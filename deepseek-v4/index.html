@@ -285,15 +285,15 @@
         <th>What It Measures</th>
         <th>V4-Pro</th>
         <th>Claude Opus 4.6</th>
-        <th>GPT-5.4/5.5</th>
+        <th>GPT-5.4</th>
       </tr>
     </thead>
     <tbody>
       <tr><td>MRCR 1M</td><td>Long-form memory recall</td><td>83.5</td><td class="winner">92.9</td><td>—</td></tr>
       <tr><td>CorpusQA 1M</td><td>Multi-hop reasoning on massive docs</td><td>62.0</td><td class="winner">71.7</td><td>—</td></tr>
-      <tr><td>SWE-bench Verified</td><td>Real GitHub issue resolution</td><td>80.6</td><td>80.8</td><td>80.6</td></tr>
-      <tr><td>SWE-bench Pro</td><td>Long-horizon multi-step fixes</td><td>55.4</td><td>—</td><td class="winner">58.6</td></tr>
-      <tr><td>LiveCodeBench</td><td>Competitive programming</td><td class="winner">93.5</td><td>—</td><td>91.2</td></tr>
+      <tr><td>SWE-bench Verified</td><td>Real GitHub issue resolution</td><td>80.6</td><td>80.8</td><td>—</td></tr>
+      <tr><td>SWE-bench Pro</td><td>Long-horizon multi-step fixes</td><td>55.4</td><td>57.3</td><td>57.7</td></tr>
+      <tr><td>LiveCodeBench</td><td>Competitive programming</td><td class="winner">93.5</td><td>88.8</td><td>—</td></tr>
       <tr><td>Codeforces</td><td>Algorithmic rating</td><td class="winner">3206</td><td>—</td><td>3168</td></tr>
       <tr><td>Terminal-Bench 2.0</td><td>Complex CLI agent tasks</td><td>67.9</td><td>65.4</td><td class="winner">75.1</td></tr>
     </tbody>
@@ -312,20 +312,20 @@
       <div class="bar-track"><div class="bar-fill" style="width:80.6%;background:var(--chart-b)">80.6</div></div>
     </div>
     <div class="bar-row">
-      <div class="bar-label">GPT-5.4</div>
+      <div class="bar-label">Gemini 3.1 Pro</div>
       <div class="bar-track"><div class="bar-fill" style="width:80.6%;background:var(--chart-c)">80.6</div></div>
     </div>
     <div class="bar-row">
-      <div class="bar-label">GPT-5.5</div>
-      <div class="bar-track"><div class="bar-fill" style="width:82%;background:var(--chart-d)">82.0</div></div>
+      <div class="bar-label">K2.6 Thinking</div>
+      <div class="bar-track"><div class="bar-fill" style="width:80.2%;background:var(--chart-d)">80.2</div></div>
     </div>
   </div>
   <div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--muted);margin-top:6px;text-align:center">
-    V4 ties the frontier on standard code repair — a 0.2% gap vs. Opus 4.6 is within measurement noise.
+    V4-Pro ties the frontier on standard code repair — all four models within 0.6 points. Source: DeepSeek-V4 technical report, Table 6.
   </div>
 </div>
 
-<p>Three things stand out. First, SWE-bench Verified is effectively tied at the frontier — 80.6 vs. 80.8 is noise. Second, the advantage in competitive programming (LiveCodeBench 93.5, Codeforces 3206) suggests V4-Pro's reasoning engine is genuinely strong. Third, the gap widens on <em>long-horizon</em> tasks — Terminal-Bench 2.0 and SWE-bench Pro show where the newest frontier models still pull ahead.</p>
+<p>Three things stand out. First, SWE-bench Verified is effectively tied across the frontier — V4-Pro (80.6), Opus 4.6 (80.8), Gemini 3.1 Pro (80.6), and K2.6 (80.2) are all within measurement noise. Second, V4-Pro leads on competitive programming — LiveCodeBench 93.5 and Codeforces 3206 are the strongest open-source scores on record. Third, the gap opens on long-horizon tasks: SWE-bench Pro has Opus 4.6 (57.3) and GPT-5.4 (57.7) ahead of V4-Pro (55.4), and Terminal-Bench 2.0 shows GPT-5.4 (75.1) with a clear lead.</p>
 
 <h2>The Economics That Actually Matters</h2>
 
