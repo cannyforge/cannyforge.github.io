@@ -206,8 +206,8 @@ def render_article(title, date_str, category, slug, body_html, description):
 {body_html}
 
 <div class="author-box">
-  <p>Written by <strong>CannyForge</strong> — AI systems engineering. We build <a href="https://github.com/cannyforge" target="_blank" rel="noopener">open-source observability tooling for AI agents</a> and write about what we learn.</p>
-  <p style="margin-bottom:0">Follow on <a href="https://twitter.com/cannyforge" target="_blank" rel="noopener">Twitter/X</a> · <a href="/feed.xml">RSS</a> · <a href="/about.html">About</a></p>
+  <p><strong>CannyForge</strong> is an independent AI practice — publishing across agent systems, architecture, economics, and emerging applications. Written by a builder, for practitioners, executives, and investors shaping what comes next.</p>
+  <p style="margin-bottom:0"><a href="/about.html">About CannyForge</a> · <a href="https://twitter.com/cannyforge" target="_blank" rel="noopener">Twitter/X</a> · <a href="/feed.xml">RSS</a> · Building something interesting in AI? <a href="mailto:sales.numlia@gmail.com">Get in touch →</a></p>
 </div>
 
 <div class="email-capture">
