@@ -259,7 +259,7 @@
     <div class="label">KV Cache Reduction<br>vs. V3.2<br><span style="color:var(--accent)">V4-Pro</span></div>
   </div>
   <div class="stat-card">
-    <div class="value">$0.14–0.50</div>
+    <div class="value">$0.87–3.48</div>
     <div class="label">Per Million<br>Output Tokens<br><span style="color:var(--accent)">V4-Pro API</span></div>
   </div>
 </div>
@@ -332,7 +332,7 @@
 <p>Benchmarks measure accuracy. But for anyone running a coding agent at scale, the binding constraint is cost per productive session.</p>
 
 <div class="pull-quote">
-  "A complex coding session that costs $15+ with Claude Opus can fall under $2 with V4-Pro."
+  "A complex coding session that costs $15+ with Claude Opus can fall under $1 with V4-Pro at current discounted pricing."
 </div>
 
 <p>Most chatty code assistants fail on long tasks not because of accuracy but because the task history <em>is</em> the context. A complex debugging session generates hundreds of tool calls and results. With standard attention, cost grows quadratically — Uber CTO Praveen Neppalli Naga told <em>The Information</em> that the company's entire 2026 AI budget was exhausted in the first few months, driven by surging Claude Code usage. (Uber now sees ~1,800 AI-generated code changes per week, and ~11% of backend code is AI-written — up from under 1% three months prior.) V4's hybrid attention bends this curve toward near-linear.</p>
@@ -345,12 +345,12 @@
   </div>
   <div class="cost-card highlight">
     <div class="model-name">DeepSeek V4-Pro</div>
-    <div class="price">$0.14–0.50</div>
+    <div class="price">$0.87–3.48</div>
     <div class="unit">per million output tokens</div>
   </div>
 </div>
 <div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--muted);text-align:center;margin-top:-12px;margin-bottom:28px">
-  API pricing as of April 2026. DeepSeek's cost advantage is ~30–100× at equivalent capability tiers.
+  API pricing as of April 2026. V4-Pro output: $0.87/M (discounted until May 5) / $3.48/M (regular). DeepSeek's cost advantage is 4–17× vs. Claude Opus 4.6 at equivalent capability tiers.
 </div>
 
 <h2>Impact Across the Coding Tool Ecosystem</h2>
