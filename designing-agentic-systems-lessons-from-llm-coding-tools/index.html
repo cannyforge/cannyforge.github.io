@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Designing Agentic Systems: Lessons from LLM Coding Tools — CannyForge</title>
+  <meta name="description" content="Google’s reported $2B acquisition of Windsurf’s technology is another milestone proof: agentic automation is moving from buzzword to reality. The real excitement isn’t just about the tech — it’s about…">
+  <meta property="og:title" content="Designing Agentic Systems: Lessons from LLM Coding Tools">
+  <meta property="og:description" content="Google’s reported $2B acquisition of Windsurf’s technology is another milestone proof: agentic automation is moving from buzzword to reality. The real excitement isn’t just about the tech — it’s about…">
+  <meta property="og:url" content="https://cannyforge.dev/designing-agentic-systems-lessons-from-llm-coding-tools/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="CannyForge">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@cannyforge">
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="alternate" type="application/rss+xml" title="CannyForge" href="/feed.xml">
+  <style>
+    .article-wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 80px; }
+    .masthead { border-bottom: 2px solid var(--ink); padding: 32px 0 20px; margin-bottom: 40px; }
+    .masthead .kicker { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: .15em; color: var(--accent); margin-bottom: 8px; }
+    .masthead h1 { font-size: 36px; line-height: 1.2; letter-spacing: -.01em; margin-bottom: 12px; }
+    .masthead .byline { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: var(--muted); }
+    .masthead .byline a { color: var(--accent); }
+    h2 { font-size: 22px; margin: 40px 0 14px; letter-spacing: -.01em; }
+    h3 { font-size: 18px; margin: 28px 0 10px; }
+    p { margin-bottom: 18px; font-size: 17px; line-height: 1.75; }
+    ul, ol { margin: 0 0 18px 24px; font-size: 17px; line-height: 1.75; }
+    li { margin-bottom: 6px; }
+    blockquote { border-left: 3px solid var(--accent); margin: 24px 0; padding: 4px 0 4px 20px; font-style: italic; color: var(--muted); }
+    pre { background: var(--surface); border-radius: 4px; padding: 16px; overflow-x: auto; margin: 24px 0; }
+    code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 14px; background: var(--surface); padding: 2px 6px; border-radius: 3px; }
+    pre code { background: none; padding: 0; font-size: 13px; }
+    figure { margin: 28px 0; text-align: center; }
+    figure img { max-width: 100%; border-radius: 4px; }
+    figcaption { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: var(--muted); margin-top: 8px; }
+    a, a:visited { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="/" class="site-name">Canny<span>Forge</span></a>
+  <nav>
+    <a href="/about.html">About</a>
+    <a href="https://github.com/cannyforge" target="_blank" rel="noopener">GitHub</a>
+    <a href="/feed.xml">RSS</a>
+  </nav>
+</header>
+
+<div class="article-wrap">
+
+<div class="masthead">
+  <div class="kicker">Agent Systems · July 14, 2025</div>
+  <h1>Designing Agentic Systems: Lessons from LLM Coding Tools</h1>
+  <div class="byline">By <a href="/about.html">CannyForge</a></div>
+</div>
+
+<figure><img src="https://cdn-images-1.medium.com/max/800/1*3qHGvCRxIqA0WDZwZwVv1Q.png" loading="lazy" style="max-width:100%;border-radius:4px;"></figure>
+<p>Google’s reported $2B acquisition of Windsurf’s technology is another milestone proof: agentic automation is moving from buzzword to reality. The real excitement isn’t just about the tech — it’s about LLM-powered systems that genuinely make work easier. What’s fueling this momentum, and what can we learn from tools like Copilot, Cursor, and Windsurf?</p>
+<h2>Why Agentic Automation Is Taking Off</h2>
+<p>Agentic systems break complex workflows into manageable steps, weaving in context and keeping users in control. The business case is clear: these tools help us get more done with less friction, and they’re flexible enough for coding, writing, research, and beyond. Companies are betting big because agentic frameworks offer persistent, intelligent teammates that fit right into daily routines.</p>
+<h2>What Makes Agentic Systems Work</h2>
+<p><strong>1. Breaking Down Tasks</strong><br>It starts with decomposing big goals into smaller, actionable steps. Agentic tools make this process transparent, letting users see and review each move instead of hiding everything behind a single prompt.</p>
+<p><strong>2. Smart Use of Context</strong><br>Automation only works when the system understands what’s happening. The best tools blend short-term context (what you’re working on now) with long-term memory (project rules, style guides). Giving users ways to pin info or teach new rules is essential.</p>
+<p><strong>3. Calling the Right Tools</strong><br>Agentic systems excel when they can reach out and use external tools — fetching data, running code, or tapping knowledge bases. Clear APIs let the AI do more than just generate text; it can actually get things done.</p>
+<p><strong>4. Keeping Users in Control</strong><br>Trust comes from transparency. Users need to see what the AI is doing, accept or reject suggestions, and undo actions if needed. Good UI — logs, previews, explanations — keeps things clear and puts users in charge.</p>
+<p><strong>5. Iterative Collaboration</strong><br>Agentic workflows are built for back-and-forth. Instead of one-shot commands, users and AI refine instructions together, correcting mistakes and improving results through dialogue.</p>
+<p><strong>6. Seamless Integration</strong><br>Embedding AI controls right where you work — inside editors or apps — keeps you in the flow. Contextual suggestions, chat panels, and stats are available inline, so you never have to break stride.</p>
+<p><strong>7. Tracking User Signals</strong><br>By following your edits, clicks, and selections, the system stays tuned to your intent. Feeding this filtered history into the LLM helps the agent stay relevant as your work evolves.</p>
+<p><strong>8. Customization and Extensibility</strong><br>Letting users tweak AI behavior — through rules, memory entries, or plugins — makes the system adaptable to any domain. Open architectures mean new tools can plug in easily, expanding what the agent can do.</p>
+<h2>How Agentic Workflows Play Out</h2>
+<p>It starts with a high-level goal. The system gathers context, calls the LLM, and either gives you a direct result or triggers a tool. The tool runs, returns output, and the LLM refines the solution — looping as needed until you’re satisfied. This context-rich, tool-augmented, iterative loop is the backbone of agentic automation.</p>
+<h2>Wrapping Up</h2>
+<p>The Windsurf deal is another milestone proof: agentic systems are delivering real business value. By embracing design patterns like task breakdown, smart context, tool integration, and user control, we can build LLM-powered assistants that feel like true collaborators. The future of productivity is agentic — AI that’s always there, always learning, and always ready to help.</p>
+
+<div class="author-box">
+  <p>Written by <strong>CannyForge</strong> — AI systems engineering. We build <a href="https://github.com/cannyforge" target="_blank" rel="noopener">open-source observability tooling for AI agents</a> and write about what we learn.</p>
+  <p style="margin-bottom:0">Follow on <a href="https://twitter.com/cannyforge" target="_blank" rel="noopener">Twitter/X</a> · <a href="/feed.xml">RSS</a> · <a href="/about.html">About</a></p>
+</div>
+
+<div class="email-capture">
+  <p>Get new articles by email — no noise, just the writing.</p>
+  <form action="https://buttondown.email/api/emails/embed-subscribe/BUTTONDOWN_USERNAME"
+        method="post" target="popupwindow"
+        onsubmit="window.open('https://buttondown.email/BUTTONDOWN_USERNAME','popupwindow')">
+    <input type="email" name="email" placeholder="you@example.com" required>
+    <button type="submit">Subscribe</button>
+  </form>
+</div>
+
+<div class="comments">
+  <script src="https://giscus.app/client.js"
+    data-repo="cannyforge/cannyforge.github.io"
+    data-repo-id="R_kgDOSMHeOA"
+    data-category="General"
+    data-category-id="DIC_kwDOSMHeOM4C7p9a"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    crossorigin="anonymous"
+    async>
+  </script>
+</div>
+
+</div>
+</body>
+</html>

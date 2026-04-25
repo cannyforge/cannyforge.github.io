@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Context Engineering: The Real Secret to Magical AI Agents — CannyForge</title>
+  <meta name="description" content="AI is evolving rapidly. The conversation is shifting from “prompt engineering” to something broader: Context Engineering. As Tobi Lutke puts it (source: https://x.com/tobi/status/1935533422589399127),…">
+  <meta property="og:title" content="Context Engineering: The Real Secret to Magical AI Agents">
+  <meta property="og:description" content="AI is evolving rapidly. The conversation is shifting from “prompt engineering” to something broader: Context Engineering. As Tobi Lutke puts it (source: https://x.com/tobi/status/1935533422589399127),…">
+  <meta property="og:url" content="https://cannyforge.dev/context-engineering-the-real-secret-to-magical-ai-agents/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="CannyForge">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@cannyforge">
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="alternate" type="application/rss+xml" title="CannyForge" href="/feed.xml">
+  <style>
+    .article-wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 80px; }
+    .masthead { border-bottom: 2px solid var(--ink); padding: 32px 0 20px; margin-bottom: 40px; }
+    .masthead .kicker { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: .15em; color: var(--accent); margin-bottom: 8px; }
+    .masthead h1 { font-size: 36px; line-height: 1.2; letter-spacing: -.01em; margin-bottom: 12px; }
+    .masthead .byline { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: var(--muted); }
+    .masthead .byline a { color: var(--accent); }
+    h2 { font-size: 22px; margin: 40px 0 14px; letter-spacing: -.01em; }
+    h3 { font-size: 18px; margin: 28px 0 10px; }
+    p { margin-bottom: 18px; font-size: 17px; line-height: 1.75; }
+    ul, ol { margin: 0 0 18px 24px; font-size: 17px; line-height: 1.75; }
+    li { margin-bottom: 6px; }
+    blockquote { border-left: 3px solid var(--accent); margin: 24px 0; padding: 4px 0 4px 20px; font-style: italic; color: var(--muted); }
+    pre { background: var(--surface); border-radius: 4px; padding: 16px; overflow-x: auto; margin: 24px 0; }
+    code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 14px; background: var(--surface); padding: 2px 6px; border-radius: 3px; }
+    pre code { background: none; padding: 0; font-size: 13px; }
+    figure { margin: 28px 0; text-align: center; }
+    figure img { max-width: 100%; border-radius: 4px; }
+    figcaption { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: var(--muted); margin-top: 8px; }
+    a, a:visited { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="/" class="site-name">Canny<span>Forge</span></a>
+  <nav>
+    <a href="/about.html">About</a>
+    <a href="https://github.com/cannyforge" target="_blank" rel="noopener">GitHub</a>
+    <a href="/feed.xml">RSS</a>
+  </nav>
+</header>
+
+<div class="article-wrap">
+
+<div class="masthead">
+  <div class="kicker">Agent Systems · July 8, 2025</div>
+  <h1>Context Engineering: The Real Secret to Magical AI Agents</h1>
+  <div class="byline">By <a href="/about.html">CannyForge</a></div>
+</div>
+
+<figure><img src="https://cdn-images-1.medium.com/max/800/1*t-zfnw7RKz4CUdg3OBqDkg.png" loading="lazy" style="max-width:100%;border-radius:4px;"></figure>
+<p>AI is evolving rapidly. The conversation is shifting from “prompt engineering” to something broader: Context Engineering. As Tobi Lutke puts it (source: <a href="https://x.com/tobi/status/1935533422589399127" target="_blank" rel="noopener">https://x.com/tobi/status/1935533422589399127</a>), it’s “the art of providing all the context for the task to be plausibly solvable by the LLM.” In other words: the difference between a basic demo and a magical product isn’t the model — it’s the context.</p>
+<p><strong>What Is Context?</strong></p>
+<p>Context is more than just the prompt. It’s everything the model sees before it responds:</p>
+<ul><li>System Prompt: Sets rules, tone, and examples.</li><li>User Prompt: The immediate question or task.</li><li>Short-Term Memory: The ongoing conversation.</li><li>Long-Term Memory: Persistent knowledge — user preferences, past projects, facts.</li><li>Retrieved Information (RAG): Up-to-date data from documents, APIs, or databases.</li><li>Available Tools: Functions the model can call (e.g., send_email).</li><li>Structured Output: Clear response formats (like JSON).</li></ul>
+<p><strong>Why Context Engineering Matters</strong></p>
+<p>Most agent failures today aren’t due to the model — they’re due to missing or poor context. Imagine an AI assistant analyzing a stock:</p>
+<p>Basic Demo: Only sees the user’s question. Replies with a generic answer or outdated info.</p>
+<p>Magical Agent: Sees real-time stock prices, recent news, your portfolio, and relevant financial indicators. It can reason about trends, risks, and tailor advice to your goals. The response is insightful, timely, and actionable.</p>
+<p>The magic isn’t in the code. It’s in the context.</p>
+<p><strong>From Prompt to Context Engineering</strong></p>
+<p>Prompt engineering is about crafting a clever string. Context engineering is about building a system that delivers the right info, in the right format, at the right time.</p>
+<ul><li>It’s a System, Not a String: Context is dynamically assembled before the LLM call.</li><li>Dynamic & Task-Specific: For one request, it’s calendar data; for another, it’s emails or a web search.</li><li>Quality Over Quantity: Dense retrieval (RAG) is powerful, but needs careful tuning — dumping raw data is worse than a concise summary.</li><li>Assume & Adapt: User prompts are unpredictable. The system must make smart assumptions and optimize over time.</li><li>Memory Accelerates Precision: Short/long-term memory boosts relevance, but cold starts are still a challenge.</li><li>Tools Expand Capacity: Clear tool specs and differentiation are key for success.</li><li>Structured Output Wins: Well-defined formats (like JSON) make downstream processing and communication efficient.</li></ul>
+<p><strong>Conclusion</strong></p>
+<p>Building great AI agents isn’t about finding a magic prompt or the latest model. It’s about engineering context — delivering the right information and tools, in the right format, at the right time. This is a cross-functional challenge: understand your use case, define your outputs, and structure your context so the LLM can actually get the job done.</p>
+<p>Context engineering is where the magic happens.</p>
+<p>Reference:</p>
+
+<div class="author-box">
+  <p>Written by <strong>CannyForge</strong> — AI systems engineering. We build <a href="https://github.com/cannyforge" target="_blank" rel="noopener">open-source observability tooling for AI agents</a> and write about what we learn.</p>
+  <p style="margin-bottom:0">Follow on <a href="https://twitter.com/cannyforge" target="_blank" rel="noopener">Twitter/X</a> · <a href="/feed.xml">RSS</a> · <a href="/about.html">About</a></p>
+</div>
+
+<div class="email-capture">
+  <p>Get new articles by email — no noise, just the writing.</p>
+  <form action="https://buttondown.email/api/emails/embed-subscribe/BUTTONDOWN_USERNAME"
+        method="post" target="popupwindow"
+        onsubmit="window.open('https://buttondown.email/BUTTONDOWN_USERNAME','popupwindow')">
+    <input type="email" name="email" placeholder="you@example.com" required>
+    <button type="submit">Subscribe</button>
+  </form>
+</div>
+
+<div class="comments">
+  <script src="https://giscus.app/client.js"
+    data-repo="cannyforge/cannyforge.github.io"
+    data-repo-id="R_kgDOSMHeOA"
+    data-category="General"
+    data-category-id="DIC_kwDOSMHeOM4C7p9a"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    crossorigin="anonymous"
+    async>
+  </script>
+</div>
+
+</div>
+</body>
+</html>

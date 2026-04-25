@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Best Practices for Agentic Reasoning in Production: Lessons from Anthropic and My Own Experience — CannyForge</title>
+  <meta name="description" content="As AI systems become more capable, agentic reasoning — where autonomous agents plan, coordinate, and execute complex tasks — has emerged as a powerful paradigm for tackling open-ended problems. Anthro…">
+  <meta property="og:title" content="Best Practices for Agentic Reasoning in Production: Lessons from Anthropic and My Own Experience">
+  <meta property="og:description" content="As AI systems become more capable, agentic reasoning — where autonomous agents plan, coordinate, and execute complex tasks — has emerged as a powerful paradigm for tackling open-ended problems. Anthro…">
+  <meta property="og:url" content="https://cannyforge.dev/best-practices-for-agentic-reasoning-in-production-lessons-f/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="CannyForge">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@cannyforge">
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="alternate" type="application/rss+xml" title="CannyForge" href="/feed.xml">
+  <style>
+    .article-wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 80px; }
+    .masthead { border-bottom: 2px solid var(--ink); padding: 32px 0 20px; margin-bottom: 40px; }
+    .masthead .kicker { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: .15em; color: var(--accent); margin-bottom: 8px; }
+    .masthead h1 { font-size: 36px; line-height: 1.2; letter-spacing: -.01em; margin-bottom: 12px; }
+    .masthead .byline { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: var(--muted); }
+    .masthead .byline a { color: var(--accent); }
+    h2 { font-size: 22px; margin: 40px 0 14px; letter-spacing: -.01em; }
+    h3 { font-size: 18px; margin: 28px 0 10px; }
+    p { margin-bottom: 18px; font-size: 17px; line-height: 1.75; }
+    ul, ol { margin: 0 0 18px 24px; font-size: 17px; line-height: 1.75; }
+    li { margin-bottom: 6px; }
+    blockquote { border-left: 3px solid var(--accent); margin: 24px 0; padding: 4px 0 4px 20px; font-style: italic; color: var(--muted); }
+    pre { background: var(--surface); border-radius: 4px; padding: 16px; overflow-x: auto; margin: 24px 0; }
+    code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 14px; background: var(--surface); padding: 2px 6px; border-radius: 3px; }
+    pre code { background: none; padding: 0; font-size: 13px; }
+    figure { margin: 28px 0; text-align: center; }
+    figure img { max-width: 100%; border-radius: 4px; }
+    figcaption { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: var(--muted); margin-top: 8px; }
+    a, a:visited { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="/" class="site-name">Canny<span>Forge</span></a>
+  <nav>
+    <a href="/about.html">About</a>
+    <a href="https://github.com/cannyforge" target="_blank" rel="noopener">GitHub</a>
+    <a href="/feed.xml">RSS</a>
+  </nav>
+</header>
+
+<div class="article-wrap">
+
+<div class="masthead">
+  <div class="kicker">Agent Systems · July 8, 2025</div>
+  <h1>Best Practices for Agentic Reasoning in Production: Lessons from Anthropic and My Own Experience</h1>
+  <div class="byline">By <a href="/about.html">CannyForge</a></div>
+</div>
+
+<figure><img src="https://cdn-images-1.medium.com/max/800/1*F-fPSNExiPM2sVbeo1PI9A.png" loading="lazy" style="max-width:100%;border-radius:4px;"></figure>
+<p>As AI systems become more capable, agentic reasoning — where autonomous agents plan, coordinate, and execute complex tasks — has emerged as a powerful paradigm for tackling open-ended problems. Anthropic’s recent work (<a href="https://www.anthropic.com/engineering/built-multi-agent-research-system" target="_blank" rel="noopener">https://www.anthropic.com/engineering/built-multi-agent-research-system</a>) on multi-agent research systems offers valuable insights, many of which resonate deeply with my own experience building and deploying agentic solutions in production. Here, I share key best practices and learnings for applying agentic reasoning at scale.</p>
+<h2>1. Interleaved Thinking</h2>
+<p>Agents should reason in cycles: plan, act, reflect, and adapt. Interleaved thinking — iterative, stepwise reasoning — enables agents to handle ambiguity, course-correct, and deliver more reliable results. In practice, this means building systems that support multi-turn deliberation and adjustment, not just one-shot answers.</p>
+<h2>2. Clear Task Boundaries</h2>
+<p>Defining clear, non-overlapping task boundaries for each agent or subagent is essential. In my experience, vague or overlapping objectives lead to duplicated work, missed information, and coordination failures. Anthropic’s orchestrator-worker pattern, where a lead agent decomposes queries and assigns specific subtasks, is a proven model. Explicit objectives, output formats, and tool guidance for each subagent ensure efficient division of labor and comprehensive coverage.</p>
+<h2>3. Tool Selection and Interface Quality</h2>
+<p>Agent-tool interfaces are as critical as human-computer interfaces. Agents must be equipped with the right tools and clear descriptions to avoid wasted effort and dead ends. I’ve found that investing in tool ergonomics — testing, refining, and documenting tool usage — pays off in both agent performance and reliability. Anthropic’s use of heuristics for tool selection and their tool-testing agents are excellent practices to emulate.</p>
+<p>The article also highlights the challenge of “wildly varying quality” in MCP (Model Context Protocol) tools. Designing, selecting, and continuously improving tool interfaces and quality are essential steps to making agents truly intelligent. Clear, purpose-driven tool descriptions, robust testing, and iterative refinement help agents choose and use tools effectively, minimizing errors and maximizing task success. In my experience, close collaboration between tool designers and agent developers, along with feedback loops from real-world usage, is key to evolving a high-quality tool ecosystem that empowers agentic reasoning.</p>
+<h2>4. Parallelization: Speed and Breadth</h2>
+<p>Complex tasks often benefit from parallel execution. Spawning multiple subagents and enabling parallel tool calls can dramatically reduce research time and increase coverage. In my own deployments, parallelization has been a key lever for scaling agentic systems to handle large, multifaceted problems efficiently. However, it’s important to balance parallelism with coordination to avoid bottlenecks and resource contention.</p>
+<h2>5. Error Handling and State Management: Building Resilience</h2>
+<p>Production agentic systems must be resilient to errors and interruptions. Agents should be able to gracefully handle tool failures, unexpected results, and context overflows. Techniques like checkpointing, retry logic, and external memory for long-horizon conversations are vital. Anthropic’s approach to stateful agents — resuming from errors, maintaining context, and using observability for debugging — aligns closely with my own best practices.</p>
+<h2>6. Observability and Evaluation: Continuous Improvement</h2>
+<p>Finally, robust observability and flexible evaluation methods are essential for production reliability. Monitoring agent decision patterns, tracing interactions, and combining automated and human evaluation help catch edge cases and drive continuous improvement. Fast iteration loops and prompt engineering, informed by real-world feedback, are key to evolving agentic systems that can be trusted in production.</p>
+<h2>Conclusion</h2>
+<p>Agentic reasoning is a powerful approach for research, automation, and decision support. With careful system design, attention to tool quality, and a focus on resilience and observability, agentic systems can deliver robust, real-world impact. I welcome discussion and collaboration with others working at the intersection of AI architecture and production engineering.</p>
+<h2>Reference:</h2>
+<p>Anthropic. (2025). How we built our multi-agent research system. <a href="https://www.anthropic.com/engineering/built-multi-agent-research-system" target="_blank" rel="noopener">https://www.anthropic.com/engineering/built-multi-agent-research-system</a></p>
+
+<div class="author-box">
+  <p>Written by <strong>CannyForge</strong> — AI systems engineering. We build <a href="https://github.com/cannyforge" target="_blank" rel="noopener">open-source observability tooling for AI agents</a> and write about what we learn.</p>
+  <p style="margin-bottom:0">Follow on <a href="https://twitter.com/cannyforge" target="_blank" rel="noopener">Twitter/X</a> · <a href="/feed.xml">RSS</a> · <a href="/about.html">About</a></p>
+</div>
+
+<div class="email-capture">
+  <p>Get new articles by email — no noise, just the writing.</p>
+  <form action="https://buttondown.email/api/emails/embed-subscribe/BUTTONDOWN_USERNAME"
+        method="post" target="popupwindow"
+        onsubmit="window.open('https://buttondown.email/BUTTONDOWN_USERNAME','popupwindow')">
+    <input type="email" name="email" placeholder="you@example.com" required>
+    <button type="submit">Subscribe</button>
+  </form>
+</div>
+
+<div class="comments">
+  <script src="https://giscus.app/client.js"
+    data-repo="cannyforge/cannyforge.github.io"
+    data-repo-id="R_kgDOSMHeOA"
+    data-category="General"
+    data-category-id="DIC_kwDOSMHeOM4C7p9a"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    crossorigin="anonymous"
+    async>
+  </script>
+</div>
+
+</div>
+</body>
+</html>
