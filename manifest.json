@@ -1,0 +1,10 @@
+[
+  {
+    "slug": "deepseek-v4",
+    "title": "DeepSeek-V4: The Economics of the Million-Token Brain",
+    "date": "2026-04-24",
+    "category": "Architecture",
+    "tags": ["attention", "agentic-coding", "cost", "deepseek"],
+    "description": "How a redesigned attention mechanism turns long-context AI from a luxury into a utility — and what it means for the tools developers use every day."
+  }
+]

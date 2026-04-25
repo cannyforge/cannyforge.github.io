@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CannyForge</title>
+    <link>https://cannyforge.dev</link>
+    <description>AI systems engineering — architecture, agent reliability, LLM economics, and observations from building.</description>
+    <language>en-us</language>
+    <atom:link href="https://cannyforge.dev/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>DeepSeek-V4: The Economics of the Million-Token Brain</title>
+      <link>https://cannyforge.dev/deepseek-v4/</link>
+      <pubDate>Thu, 24 Apr 2026 00:00:00 +0000</pubDate>
+      <description>How a redesigned attention mechanism turns long-context AI from a luxury into a utility — and what it means for the tools developers use every day.</description>
+      <guid isPermaLink="true">https://cannyforge.dev/deepseek-v4/</guid>
+    </item>
+  </channel>
+</rss>

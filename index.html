@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CannyForge — AI Systems Engineering</title>
+  <meta name="description" content="Writing on AI systems, agent reliability, LLM architecture, and economics. Built by the team behind CannyForge.">
+  <meta property="og:title" content="CannyForge — AI Systems Engineering">
+  <meta property="og:description" content="Writing on AI systems, agent reliability, LLM architecture, and economics.">
+  <meta property="og:url" content="https://cannyforge.dev">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="alternate" type="application/rss+xml" title="CannyForge" href="/feed.xml">
+</head>
+<body>
+
+<header class="site-header">
+  <a href="/" class="site-name">Canny<span>Forge</span></a>
+  <nav>
+    <a href="/about.html">About</a>
+    <a href="https://github.com/cannyforge" target="_blank" rel="noopener">GitHub</a>
+    <a href="/feed.xml">RSS</a>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="filter-bar" id="filters"></div>
+  <div class="article-list" id="articles">
+    <p style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#6b7280;padding:40px 0">Loading...</p>
+  </div>
+</div>
+
+<script>
+  fetch('/manifest.json')
+    .then(r => r.json())
+    .then(articles => {
+      const categories = [...new Set(articles.map(a => a.category))];
+      let active = null;
+
+      const filtersEl = document.getElementById('filters');
+      categories.forEach(cat => {
+        const chip = document.createElement('button');
+        chip.className = 'chip';
+        chip.textContent = cat;
+        chip.onclick = () => {
+          active = active === cat ? null : cat;
+          document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+          if (active) chip.classList.add('active');
+          render(active ? articles.filter(a => a.category === active) : articles);
+        };
+        filtersEl.appendChild(chip);
+      });
+
+      function render(list) {
+        document.getElementById('articles').innerHTML = list.length ? list.map(a => `
+          <a href="/${a.slug}/" class="article-item">
+            <div class="meta">
+              <time>${a.date}</time>
+              <span class="category-badge">${a.category}</span>
+            </div>
+            <h2>${a.title}</h2>
+            <p>${a.description}</p>
+          </a>
+        `).join('') : '<p style="font-family:sans-serif;font-size:14px;color:#6b7280;padding:40px 0">No articles in this category yet.</p>';
+      }
+
+      render(articles);
+    });
+</script>
+
+</body>
+</html>
