@@ -16,20 +16,20 @@
     "description": "How AI agents are evolving from static prompt followers to dynamic learning machines — and what the agent skill primitive means for the future of autonomous systems."
   },
   {
-    "slug": "the-shock-of-deepseek-r1-and-the-legacy-of-eclipse",
-    "title": "The Shock of DeepSeek-R1 and the Legacy of Eclipse",
-    "date": "2025-02-01",
+    "slug": "beyond-the-hype-a-deep-dive-into-the-systemic-algorithmic-an",
+    "title": "Beyond the Hype: A Deep Dive into the Systemic, Algorithmic, and Cognitive Roots of the Infinite Software Crisis",
+    "date": "2026-01-19",
     "category": "Architecture",
-    "tags": ["deepseek", "reasoning", "open-source"],
-    "description": "DeepSeek-R1 arrived like a shock to the system. What it means for the frontier, and what history tells us about moments like this."
+    "tags": ["vibe-coding", "technical-debt", "software-engineering"],
+    "description": "A systems-level analysis of the Infinite Software Crisis, connecting weak guardrails, model training limits, and human cognitive bias to long-term software fragility."
   },
   {
-    "slug": "chain-of-thought-vs-react-a-deep-dive-into-reasoning-paradig",
-    "title": "Chain-of-Thought vs. ReAct: A Deep Dive into Reasoning Paradigms for Large Language Models",
-    "date": "2025-02-18",
-    "category": "Architecture",
-    "tags": ["reasoning", "chain-of-thought", "react"],
-    "description": "A rigorous comparison of two dominant reasoning paradigms — when to use each, and what their tradeoffs reveal about how LLMs actually think."
+    "slug": "designing-agentic-systems-lessons-from-llm-coding-tools",
+    "title": "Designing Agentic Systems: Lessons from LLM Coding Tools",
+    "date": "2025-07-14",
+    "category": "Agent Systems",
+    "tags": ["agents", "coding", "system-design"],
+    "description": "LLM coding tools are the most demanding test of agentic system design. Here's what building and using them teaches about agents that actually work."
   },
   {
     "slug": "context-engineering-the-real-secret-to-magical-ai-agents",
@@ -48,11 +48,27 @@
     "description": "What actually works when deploying agentic reasoning systems in production — lessons distilled from Anthropic's guidance and real-world experience."
   },
   {
-    "slug": "designing-agentic-systems-lessons-from-llm-coding-tools",
-    "title": "Designing Agentic Systems: Lessons from LLM Coding Tools",
-    "date": "2025-07-14",
-    "category": "Agent Systems",
-    "tags": ["agents", "coding", "system-design"],
-    "description": "LLM coding tools are the most demanding test of agentic system design. Here's what building and using them teaches about agents that actually work."
+    "slug": "reverse-engineering-openais-deep-research-how-to-balance-pow",
+    "title": "Reverse-Engineering OpenAI’s Deep Research: How to Balance Power with Safety",
+    "date": "2025-03-09",
+    "category": "Analysis",
+    "tags": ["openai", "safety", "research"],
+    "description": "A practical reverse-engineering of OpenAI's Deep Research system architecture, with lessons for balancing autonomous capability, reliability, and safety in production."
+  },
+  {
+    "slug": "chain-of-thought-vs-react-a-deep-dive-into-reasoning-paradig",
+    "title": "Chain-of-Thought vs. ReAct: A Deep Dive into Reasoning Paradigms for Large Language Models",
+    "date": "2025-02-18",
+    "category": "Architecture",
+    "tags": ["reasoning", "chain-of-thought", "react"],
+    "description": "A rigorous comparison of two dominant reasoning paradigms — when to use each, and what their tradeoffs reveal about how LLMs actually think."
+  },
+  {
+    "slug": "the-shock-of-deepseek-r1-and-the-legacy-of-eclipse",
+    "title": "The Shock of DeepSeek-R1 and the Legacy of Eclipse",
+    "date": "2025-02-01",
+    "category": "Architecture",
+    "tags": ["deepseek", "reasoning", "open-source"],
+    "description": "DeepSeek-R1 arrived like a shock to the system. What it means for the frontier, and what history tells us about moments like this."
   }
 ]
