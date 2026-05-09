@@ -7,6 +7,13 @@
     <language>en-us</language>
     <atom:link href="https://cannyforge.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>From Conversation to Knowledge: Temporal Memory Reconstruction</title>
+      <link>https://cannyforge.dev/from-conversation-to-knowledge-temporal-memory-reconstruction/</link>
+      <pubDate>Fri, 08 May 2026 00:00:00 +0000</pubDate>
+      <description>A grep-first, LLM-second pipeline for recovering design decisions from months of Discord history — with timestamps, decision states, and conflict detection. No vector DB needed.</description>
+      <guid isPermaLink="true">https://cannyforge.dev/from-conversation-to-knowledge-temporal-memory-reconstruction/</guid>
+    </item>
+    <item>
       <title>DeepSeek-V4: The Economics of the Million-Token Brain</title>
       <link>https://cannyforge.dev/deepseek-v4/</link>
       <pubDate>Thu, 24 Apr 2026 00:00:00 +0000</pubDate>

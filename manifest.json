@@ -1,5 +1,13 @@
 [
   {
+    "slug": "from-conversation-to-knowledge-temporal-memory-reconstruction",
+    "title": "From Conversation to Knowledge: Temporal Memory Reconstruction",
+    "date": "2026-05-08",
+    "category": "Systems & Memory",
+    "tags": ["memory", "knowledge-management", "discord", "pipeline"],
+    "description": "A grep-first, LLM-second pipeline for recovering design decisions from months of Discord history — with timestamps, decision states, and conflict detection. No vector DB needed."
+  },
+  {
     "slug": "deepseek-v4",
     "title": "DeepSeek-V4: The Economics of the Million-Token Brain",
     "date": "2026-04-24",
