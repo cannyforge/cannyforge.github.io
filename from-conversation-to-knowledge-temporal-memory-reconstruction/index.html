@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>From Conversation to Knowledge: Temporal Memory Reconstruction — CannyForge</title>
+  <meta name="description" content="A grep-first, LLM-second pipeline for recovering design decisions from months of Discord history — with timestamps, decision states, and conflict detection. No vector DB needed.">
+  <meta property="og:title" content="From Conversation to Knowledge: Temporal Memory Reconstruction">
+  <meta property="og:description" content="A grep-first, LLM-second pipeline for recovering design decisions from months of Discord history — with timestamps, decision states, and conflict detection.">
+  <meta property="og:url" content="https://cannyforge.dev/from-conversation-to-knowledge-temporal-memory-reconstruction/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="CannyForge">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@cannyforge">
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="alternate" type="application/rss+xml" title="CannyForge" href="/feed.xml">
+  <style>
+    .article-wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 80px; }
+
+    /* Masthead */
+    .masthead { border-bottom: 2px solid var(--ink); padding: 40px 0 24px; margin-bottom: 48px; }
+    .masthead .kicker {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 11px; text-transform: uppercase;
+      letter-spacing: .18em; color: var(--accent);
+      margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+    }
+    .masthead .kicker::after {
+      content: ''; flex: 1; height: 1px; background: var(--rule);
+    }
+    .masthead h1 {
+      font-size: 42px; line-height: 1.1; letter-spacing: -.02em;
+      margin-bottom: 18px; font-weight: 700;
+    }
+    .masthead .deck {
+      font-size: 19px; line-height: 1.6; color: var(--muted);
+      font-style: italic; margin-bottom: 20px;
+      border-left: 3px solid var(--accent); padding-left: 18px;
+    }
+    .masthead .byline {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 12px; color: var(--muted);
+    }
+    .masthead .byline a { color: var(--accent); text-decoration: none; }
+
+    /* Body typography */
+    p { margin-bottom: 20px; font-size: 17.5px; line-height: 1.78; }
+    a, a:visited { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
+    /* Drop cap on first paragraph */
+    .lede::first-letter {
+      float: left; font-size: 72px; line-height: .8;
+      font-weight: 700; margin: 6px 10px -4px 0;
+      color: var(--accent); font-family: Georgia, serif;
+    }
+
+    /* Section headers — Wired-style bold numbered */
+    .section-head {
+      display: flex; align-items: baseline; gap: 16px;
+      margin: 56px 0 20px; border-top: 2px solid var(--ink); padding-top: 16px;
+    }
+    .section-head .num {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 11px; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--accent); white-space: nowrap;
+    }
+    .section-head h2 {
+      font-size: 24px; line-height: 1.2; letter-spacing: -.01em;
+      margin: 0; font-weight: 700;
+    }
+
+    /* Pull quote */
+    .pull-quote {
+      margin: 44px -40px;
+      padding: 28px 40px;
+      border-top: 3px solid var(--ink);
+      border-bottom: 1px solid var(--rule);
+    }
+    .pull-quote p {
+      font-size: 24px; line-height: 1.45; font-style: italic;
+      letter-spacing: -.01em; color: var(--ink); margin: 0;
+    }
+    @media (max-width: 640px) { .pull-quote { margin: 32px 0; padding: 20px 0; } }
+
+    /* Stat spotlight */
+    .stat-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--rule);
+      border: 1px solid var(--rule); border-radius: 4px;
+      overflow: hidden; margin: 40px 0;
+    }
+    .stat-cell {
+      background: var(--paper); padding: 24px 20px; text-align: center;
+    }
+    .stat-cell .number {
+      font-size: 48px; font-weight: 700; letter-spacing: -.03em;
+      color: var(--accent); line-height: 1; display: block;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    .stat-cell .label {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--muted); margin-top: 6px; display: block;
+    }
+
+    /* Code */
+    pre {
+      background: var(--surface); border-left: 3px solid var(--accent);
+      border-radius: 0 4px 4px 0; padding: 18px 20px;
+      overflow-x: auto; margin: 28px 0;
+    }
+    code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13.5px; background: var(--surface);
+      padding: 2px 6px; border-radius: 3px;
+    }
+    pre code { background: none; padding: 0; font-size: 13px; }
+
+    /* Data table */
+    table {
+      width: 100%; border-collapse: collapse; margin: 32px 0;
+      font-size: 15px;
+    }
+    th {
+      text-align: left; padding: 10px 14px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .1em;
+      border-bottom: 2px solid var(--ink); color: var(--muted);
+    }
+    td { padding: 11px 14px; border-bottom: 1px solid var(--rule); }
+    tr:last-child td { border-bottom: none; }
+    .free { color: #2d7a2d; font-weight: 600; }
+
+    /* Callout box (lightly styled) */
+    .callout {
+      background: var(--surface);
+      border-top: 2px solid var(--accent);
+      padding: 20px 24px; margin: 32px 0; border-radius: 0 0 4px 4px;
+    }
+    .callout .callout-label {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 10px; text-transform: uppercase; letter-spacing: .14em;
+      color: var(--accent); font-weight: 700; margin-bottom: 8px;
+    }
+    .callout p { font-size: 15.5px; margin: 0; line-height: 1.65; }
+
+    /* State table cells */
+    td code { font-size: 12.5px; }
+
+    ul, ol { margin: 0 0 20px 24px; font-size: 17px; line-height: 1.78; }
+    li { margin-bottom: 8px; }
+
+    h3 { font-size: 19px; margin: 32px 0 12px; letter-spacing: -.01em; }
+
+    blockquote {
+      border-left: 3px solid var(--accent); margin: 28px 0;
+      padding: 4px 0 4px 22px; font-style: italic; color: var(--muted);
+    }
+    blockquote p { font-size: 17px; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="/" class="site-name">Canny<span>Forge</span></a>
+  <nav>
+    <a href="/about.html">About</a>
+    <a href="https://github.com/cannyforge" target="_blank" rel="noopener">GitHub</a>
+    <a href="/feed.xml">RSS</a>
+  </nav>
+</header>
+
+<div class="article-wrap">
+
+<div class="masthead">
+  <div class="kicker">Systems &amp; Memory · May 8, 2026</div>
+  <h1>From Conversation to Knowledge</h1>
+  <div class="deck">How temporal clustering, grep, and two language models can reconstruct months of design decisions from Discord history — without a vector database.</div>
+  <div class="byline">By <a href="/about.html">CannyForge</a></div>
+</div>
+
+<p class="lede">There is a specific kind of institutional forgetting that happens to small teams building in the open. The decisions are all there — in Slack, in Discord, in long email threads — but they're chronologically scattered, buried under follow-up messages and tangents, separated by the natural cadence of people thinking out loud. Six months later, nobody can agree on what was confirmed versus what was just floated. Nobody remembers when the pivot happened, or why. The knowledge existed. It just never got extracted.</p>
+
+<p>This is the problem a simple pipeline was built to solve. The input: months of Discord messages across multiple channels, containing design discussions for two different products. The output: a complete design specification for each, including the decisions that changed over time and the reasoning behind each change. The constraint: spend as few LLM tokens as possible getting there.</p>
+
+<p>The result is a six-stage architecture that challenges one of the most common instincts in AI tooling — the instinct to send everything to the model and let it sort things out.</p>
+
+<div class="stat-row">
+  <div class="stat-cell">
+    <span class="number">~N/10</span>
+    <span class="label">Time clusters</span>
+  </div>
+  <div class="stat-cell">
+    <span class="number">~25%</span>
+    <span class="label">Reached an LLM</span>
+  </div>
+  <div class="stat-cell">
+    <span class="number">~75%</span>
+    <span class="label">Filtered by grep</span>
+  </div>
+</div>
+
+<figure style="margin: 36px 0;">
+  <div style="border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; height: 560px; position: relative;">
+    <iframe src="diagram.html" style="width: 100%; height: 100%; border: none;" title="Pipeline diagram: From Conversation to Knowledge" loading="lazy"></iframe>
+  </div>
+  <figcaption style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: var(--muted); margin-top: 10px; text-align: center;">
+    The full 14-stage pipeline — from raw chat history to recovered design specification. Scroll inside the frame, or <a href="diagram.html" target="_blank">open full screen →</a>
+  </figcaption>
+</figure>
+
+<div class="section-head">
+  <span class="num">Stage 01</span>
+  <h2>Cutting the Stream Into Time Blocks</h2>
+</div>
+
+<p>The raw material is Discord JSON — two export files with overlapping membership, some duplicate messages, and thousands of entries sorted loosely by timestamp. The first job is deduplication by message ID, then a clean chronological merge across both channels.</p>
+
+<p>What happens next is the key structural choice of the entire pipeline. Instead of treating the message stream as a flat document, it gets cut into <em>clusters</em> — contiguous blocks of conversation separated by gaps of 30 minutes or more. A 30-minute silence between messages is treated as a context switch: two different conversations, two different thought threads, two different moments in the project's intellectual life.</p>
+
+<pre><code>=== CLUSTER_0015 [2026-03-25 05:03 – 05:41] (22 messages) ===
+[05:03] alice: what if voice memory is per-session only initially
+[05:07] alice: we can persist summaries, not transcripts
+[05:41] alice: yeah let's confirm that, summaries not full transcripts</code></pre>
+
+<p>Each cluster gets saved as a numbered plaintext file. The timestamps in the cluster header are not decorative — they are preserved through every subsequent stage. Cluster 0015 confirmed the summary-only approach on March 25th. If that decision was reversed in cluster 0031 three weeks later, the pipeline will know which one came first, and weight the later one accordingly.</p>
+
+<p>Alongside the cluster files, every message is written to a flat TSV — one row per message, grep-ready, no parsing required downstream.</p>
+
+<div class="section-head">
+  <span class="num">Stage 02 &amp; 03</span>
+  <h2>Grep Replaces the Vector Database</h2>
+</div>
+
+<p>The conventional approach to relevance search in AI pipelines is embeddings: convert every document to a dense vector, store them in a vector database, query with cosine similarity. It works. It also costs money to embed, requires infrastructure to maintain, and introduces a semantic layer that's difficult to debug when it fails.</p>
+
+<p>The pipeline does something more direct. A single lightweight Haiku call takes the app names and descriptions, then returns a JSON dictionary of domain-specific search terms:</p>
+
+<pre><code>{
+  "app_one": ["voice", "session", "memory", "emotion", "transcript"],
+  "app_two": ["dashboard", "portfolio", "delta", "model", "exposure"]
+}</code></pre>
+
+<p>That's the only LLM call in the search phase. Everything that follows is shell:</p>
+
+<pre><code>hits=$(grep -ciE "$pattern" "$cluster_file" 2>/dev/null) || hits=0</code></pre>
+
+<p>The output is a score matrix: cluster × topic → hit count. Clusters below a threshold get dropped. The survivors — about 23% of the total — are assembled into per-topic text files and handed to the extraction stage.</p>
+
+<div class="pull-quote">
+  <p>"Domain jargon is already dense with meaning. 'Delta-neutral rebalancing' in a finance conversation is more specific than any cosine similarity score could be."</p>
+</div>
+
+<p>The reason this works better than it sounds: the search terms are generated by a model that understands the domain. They're not generic keywords — they're the vocabulary that actually appears in discussions about this specific problem. The recall gap between grep and semantic search narrows considerably when the vocabulary is domain-aware. And the cost gap — zero versus embedding API calls — only grows as the corpus grows.</p>
+
+<div class="section-head">
+  <span class="num">Stage 04</span>
+  <h2>The Decision State Machine</h2>
+</div>
+
+<p>Each surviving cluster gets a targeted Haiku call. The extraction prompt is unusual in one specific way: it asks the model to classify a <em>decision state</em> for each cluster, not just to summarize the content.</p>
+
+<table>
+  <thead>
+    <tr><th>State</th><th>What it means</th><th>Signal words</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>proposed</code></td><td>Someone floated the idea</td><td>"what if", "could we", "maybe"</td></tr>
+    <tr><td><code>debated</code></td><td>Active discussion of tradeoffs</td><td>"but", "concern", "tradeoff"</td></tr>
+    <tr><td><code>confirmed</code></td><td>Team explicitly agreed</td><td>"agreed", "let's go with", "confirmed"</td></tr>
+    <tr><td><code>reversed</code></td><td>Earlier decision overturned</td><td>"actually", "changed", "instead", "dropped"</td></tr>
+    <tr><td><code>deferred</code></td><td>Pushed to a future phase</td><td>"later", "next phase", "backlog"</td></tr>
+  </tbody>
+</table>
+
+<p>The extraction also captures a <code>reverses</code> field — a description of what prior decision this cluster explicitly overturns. That field is the seed for the conflict detection stage that follows.</p>
+
+<p>Six workers run the extractions concurrently via Python's <code>ThreadPoolExecutor</code>. The wall time for 21 clusters at two seconds each is under ten seconds. Each result carries its cluster ID, its timestamp, its topic tags, and the design content — product insight, engineering decision, UX notes, deferred items. Every field flows forward into the synthesis prompt.</p>
+
+<div class="section-head">
+  <span class="num">Stage 05</span>
+  <h2>Detecting When the Team Changed Its Mind</h2>
+</div>
+
+<p>After extraction, the pipeline groups all results by topic tags. For most tag groups, the state sequence looks clean: proposed → debated → confirmed. No further action. No LLM call. The topic evolved normally and landed somewhere stable.</p>
+
+<p>The interesting case is when a tag group contains both a <code>confirmed</code> state and a <code>reversed</code> state — or when any extraction carries a non-empty <code>reverses</code> field. That combination is a signal: the team changed direction on this topic. A targeted Haiku call is fired to summarize the shift:</p>
+
+<pre><code>{
+  "topic": "memory",
+  "original_approach": "full transcript persistence per session",
+  "shift_description": "storage cost concern in week 3; moved to summary-only",
+  "final_approach": "session summaries + emotional state tags",
+  "when_shifted": "cluster_0021",
+  "resolved": true
+}</code></pre>
+
+<div class="callout">
+  <div class="callout-label">Why this matters</div>
+  <p>Most AI summarization pipelines produce the current answer. This produces the history of answers and the transitions between them. That's a qualitatively different artifact — closer to an architecture decision record than a specification, and far more useful for anyone who needs to understand or extend the system later.</p>
+</div>
+
+<p>Conflict detection costs nothing for topics that didn't flip. The check is local — inspect the state sequence, look for the signal. Only when the signal fires does an LLM call happen. For a 93-cluster corpus, that turned out to be one conflict call. One.</p>
+
+<div class="section-head">
+  <span class="num">Stage 06</span>
+  <h2>One Sonnet Call to Rule Them All</h2>
+</div>
+
+<p>All extracted notes, sorted by cluster ID — which is chronological order — plus the conflict summary, go to Sonnet in a single call with a 12,000-token output budget. The prompt is explicit about temporal precedence: later entries win. Earlier decisions that were reversed appear in the conflict section, not silently overwritten in the main spec.</p>
+
+<p>The output is a complete Markdown design specification with ten sections. Product overview, features, architecture, data models, API integrations, engineering decisions, QA considerations, deferred work. And then section nine:</p>
+
+<blockquote>
+  <p><strong>§9. Design Decisions That Changed Over Time</strong><br>
+  For each: original approach → trigger for change → final direction.</p>
+</blockquote>
+
+<p>That section is the piece that no flat summarization can produce. It requires knowing the timeline. It requires knowing which cluster confirmed what, and which cluster came back three weeks later and said "actually." The timestamps carried through from stage one, the decision states captured in stage four, and the conflict summary built in stage five — they all converge here, in the one place where the intellectual history of the project becomes legible again.</p>
+
+<div class="section-head">
+  <span class="num">The Ledger</span>
+  <h2>What Everything Cost</h2>
+</div>
+
+<table>
+  <thead>
+    <tr><th>Stage</th><th>Cost</th><th>Actual calls</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Preprocessing + clustering</td><td class="free">$0 — local compute</td><td>—</td></tr>
+    <tr><td>Term generation</td><td>1 Haiku call</td><td>1</td></tr>
+    <tr><td>Grep scoring</td><td class="free">$0 — shell</td><td>—</td></tr>
+    <tr><td>Cluster extraction</td><td>N × Haiku (parallel)</td><td>21</td></tr>
+    <tr><td>Conflict detection</td><td>0–N × Haiku</td><td>1</td></tr>
+    <tr><td>Spec synthesis</td><td>1 Sonnet call</td><td>1</td></tr>
+  </tbody>
+</table>
+
+<p>Total: 23 Haiku calls and 1 Sonnet call for a 93-cluster corpus spanning months of active design work. Roughly equivalent to two or three standalone Sonnet calls — for a complete, temporally-aware design specification of two products.</p>
+
+<div class="section-head">
+  <span class="num">Wider</span>
+  <h2>The Pattern Generalizes</h2>
+</div>
+
+<p>The pipeline is Discord-specific in its input format. The architecture is not. Cluster by time gap, score by domain terms, extract in parallel with a fast model, synthesize once with a smart model — this works on any corpus where decisions evolve over time and the timestamp order carries meaning:</p>
+
+<ul>
+  <li>Slack channel exports from long-running projects</li>
+  <li>GitHub issue and PR comment histories</li>
+  <li>Meeting transcript archives</li>
+  <li>Long email threads with multiple participants</li>
+  <li>Notion page edit histories with contributor timestamps</li>
+</ul>
+
+<p>The common thread is teams thinking out loud over time. Wherever that happens in text, there is institutional memory that point-in-time snapshots cannot recover. The temporal dimension — which most summarization tools flatten away — is where the actual history lives.</p>
+
+<p>The pipeline just makes it readable again.</p>
+
+<div style="border: 1px solid var(--rule); border-radius: 4px; padding: 20px 24px; margin: 36px 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+  <div>
+    <div style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px;">Open Source</div>
+    <div style="font-size: 16px; font-weight: 700; color: var(--ink);">The full pipeline is available on GitHub</div>
+    <div style="font-size: 14px; color: var(--muted); margin-top: 3px;">Bot, preprocessing, grep scoring, extraction, synthesis — all stages included.</div>
+  </div>
+  <a href="https://github.com/cannyforge/chat-archaeology" target="_blank" rel="noopener"
+     style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; font-weight: 700; padding: 10px 20px; background: var(--ink); color: #fff; text-decoration: none; border-radius: 4px; white-space: nowrap;">
+    cannyforge/chat-archaeology →
+  </a>
+</div>
+
+<div class="author-box">
+  <p><strong>CannyForge</strong> is an independent AI practice — publishing across agent systems, architecture, economics, and emerging applications. Written by a builder, for practitioners, executives, and investors shaping what comes next.</p>
+  <p style="margin-bottom:0"><a href="/about.html">About CannyForge</a> · <a href="https://twitter.com/cannyforge" target="_blank" rel="noopener">Twitter/X</a> · <a href="/feed.xml">RSS</a> · Building something interesting in AI? <a href="mailto:cannyforge@gmail.com">Get in touch →</a></p>
+</div>
+
+<div class="email-capture">
+  <p>Get new articles by email — no noise, just the writing.</p>
+  <form action="https://buttondown.email/api/emails/embed-subscribe/BUTTONDOWN_USERNAME"
+        method="post" target="popupwindow"
+        onsubmit="window.open('https://buttondown.email/BUTTONDOWN_USERNAME','popupwindow')">
+    <input type="email" name="email" placeholder="you@example.com" required>
+    <button type="submit">Subscribe</button>
+  </form>
+</div>
+
+<div class="comments">
+  <script src="https://giscus.app/client.js"
+    data-repo="cannyforge/cannyforge.github.io"
+    data-repo-id="R_kgDOSMHeOA"
+    data-category="General"
+    data-category-id="DIC_kwDOSMHeOM4C7p9a"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    crossorigin="anonymous"
+    async>
+  </script>
+</div>
+
+</div><!-- .article-wrap -->
+</body>
+</html>
