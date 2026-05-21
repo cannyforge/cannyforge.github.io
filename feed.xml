@@ -7,6 +7,13 @@
     <language>en-us</language>
     <atom:link href="https://cannyforge.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>The State of Agent Frameworks — A 2026 Survey</title>
+      <link>https://cannyforge.dev/the-state-of-agent-frameworks-2026/</link>
+      <pubDate>Wed, 21 May 2026 00:00:00 +0000</pubDate>
+      <description>A comprehensive 2026 survey of the six agent frameworks that ship to production: OpenAI Agents SDK, Claude Agent SDK, LangGraph, CrewAI, Google ADK, and Microsoft Semantic Kernel. Architecture trade-offs, real deployments, and the gaps they have yet to close.</description>
+      <guid isPermaLink="true">https://cannyforge.dev/the-state-of-agent-frameworks-2026/</guid>
+    </item>
+    <item>
       <title>DeepSeek-V4: The Economics of the Million-Token Brain</title>
       <link>https://cannyforge.dev/deepseek-v4/</link>
       <pubDate>Thu, 24 Apr 2026 00:00:00 +0000</pubDate>

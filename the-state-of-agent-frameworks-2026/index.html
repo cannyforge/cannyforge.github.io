@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The State of Agent Frameworks — A 2026 Survey — CannyForge</title>
+  <meta name="description" content="By Q2 2026, the framework war is over — and won by six players. 31% enterprise adoption, 37% lab-to-prod gap. The complete architectural map: OpenAI, Claude, LangGraph, CrewAI, Google ADK, Microsoft.">
+  <meta property="og:title" content="The State of Agent Frameworks — A 2026 Survey">
+  <meta property="og:description" content="Six frameworks, six niches. 31% enterprise adoption, 37% lab-to-prod gap. The full engineering map for 2026.">
+  <meta property="og:url" content="https://cannyforge.dev/the-state-of-agent-frameworks-2026/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="CannyForge">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@cannyforge">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="alternate" type="application/rss+xml" title="CannyForge" href="/feed.xml">
+<style>
+:root {
+  --ink: #0a0a0a;
+  --paper: #f4f1ea;
+  --paper-deep: #ebe6da;
+  --rust: #a8421f;
+  --rust-deep: #7a2f15;
+  --olive: #5a6b3e;
+  --gold: #b8860b;
+  --mist: #aab0a4;
+  --line: #1a1a1a;
+  --line-soft: rgba(10,10,10,0.15);
+  --line-softer: rgba(10,10,10,0.08);
+  --sans: 'Inter Tight','Helvetica Neue',sans-serif;
+  --serif: 'Fraunces',Georgia,serif;
+  --mono: 'JetBrains Mono',monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(10,10,10,0.04) 1px, transparent 0);
+  background-size: 14px 14px;
+  pointer-events: none;
+  z-index: 1;
+}
+.container { max-width: 1280px; margin: 0 auto; padding: 0 48px; position: relative; z-index: 2; }
+@media(max-width: 768px) { .container { padding: 0 24px; } }
+
+/* ── Site header (CannyForge brand) ── */
+.site-header {
+  border-bottom: 2px solid var(--ink);
+  padding: 14px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky; top: 0;
+  background: rgba(244,241,234,0.95);
+  backdrop-filter: blur(8px);
+  z-index: 200;
+}
+.site-name {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+}
+.site-name span { color: var(--rust); }
+.site-header nav { display: flex; gap: 28px; align-items: center; }
+.site-header nav a {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink);
+  text-decoration: none;
+  opacity: 0.6;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: opacity 0.2s;
+}
+.site-header nav a:hover { opacity: 1; color: var(--rust); }
+@media(max-width: 640px) { .site-header { padding: 14px 24px; } .site-header nav { display: none; } }
+
+/* ── Ticker ── */
+.ticker {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 14px 0;
+  overflow: hidden;
+  border-bottom: 1px solid #333;
+}
+.ticker-track {
+  display: flex;
+  gap: 64px;
+  animation: tick 70s linear infinite;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.ticker-item { display: flex; align-items: center; gap: 12px; }
+.ticker-item::before { content: '◆'; color: var(--rust); font-size: 7px; }
+@keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ── Hero ── */
+.hero {
+  padding: 80px 0 100px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 36px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.hero-eyebrow::before { content: ''; width: 40px; height: 1px; background: var(--rust); }
+.hero-title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(52px, 9vw, 128px);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  margin-bottom: 48px;
+}
+.hero-title em { font-style: italic; font-weight: 400; color: var(--rust); }
+.hero-sub {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 64px;
+  padding-top: 36px;
+  border-top: 1px solid var(--line-soft);
+}
+@media(max-width: 768px) { .hero-sub { grid-template-columns: 1fr; gap: 28px; } }
+.hero-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 2;
+  color: #555;
+}
+.hero-meta-label { color: var(--rust); font-weight: 600; display: block; margin-top: 14px; }
+.hero-meta-label:first-child { margin-top: 0; }
+.hero-lede {
+  font-family: var(--serif);
+  font-size: clamp(19px, 2.2vw, 26px);
+  line-height: 1.45;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: #1a1a1a;
+}
+.hero-lede em { color: var(--rust); font-style: italic; }
+
+/* ── Summary grid ── */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  margin-top: 64px;
+}
+@media(max-width: 900px) { .summary-grid { grid-template-columns: repeat(2,1fr); } }
+@media(max-width: 480px) { .summary-grid { grid-template-columns: 1fr; } }
+.summary-cell {
+  background: var(--paper);
+  padding: 36px 28px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.summary-num {
+  font-family: var(--serif);
+  font-size: 64px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--rust);
+  font-weight: 400;
+}
+.summary-num small { font-size: 22px; color: var(--ink); font-weight: 300; }
+.summary-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #555;
+  margin-top: auto;
+  line-height: 1.5;
+}
+
+/* ── Big idea ── */
+.big-idea {
+  margin-top: 72px;
+  padding: 56px 0;
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  position: relative;
+}
+.big-idea::before {
+  content: '¶';
+  position: absolute; left: -36px; top: 56px;
+  font-family: var(--serif);
+  font-size: 48px;
+  color: var(--rust);
+  font-style: italic;
+}
+@media(max-width: 900px) { .big-idea::before { display: none; } }
+.big-idea-text {
+  font-family: var(--serif);
+  font-size: clamp(26px, 3.5vw, 42px);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  font-weight: 300;
+  max-width: 22ch;
+}
+.big-idea-text em { font-style: italic; color: var(--rust); }
+.big-idea-attr {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 28px;
+  color: #777;
+}
+
+/* ── Sections ── */
+section { padding: 100px 0; border-bottom: 1px solid var(--line); }
+section:last-of-type { border-bottom: none; }
+.section-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.section-num::before { content: ''; width: 30px; height: 1px; background: var(--rust); }
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(36px, 5vw, 68px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-weight: 300;
+  margin-bottom: 24px;
+  max-width: 16ch;
+}
+.section-title em { font-style: italic; color: var(--rust); }
+.section-intro {
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.55;
+  max-width: 62ch;
+  margin-bottom: 60px;
+  color: #222;
+}
+
+/* ── Overview table ── */
+.table-wrap { overflow-x: auto; border: 1px solid var(--ink); margin: 32px 0; }
+table.compare { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 700px; }
+table.compare thead { background: var(--ink); color: var(--paper); }
+table.compare th {
+  padding: 16px 14px; text-align: left;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-weight: 500; border-right: 1px solid #333; vertical-align: bottom;
+}
+table.compare th:last-child { border-right: none; }
+table.compare td {
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--line-soft);
+  border-right: 1px solid var(--line-softer);
+  vertical-align: top; line-height: 1.5;
+}
+table.compare td:last-child { border-right: none; }
+table.compare tbody tr:nth-child(even) { background: rgba(0,0,0,0.02); }
+table.compare tbody tr:hover { background: rgba(168,66,31,0.05); }
+.cell-fw { font-family: var(--serif); font-size: 17px; font-weight: 500; color: var(--rust); }
+.score {
+  display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 600;
+  padding: 2px 8px; letter-spacing: 0.05em; text-transform: uppercase;
+}
+.score-best { background: var(--olive); color: #fff; }
+.score-good { background: rgba(90,107,62,0.18); color: var(--olive); }
+.score-mid  { background: rgba(184,134,11,0.18); color: var(--gold); }
+.score-weak { background: rgba(168,66,31,0.18); color: var(--rust); }
+
+/* ── Framework profile cards ── */
+.frameworks { display: flex; flex-direction: column; gap: 0; }
+.fw-card {
+  display: grid; grid-template-columns: 110px 1fr 1fr; gap: 44px;
+  padding: 60px 0; border-bottom: 1px solid var(--line-soft);
+  align-items: start; transition: background 0.3s;
+}
+.fw-card:hover { background: var(--paper-deep); }
+@media(max-width: 900px) { .fw-card { grid-template-columns: 1fr; gap: 20px; padding: 40px 0; } }
+.fw-num-large {
+  font-family: var(--serif); font-style: italic; font-size: 96px; line-height: 0.9;
+  letter-spacing: -0.03em; color: var(--rust); font-weight: 300;
+}
+.fw-content h3 {
+  font-family: var(--serif); font-size: 34px; line-height: 1.05;
+  letter-spacing: -0.02em; font-weight: 400; margin-bottom: 6px;
+}
+.fw-vendor {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--rust); margin-bottom: 18px;
+}
+.fw-tagline {
+  font-family: var(--serif); font-style: italic; font-size: 17px;
+  line-height: 1.4; color: #333; margin-bottom: 18px;
+}
+.fw-meta {
+  display: grid; grid-template-columns: repeat(2,1fr); gap: 14px;
+  font-size: 13px; border-top: 1px dashed var(--line-soft); padding-top: 18px;
+}
+.fw-meta-label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #888; display: block; margin-bottom: 3px;
+}
+.fw-meta-val { font-weight: 500; }
+.fw-details { font-size: 14.5px; line-height: 1.65; }
+.fw-details p { margin-bottom: 14px; }
+.fw-strengths, .fw-weaknesses {
+  margin-top: 16px; padding: 12px 16px;
+  border-left: 3px solid var(--olive); background: rgba(90,107,62,0.06);
+}
+.fw-weaknesses { border-left-color: var(--rust); background: rgba(168,66,31,0.06); }
+.fw-strengths-label, .fw-weaknesses-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--olive); font-weight: 700; margin-bottom: 6px; display: block;
+}
+.fw-weaknesses-label { color: var(--rust); }
+
+/* ── Code blocks ── */
+pre.code {
+  background: var(--ink); color: #e8e6df; padding: 22px 26px;
+  font-family: var(--mono); font-size: 12px; line-height: 1.7;
+  overflow-x: auto; margin: 18px 0; border-left: 4px solid var(--rust);
+  position: relative;
+}
+pre.code::before {
+  content: attr(data-lang); position: absolute; top: 8px; right: 14px;
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #666;
+}
+code { font-family: var(--mono); font-size: 12px; background: var(--paper-deep); padding: 2px 6px; border-radius: 2px; color: var(--rust-deep); }
+pre.code code { background: none; padding: 0; color: inherit; font-size: 12px; }
+
+/* ── Bar charts ── */
+.benchmark-chart { margin: 44px 0; padding: 30px; background: #fff; border: 1px solid var(--ink); }
+.chart-title { font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rust); margin-bottom: 6px; }
+.chart-sub { font-family: var(--serif); font-size: 22px; font-weight: 500; margin-bottom: 24px; line-height: 1.2; }
+.bar-row {
+  display: grid; grid-template-columns: 180px 1fr 70px; gap: 14px;
+  align-items: center; padding: 9px 0; border-bottom: 1px dashed var(--line-softer);
+}
+.bar-row:last-child { border-bottom: none; }
+.bar-label { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.bar-track { height: 14px; background: var(--paper-deep); position: relative; overflow: hidden; }
+.bar-fill { height: 100%; background: linear-gradient(90deg, var(--rust), var(--rust-deep)); width: 0; transition: width 1.4s cubic-bezier(0.4,0,0.2,1); }
+.bar-val { font-family: var(--mono); font-size: 12px; font-weight: 600; text-align: right; }
+
+/* ── Scenario blocks ── */
+.scenario {
+  display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px;
+  padding: 60px 0; border-top: 1px solid var(--line-soft); align-items: start;
+}
+.scenario:first-of-type { border-top: none; padding-top: 0; }
+@media(max-width: 900px) { .scenario { grid-template-columns: 1fr; gap: 24px; } }
+.scenario-head { position: sticky; top: 130px; }
+.scenario-num {
+  font-family: var(--serif); font-style: italic; font-size: 140px; line-height: 0.85;
+  letter-spacing: -0.04em; color: var(--rust); font-weight: 300;
+}
+.scenario-domain {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: #777; margin: 16px 0 10px;
+}
+.scenario-name {
+  font-family: var(--serif); font-size: 38px; line-height: 1;
+  letter-spacing: -0.025em; font-weight: 400; margin-bottom: 20px;
+}
+.scenario-name em { font-style: italic; color: var(--rust); }
+.scenario-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.s-tag {
+  display: inline-block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 4px 10px; border: 1px solid var(--line-soft); background: var(--paper-deep);
+}
+.scenario-body p { margin-bottom: 14px; font-size: 15px; line-height: 1.65; }
+.scenario-body h4 {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-top: 28px; margin-bottom: 12px; color: var(--rust); font-weight: 700;
+}
+.winner-box {
+  border: 1px solid var(--ink); background: #fff; padding: 22px; margin: 20px 0; position: relative;
+}
+.winner-box::before {
+  content: 'WINNER'; position: absolute; top: -10px; left: 20px;
+  background: var(--ink); color: var(--paper); font-family: var(--mono);
+  font-size: 9px; letter-spacing: 0.12em; padding: 3px 10px; font-weight: 700;
+}
+.winner-name { font-family: var(--serif); font-size: 22px; font-weight: 500; margin: 8px 0; color: var(--rust); }
+.winner-why { font-size: 13.5px; line-height: 1.6; color: #333; }
+
+/* ── Agent loop diagram ── */
+.loop-diagram {
+  display: grid; grid-template-columns: repeat(5,1fr); gap: 0;
+  margin: 44px 0 28px; background: #fff; border: 1px solid var(--ink);
+}
+@media(max-width: 900px) { .loop-diagram { grid-template-columns: 1fr; } }
+.loop-step {
+  padding: 26px 20px; border-right: 1px solid var(--line-soft);
+  background: linear-gradient(180deg,#fff 0%,var(--paper-deep) 100%);
+  transition: transform 0.3s, background 0.3s; position: relative;
+}
+.loop-step:last-child { border-right: none; }
+.loop-step:hover { background: linear-gradient(180deg,var(--paper) 0%,#fff 100%); transform: translateY(-2px); }
+@media(max-width: 900px) { .loop-step { border-right: none; border-bottom: 1px solid var(--line-soft); } .loop-step:last-child { border-bottom: none; } }
+.loop-num { font-family: var(--serif); font-style: italic; font-size: 40px; font-weight: 300; color: var(--rust); line-height: 1; margin-bottom: 8px; }
+.loop-name { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #666; font-weight: 700; margin-bottom: 12px; }
+.loop-title { font-family: var(--serif); font-size: 17px; font-weight: 500; margin-bottom: 8px; line-height: 1.2; }
+.loop-text { font-size: 12.5px; line-height: 1.55; color: #333; }
+
+/* ── Stage matrix blocks ── */
+.stage-block { margin: 40px 0 56px; background: #fff; border: 1px solid var(--ink); overflow: hidden; }
+.stage-header {
+  background: var(--ink); color: var(--paper); padding: 22px 26px;
+  display: flex; align-items: baseline; gap: 24px; border-bottom: 1px solid #333;
+}
+.stage-header-num { font-family: var(--serif); font-style: italic; font-size: 34px; font-weight: 300; color: var(--rust); }
+.stage-header-content h4 { font-family: var(--serif); font-size: 22px; font-weight: 500; margin-bottom: 4px; color: var(--paper); letter-spacing: -0.01em; }
+.stage-header-content .stage-cat { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #aaa; }
+.stage-prelude { padding: 22px 26px; font-family: var(--serif); font-size: 15px; line-height: 1.6; color: #222; background: var(--paper-deep); border-bottom: 1px solid var(--line-soft); font-style: italic; }
+.stage-prelude strong { color: var(--rust); font-style: normal; font-weight: 500; }
+.fw-matrix { display: grid; grid-template-columns: 160px 1fr; gap: 0; }
+@media(max-width: 640px) { .fw-matrix { grid-template-columns: 1fr; } }
+.fw-row { display: contents; }
+.fw-row > div { padding: 16px 22px; border-bottom: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft); }
+.fw-row:last-child > div { border-bottom: none; }
+.fw-row > div:last-child { border-right: none; }
+.fw-name-cell {
+  background: var(--paper-deep); font-family: var(--serif); font-size: 15px; font-weight: 500;
+  display: flex; align-items: center; gap: 8px;
+}
+.fw-name-cell::before { content: ''; width: 4px; height: 22px; background: var(--rust); flex-shrink: 0; }
+.fw-detail-cell { font-size: 13.5px; line-height: 1.55; }
+.fw-detail-cell code { font-family: var(--mono); font-size: 11px; background: var(--paper-deep); padding: 1px 5px; border-radius: 2px; color: var(--rust-deep); }
+.fw-pill {
+  display: inline-block; font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 2px 8px; background: var(--ink); color: var(--paper);
+  margin-right: 5px; margin-bottom: 3px;
+}
+.fw-pill.pill-best { background: var(--olive); }
+.fw-pill.pill-warn { background: var(--rust); }
+.fw-pill.pill-mid  { background: var(--gold); color: #fff; }
+
+/* ── Token chart ── */
+.token-chart { margin: 32px 0; padding: 28px; background: #fff; border: 1px solid var(--ink); }
+.token-chart-title { font-family: var(--serif); font-size: 20px; font-weight: 500; margin-bottom: 20px; }
+.token-row {
+  display: grid; grid-template-columns: 220px 1fr 130px; gap: 12px;
+  align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--line-softer);
+}
+.token-row:last-child { border-bottom: none; }
+.token-label { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.token-stack { display: flex; height: 22px; background: var(--paper-deep); overflow: hidden; }
+.token-seg {
+  height: 100%; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 9px; color: #fff; font-weight: 700;
+  white-space: nowrap; overflow: hidden; width: 0; transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+.seg-sys   { background: #3d4838; }
+.seg-tools { background: #5a6b3e; }
+.seg-hist  { background: var(--gold); }
+.seg-task  { background: var(--rust); }
+.seg-out   { background: var(--rust-deep); }
+.token-total { font-family: var(--mono); font-size: 12px; font-weight: 700; text-align: right; }
+.token-legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line-soft); font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+.legend-dot { display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: middle; }
+
+/* ── Principle callouts ── */
+.principle {
+  margin: 32px 0; padding: 30px 38px;
+  background: var(--ink); color: var(--paper); border-left: 6px solid var(--rust); position: relative;
+}
+.principle-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rust); font-weight: 700; margin-bottom: 10px; }
+.principle-text { font-family: var(--serif); font-size: 19px; line-height: 1.5; font-style: italic; }
+.principle-text em { color: #fff; font-style: normal; font-weight: 600; background: var(--rust); padding: 1px 8px; }
+
+/* ── Crossover section ── */
+.crossover { margin: 44px 0; padding: 44px; background: linear-gradient(135deg,#fff 0%,var(--paper-deep) 100%); border: 1px solid var(--ink); }
+.crossover-title { font-family: var(--serif); font-size: 26px; font-weight: 400; margin-bottom: 8px; line-height: 1.15; }
+.crossover-title em { font-style: italic; color: var(--rust); }
+.crossover-sub { font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #666; margin-bottom: 32px; }
+.crossover-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 28px; align-items: stretch; }
+@media(max-width: 900px) { .crossover-grid { grid-template-columns: 1fr; } }
+.cross-side { padding: 26px; background: #fff; border: 1px solid var(--ink); }
+.cross-side h5 { font-family: var(--serif); font-size: 22px; font-weight: 500; margin-bottom: 6px; }
+.cross-side h5 em { font-style: italic; color: var(--rust); }
+.cross-side-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rust); margin-bottom: 14px; }
+.cross-side ul { list-style: none; padding: 0; }
+.cross-side li { font-size: 13px; line-height: 1.6; padding-left: 18px; position: relative; margin-bottom: 7px; }
+.cross-side li::before { content: '›'; position: absolute; left: 0; color: var(--rust); font-weight: 700; font-size: 16px; line-height: 1; }
+.cross-divider { display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--serif); font-style: italic; font-size: 28px; font-weight: 300; color: var(--rust); }
+.cross-divider::before, .cross-divider::after { content: ''; width: 1px; flex: 1; background: var(--line-soft); }
+.cross-divider::before { margin-bottom: 12px; }
+.cross-divider::after  { margin-top: 12px; }
+@media(max-width: 900px) { .cross-divider { flex-direction: row; font-size: 18px; padding: 10px 0; } .cross-divider::before,.cross-divider::after { width: auto; height: 1px; flex: 1; margin: 0 12px; } }
+.cross-thresholds { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line-soft); }
+.threshold-row { display: grid; grid-template-columns: 1fr 220px; gap: 20px; padding: 12px 0; border-bottom: 1px dashed var(--line-softer); align-items: baseline; }
+.threshold-row:last-child { border-bottom: none; }
+@media(max-width: 640px) { .threshold-row { grid-template-columns: 1fr; gap: 4px; } }
+.threshold-trigger { font-family: var(--serif); font-style: italic; font-size: 15px; color: #222; }
+.threshold-resp { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; font-weight: 600; color: var(--rust); text-align: right; }
+@media(max-width: 640px) { .threshold-resp { text-align: left; } }
+
+/* ── Gap grid ── */
+.gap-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 0; margin-top: 44px; border: 1px solid var(--ink); }
+@media(max-width: 768px) { .gap-grid { grid-template-columns: 1fr; } }
+.gap-cell { padding: 34px 28px; border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); position: relative; }
+.gap-cell:nth-child(2n) { border-right: none; }
+.gap-cell:nth-last-child(-n+2) { border-bottom: none; }
+@media(max-width: 768px) { .gap-cell { border-right: none; } .gap-cell:nth-last-child(-n+2) { border-bottom: 1px solid var(--line-soft); } .gap-cell:last-child { border-bottom: none; } }
+.gap-num { font-family: var(--serif); font-style: italic; font-size: 46px; font-weight: 300; color: var(--rust); line-height: 1; margin-bottom: 10px; }
+.gap-title { font-family: var(--serif); font-size: 22px; font-weight: 500; margin-bottom: 10px; line-height: 1.2; }
+.gap-desc { font-size: 14px; line-height: 1.6; color: #333; margin-bottom: 14px; }
+.gap-future {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--olive); padding: 7px 12px; background: rgba(90,107,62,0.08);
+  border-left: 3px solid var(--olive); display: inline-block;
+}
+
+/* ── Decision tree ── */
+.decision-tree { margin-top: 44px; padding: 44px; background: var(--ink); color: var(--paper); }
+.dt-title { font-family: var(--serif); font-size: 26px; font-weight: 400; margin-bottom: 28px; }
+.dt-row { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; padding: 16px 0; border-bottom: 1px solid #333; align-items: center; }
+.dt-row:last-child { border-bottom: none; }
+@media(max-width: 640px) { .dt-row { grid-template-columns: 1fr; gap: 6px; } }
+.dt-if { font-family: var(--serif); font-size: 16px; font-style: italic; color: #ccc; }
+.dt-if::before { content: 'IF '; font-family: var(--mono); font-size: 10px; color: var(--rust); font-style: normal; letter-spacing: 0.15em; font-weight: 700; }
+.dt-then { font-family: var(--mono); font-size: 12px; letter-spacing: 0.05em; color: var(--paper); font-weight: 600; }
+.dt-then-fw { color: var(--rust); font-weight: 700; }
+
+/* ── Developer voices ── */
+.voices { display: grid; grid-template-columns: repeat(2,1fr); gap: 22px; margin-top: 44px; }
+@media(max-width: 768px) { .voices { grid-template-columns: 1fr; } }
+.voice { padding: 30px; background: #fff; border: 1px solid var(--line); position: relative; }
+.voice::before { content: '"'; position: absolute; top: -18px; left: 20px; font-family: var(--serif); font-size: 88px; line-height: 1; color: var(--rust); font-style: italic; }
+.voice-quote { font-family: var(--serif); font-size: 17px; line-height: 1.5; font-style: italic; margin: 22px 0 16px; color: #222; }
+.voice-source { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rust); border-top: 1px solid var(--line-soft); padding-top: 12px; }
+
+/* ── Callout boxes ── */
+.callout {
+  padding: 32px 38px; margin: 44px 0; border: 1px solid var(--ink);
+  background: linear-gradient(135deg,#fff 0%,var(--paper-deep) 100%);
+}
+.callout-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rust); font-weight: 700; margin-bottom: 10px; }
+.callout p { font-family: var(--serif); font-size: 18px; line-height: 1.55; color: #1a1a1a; margin: 0; }
+
+/* ── Tabs ── */
+.tabs { display: flex; border-bottom: 2px solid var(--ink); margin-top: 40px; margin-bottom: 32px; flex-wrap: wrap; }
+.tab { background: none; border: none; padding: 14px 22px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; cursor: pointer; color: #666; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab:hover { color: var(--ink); }
+.tab.active { color: var(--rust); border-bottom-color: var(--rust); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── Scroll reveal ── */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/* ── Code compare ── */
+.code-compare { display: grid; grid-template-columns: repeat(2,1fr); gap: 1px; background: var(--ink); margin: 36px 0; }
+@media(max-width: 900px) { .code-compare { grid-template-columns: 1fr; } }
+.code-compare-side h5 { background: var(--ink); color: var(--paper); padding: 14px 20px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; border-bottom: 2px solid var(--rust); }
+.code-compare-side pre.code { margin: 0; border-left: none; }
+
+/* ── Scenario tag ── */
+.tag { display: inline-block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 10px; border: 1px solid var(--line-soft); background: var(--paper-deep); }
+
+/* ── Syntax highlighting ── */
+.code-comment { color: #888; font-style: italic; }
+.code-keyword  { color: #d4895e; }
+.code-string   { color: #a8c982; }
+.code-fn       { color: #8eb5d0; }
+
+/* ── fw-num (framework number in §02) ── */
+.fw-num { font-family: var(--serif); font-style: italic; font-size: 96px; line-height: 0.9; letter-spacing: -0.03em; color: var(--rust); font-weight: 300; }
+
+/* ── Metrics grid (§04 scenarios) ── */
+.metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; }
+@media(max-width: 768px) { .metrics-grid { grid-template-columns: 1fr; } }
+.metric { padding: 28px; border: 1px solid var(--ink); background: var(--paper); position: relative; }
+.metric-cat { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rust); margin-bottom: 12px; }
+.metric h5 { font-family: var(--serif); font-size: 22px; font-weight: 500; margin-bottom: 14px; line-height: 1.2; }
+.metric ul { list-style: none; padding: 0; }
+.metric li { font-size: 13.5px; line-height: 1.55; padding-left: 18px; position: relative; margin-bottom: 8px; }
+.metric li::before { content: '→'; position: absolute; left: 0; color: var(--rust); font-weight: 700; }
+
+/* ── Dig deeper ── */
+.dig-deeper { background: var(--ink); color: var(--paper); padding: 80px 0; }
+.dig-deeper-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rust); margin-bottom: 20px; }
+.dig-deeper-title { font-family: var(--serif); font-size: clamp(32px,4vw,56px); line-height: 1; letter-spacing: -0.03em; font-weight: 300; margin-bottom: 48px; color: var(--paper); }
+.dig-deeper-title em { font-style: italic; color: var(--rust); }
+.cluster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1px; background: #333; }
+.cluster-card { background: #0f1014; padding: 28px; display: flex; flex-direction: column; gap: 12px; transition: background 0.2s; }
+.cluster-card:hover { background: #1a1a20; }
+.cluster-num { font-family: var(--serif); font-style: italic; font-size: 32px; font-weight: 300; color: var(--rust); line-height: 1; }
+.cluster-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: #666; }
+.cluster-title { font-family: var(--serif); font-size: 18px; font-weight: 500; line-height: 1.25; color: var(--paper); }
+.cluster-status { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 8px; background: #333; color: #888; display: inline-block; margin-top: auto; }
+
+/* ── Footer strip ── */
+.article-footer { background: var(--ink); color: var(--paper); padding: 72px 0 40px; }
+.foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 56px; margin-bottom: 56px; }
+@media(max-width: 768px) { .foot-grid { grid-template-columns: 1fr; gap: 28px; } }
+.foot-title { font-family: var(--serif); font-size: 44px; line-height: 0.95; letter-spacing: -0.025em; font-weight: 300; margin-bottom: 18px; }
+.foot-title em { font-style: italic; color: var(--rust); }
+.foot-desc { font-size: 14px; line-height: 1.65; color: #aaa; margin-bottom: 22px; }
+.foot-cta {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--paper); border: 1px solid var(--paper); padding: 10px 20px; text-decoration: none;
+  display: inline-block; transition: background 0.2s, color 0.2s;
+}
+.foot-cta:hover { background: var(--paper); color: var(--ink); }
+.foot-col h6 { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rust); margin-bottom: 12px; }
+.foot-col ul { list-style: none; }
+.foot-col li { font-size: 13px; margin-bottom: 7px; color: #aaa; line-height: 1.5; }
+.foot-col a { color: #aaa; text-decoration: none; }
+.foot-col a:hover { color: var(--paper); }
+.foot-bot { border-top: 1px solid #333; padding-top: 22px; display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #666; }
+@media(max-width: 640px) { .foot-bot { flex-direction: column; gap: 8px; } }
+
+/* ── Giscus comments ── */
+.comments-wrap { max-width: 1280px; margin: 0 auto; padding: 60px 48px 80px; }
+@media(max-width: 768px) { .comments-wrap { padding: 40px 24px 60px; } }
+</style>
+</head>
+<body>
+
+<!-- ── Site header ── -->
+<header class="site-header">
+  <a href="/" class="site-name">Canny<span>Forge</span></a>
+  <nav>
+    <a href="/about.html">About</a>
+    <a href="https://github.com/cannyforge" target="_blank" rel="noopener">GitHub</a>
+    <a href="/feed.xml">RSS</a>
+  </nav>
+</header>
+
+<!-- ── Ticker ── -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">MCP downloads 97M+</span>
+    <span class="ticker-item">31% enterprises in production</span>
+    <span class="ticker-item">A2A under Linux Foundation</span>
+    <span class="ticker-item">LangGraph fastest latency</span>
+    <span class="ticker-item">Claude Sonnet 4.5 — 30hr autonomous coding</span>
+    <span class="ticker-item">CrewAI 60% Fortune 500</span>
+    <span class="ticker-item">37% lab-to-prod gap</span>
+    <span class="ticker-item">CLEAR framework adopted</span>
+    <span class="ticker-item">OpenAI sandbox agents</span>
+    <span class="ticker-item">Apple ships Claude SDK in Xcode 26.3</span>
+    <span class="ticker-item">MCP downloads 97M+</span>
+    <span class="ticker-item">31% enterprises in production</span>
+    <span class="ticker-item">A2A under Linux Foundation</span>
+    <span class="ticker-item">LangGraph fastest latency</span>
+    <span class="ticker-item">Claude Sonnet 4.5 — 30hr autonomous coding</span>
+    <span class="ticker-item">CrewAI 60% Fortune 500</span>
+  </div>
+</div>
+
+<!-- ── Hero ── -->
+<div class="container">
+  <div class="hero">
+    <div class="hero-eyebrow">Agent Systems · May 2026 Survey</div>
+    <h1 class="hero-title">
+      The State of<br>
+      <em>Agent</em><br>
+      Frameworks
+    </h1>
+    <div class="hero-sub">
+      <div class="hero-meta">
+        <span class="hero-meta-label">Published</span>
+        May 2026
+        <span class="hero-meta-label">Sources</span>
+        Official framework docs<br>
+        arXiv 2511.14136 (CLEAR)<br>
+        McKinsey/S&amp;P Global Q1 2026<br>
+        Langfuse/Gurusup benchmarks<br>
+        Klarna · Uber · LinkedIn · Replit
+        <span class="hero-meta-label">Frameworks</span>
+        OpenAI · Anthropic · LangChain<br>
+        CrewAI · Google · Microsoft
+      </div>
+      <div class="hero-lede">
+        By Q2 2026 the framework war is effectively over — and won by <em>six players</em> occupying distinct architectural niches. Adoption is real: 31% of enterprises now run agents in production. But the lab-to-production gap remains the dominant pain point at 37%. Framework choice is no longer a library decision. It is an architectural commitment that compounds over years.
+      </div>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-cell">
+        <div class="summary-num">6</div>
+        <div class="summary-label">Surviving frameworks, distinct niches</div>
+      </div>
+      <div class="summary-cell">
+        <div class="summary-num">31<small>%</small></div>
+        <div class="summary-label">Enterprises running agents in production</div>
+      </div>
+      <div class="summary-cell">
+        <div class="summary-num">37<small>%</small></div>
+        <div class="summary-label">Lab-to-production gap (CLEAR arXiv)</div>
+      </div>
+      <div class="summary-cell">
+        <div class="summary-num">4</div>
+        <div class="summary-label">Patterns That Ship</div>
+      </div>
+    </div>
+
+    <div class="big-idea">
+      <div class="big-idea-text">
+        The hardest problem in 2026 is no longer <em>building</em> agents. It is <em>operating</em> them reliably — at scale, under governance, with cost-per-task as the unit of measure.
+      </div>
+      <div class="big-idea-attr">— Synthesized from 2026 State of AI Agents (Anthropic / Arcade) · S&amp;P Global Market Intelligence · McKinsey</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- § 02 FRAMEWORK PROFILES -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="frameworks">
+  <div class="container">
+    <div class="section-num">§ 02 — Framework Profiles</div>
+    <h2 class="section-title">The <em>six</em> frameworks that survived.</h2>
+    <p class="section-intro">Each framework profile covers architecture, primitives, code idiom, strengths, and the gaps developers consistently hit at production scale. Read these as architectural commitments, not feature checklists.</p>
+
+    <div class="frameworks">
+
+      <!-- OPENAI -->
+      <article class="fw-card reveal">
+        <div class="fw-num">01</div>
+        <div class="fw-content">
+          <h3>OpenAI <em>Agents SDK</em></h3>
+          <div class="fw-vendor">OpenAI · Released Mar 2025 · Open source</div>
+          <p class="fw-tagline">"A minimalist harness with four primitives — agents, handoffs, guardrails, tracing — and an opinionated runtime that gets you to production fast."</p>
+          <div class="fw-meta">
+            <div><span class="fw-meta-label">Languages</span><span class="fw-meta-val">Python · TypeScript</span></div>
+            <div><span class="fw-meta-label">Orchestration</span><span class="fw-meta-val">Explicit handoffs</span></div>
+            <div><span class="fw-meta-label">Model</span><span class="fw-meta-val">Provider-agnostic (100+)</span></div>
+            <div><span class="fw-meta-label">Stable since</span><span class="fw-meta-val">v0.14 sandbox (Apr 2026)</span></div>
+            <div><span class="fw-meta-label">Predecessor</span><span class="fw-meta-val">Swarm (experimental)</span></div>
+            <div><span class="fw-meta-label">Best for</span><span class="fw-meta-val">OpenAI-first stacks</span></div>
+          </div>
+        </div>
+        <div class="fw-details">
+          <p>The Agents SDK is OpenAI's production successor to the experimental Swarm. Its core abstraction is the <em>handoff</em>: agents transfer control to each other explicitly, carrying conversation context through the transition. The Apr 2026 update added native sandbox execution — agents now run in controlled computer environments with built-in support for Blaxel, Cloudflare, Daytona, E2B, Modal, Runloop, and Vercel.</p>
+          <pre class="code" data-lang="python"><span class="code-keyword">from</span> agents <span class="code-keyword">import</span> Agent, Runner
+
+triage = Agent(
+    name=<span class="code-string">"Triage"</span>,
+    instructions=<span class="code-string">"Route to billing or tech"</span>,
+    handoffs=[billing_agent, tech_agent],
+)
+result = Runner.run_sync(triage, <span class="code-string">"Refund my order"</span>)
+<span class="code-fn">print</span>(result.final_output)</pre>
+          <div class="fw-strengths">
+            <span class="fw-strengths-label">Strengths</span>
+            Tiny surface area; production-grade tracing built in; AgentKit visual builder; works with 100+ LLMs via Chat Completions; native realtime voice via gpt-realtime-2.
+          </div>
+          <div class="fw-weaknesses">
+            <span class="fw-weaknesses-label">Gaps</span>
+            Coarser orchestration than LangGraph; durable state requires bring-your-own; the simplicity that wins on velocity becomes a constraint on complex stateful workflows.
+          </div>
+        </div>
+      </article>
+
+      <!-- CLAUDE -->
+      <article class="fw-card reveal">
+        <div class="fw-num">02</div>
+        <div class="fw-content">
+          <h3>Claude <em>Agent SDK</em></h3>
+          <div class="fw-vendor">Anthropic · Renamed from Claude Code SDK · Sep 2025</div>
+          <p class="fw-tagline">"Give the agent a computer. Built-in file/shell tools, subagents with isolated context windows, and the deepest MCP integration in the ecosystem."</p>
+          <div class="fw-meta">
+            <div><span class="fw-meta-label">Languages</span><span class="fw-meta-val">Python · TypeScript</span></div>
+            <div><span class="fw-meta-label">Orchestration</span><span class="fw-meta-val">Tool-use chain + subagents</span></div>
+            <div><span class="fw-meta-label">Model</span><span class="fw-meta-val">Claude-only</span></div>
+            <div><span class="fw-meta-label">Powers</span><span class="fw-meta-val">Claude Code · Xcode 26.3</span></div>
+            <div><span class="fw-meta-label">Notable</span><span class="fw-meta-val">Skills system · Hooks · Compaction</span></div>
+            <div><span class="fw-meta-label">Best for</span><span class="fw-meta-val">Long-horizon agents · OS access</span></div>
+          </div>
+        </div>
+        <div class="fw-details">
+          <p>The SDK that powers Claude Code, exposed as a library. The design philosophy: giving a model real access to a real computer is a shorter path to capable agents than reinventing tool-calling on top of a chat API. Anthropic's own research shows the orchestrator+subagent pattern outperforming single-agent benchmarks by up to 90% when sub-agents work in parallel.</p>
+          <pre class="code" data-lang="python"><span class="code-keyword">from</span> claude_agent_sdk <span class="code-keyword">import</span> query, ClaudeAgentOptions
+
+<span class="code-keyword">async for</span> message <span class="code-keyword">in</span> query(
+    prompt=<span class="code-string">"Review this codebase: security, perf, tests"</span>,
+    options=ClaudeAgentOptions(
+        allowedTools=[<span class="code-string">"Read"</span>,<span class="code-string">"Glob"</span>,<span class="code-string">"Grep"</span>,<span class="code-string">"Task"</span>],
+        agents={
+            <span class="code-string">"security-reviewer"</span>: {<span class="code-string">"prompt"</span>: <span class="code-string">"You audit auth"</span>},
+            <span class="code-string">"perf-reviewer"</span>: {<span class="code-string">"prompt"</span>: <span class="code-string">"You profile"</span>},
+        },
+    ),
+):
+    <span class="code-fn">print</span>(message)</pre>
+          <div class="fw-strengths">
+            <span class="fw-strengths-label">Strengths</span>
+            Deepest MCP integration (200+ servers, single-line config); built-in file/shell tools; subagents with isolated context windows; Skills system for progressive disclosure; prompt caching delivers 10× cost reduction.
+          </div>
+          <div class="fw-weaknesses">
+            <span class="fw-weaknesses-label">Gaps</span>
+            Claude-only (no model routing to other vendors); no built-in observability, durable execution, or state persistence across sessions; runaway loops aren't guarded — developers must implement caps; the bundled CLI binary adds 270–340 MiB to Docker images.
+          </div>
+        </div>
+      </article>
+
+      <!-- LANGGRAPH -->
+      <article class="fw-card reveal">
+        <div class="fw-num">03</div>
+        <div class="fw-content">
+          <h3>Lang<em>Graph</em></h3>
+          <div class="fw-vendor">LangChain · v1.0 GA Oct 2025 · 90M monthly downloads</div>
+          <p class="fw-tagline">"A low-level graph runtime where agents are nodes and edges are conditional flow. Durable execution, checkpointing, and human-in-the-loop are first-class citizens."</p>
+          <div class="fw-meta">
+            <div><span class="fw-meta-label">Languages</span><span class="fw-meta-val">Python · TypeScript</span></div>
+            <div><span class="fw-meta-label">Orchestration</span><span class="fw-meta-val">Directed graph + conditional edges</span></div>
+            <div><span class="fw-meta-label">Model</span><span class="fw-meta-val">Provider-agnostic</span></div>
+            <div><span class="fw-meta-label">Production users</span><span class="fw-meta-val">Klarna · Uber · LinkedIn · Replit · JPM</span></div>
+            <div><span class="fw-meta-label">Inspired by</span><span class="fw-meta-val">Pregel · Apache Beam · NetworkX</span></div>
+            <div><span class="fw-meta-label">Best for</span><span class="fw-meta-val">Stateful complex workflows</span></div>
+          </div>
+        </div>
+        <div class="fw-details">
+          <p>LangGraph is the runtime LangChain pivoted to after openly saying "use LangGraph for agents, not LangChain." Production-tested at scale: Klarna runs LangGraph for support across 85 million users, cutting resolution time by 80%. In a controlled 2,000-task benchmark across four frameworks, LangGraph was fastest on latency across all five test tasks.</p>
+          <pre class="code" data-lang="python"><span class="code-keyword">from</span> langgraph.graph <span class="code-keyword">import</span> StateGraph, MessagesState, START, END
+
+<span class="code-keyword">def</span> <span class="code-fn">classify</span>(state): ...
+<span class="code-keyword">def</span> <span class="code-fn">research</span>(state): ...
+
+g = StateGraph(MessagesState)
+g.add_node(<span class="code-string">"classify"</span>, classify)
+g.add_node(<span class="code-string">"research"</span>, research)
+g.add_conditional_edges(<span class="code-string">"classify"</span>, route_by_intent)
+g.add_edge(<span class="code-string">"research"</span>, END)
+agent = g.compile(checkpointer=memory)</pre>
+          <div class="fw-strengths">
+            <span class="fw-strengths-label">Strengths</span>
+            Durable execution (resume from interrupted state); built-in persistence; first-class HITL; LangSmith observability replays production traces locally; most token-efficient in independent benchmarks; battle-tested at LinkedIn, Uber, JPM, Klarna.
+          </div>
+          <div class="fw-weaknesses">
+            <span class="fw-weaknesses-label">Gaps</span>
+            Steepest learning curve in the survey; graph theory + distributed systems literacy is a real prerequisite; frequent ecosystem updates create breaking-change risk; high TCO when factoring infrastructure and specialized talent.
+          </div>
+        </div>
+      </article>
+
+      <!-- CREWAI -->
+      <article class="fw-card reveal">
+        <div class="fw-num">04</div>
+        <div class="fw-content">
+          <h3>Crew<em>AI</em></h3>
+          <div class="fw-vendor">CrewAI Inc · $18M Series A · 60% Fortune 500 footprint</div>
+          <p class="fw-tagline">"Role-based agent teams modeled on how humans organize work. The fastest path from idea to working multi-agent prototype — sometimes too fast."</p>
+          <div class="fw-meta">
+            <div><span class="fw-meta-label">Languages</span><span class="fw-meta-val">Python only</span></div>
+            <div><span class="fw-meta-label">Orchestration</span><span class="fw-meta-val">Role-based crews · Flows</span></div>
+            <div><span class="fw-meta-label">Model</span><span class="fw-meta-val">Provider-agnostic</span></div>
+            <div><span class="fw-meta-label">Time-to-prototype</span><span class="fw-meta-val">2–4 hours (~35 LOC)</span></div>
+            <div><span class="fw-meta-label">Stars</span><span class="fw-meta-val">30K+ GitHub · 100K certified devs</span></div>
+            <div><span class="fw-meta-label">Best for</span><span class="fw-meta-val">Content, research, role workflows</span></div>
+          </div>
+        </div>
+        <div class="fw-details">
+          <p>CrewAI models multi-agent collaboration as a team of role-playing agents — each with role, backstory, goal, and tools. The 2025 enterprise breakout was real: $18M Series A, 100,000+ agent executions per day, 150+ enterprise customers. Distinctive feature: a hierarchical process mode that auto-generates a manager agent overseeing task delegation.</p>
+          <pre class="code" data-lang="python"><span class="code-keyword">from</span> crewai <span class="code-keyword">import</span> Agent, Task, Crew
+
+researcher = Agent(role=<span class="code-string">"Senior Researcher"</span>,
+    goal=<span class="code-string">"Surface industry trends"</span>,
+    backstory=<span class="code-string">"PhD in market analysis..."</span>)
+writer = Agent(role=<span class="code-string">"Tech Writer"</span>, ...)
+
+crew = Crew(agents=[researcher, writer],
+    tasks=[research_task, writing_task],
+    process=Process.hierarchical)
+crew.kickoff()</pre>
+          <div class="fw-strengths">
+            <span class="fw-strengths-label">Strengths</span>
+            Lowest learning curve; role abstraction maps intuitively to business stakeholders; Crews + Flows give you both autonomy and predictability; built-in observability and control plane in CrewAI AMP suite.
+          </div>
+          <div class="fw-weaknesses">
+            <span class="fw-weaknesses-label">Gaps</span>
+            ~18% token overhead vs LangGraph for ticket-triage workloads; ~3× the tokens on simple one-tool-call flows in independent benchmarks; debugging 5+ agent pipelines gets opaque; no checkpointing for long-running flows; teams often migrate to LangGraph in production.
+          </div>
+        </div>
+      </article>
+
+      <!-- GOOGLE ADK -->
+      <article class="fw-card reveal">
+        <div class="fw-num">05</div>
+        <div class="fw-content">
+          <h3>Google <em>ADK</em></h3>
+          <div class="fw-vendor">Google · Released Cloud NEXT 2025 · v2.0 Apr 2026</div>
+          <p class="fw-tagline">"Event-driven runtime with hierarchical agent trees, native A2A protocol support, and four-language coverage. The most multilingual framework in the survey."</p>
+          <div class="fw-meta">
+            <div><span class="fw-meta-label">Languages</span><span class="fw-meta-val">Python · TS · Go · Java</span></div>
+            <div><span class="fw-meta-label">Orchestration</span><span class="fw-meta-val">Hierarchical tree · Workflow Runtime</span></div>
+            <div><span class="fw-meta-label">Model</span><span class="fw-meta-val">Gemini-first; LiteLLM bridge</span></div>
+            <div><span class="fw-meta-label">Powers</span><span class="fw-meta-val">Agentspace · Customer Engagement Suite</span></div>
+            <div><span class="fw-meta-label">Notable</span><span class="fw-meta-val">A2A protocol · Skills · bidirectional audio/video</span></div>
+            <div><span class="fw-meta-label">Best for</span><span class="fw-meta-val">GCP-native · multimodal · polyglot teams</span></div>
+          </div>
+        </div>
+        <div class="fw-details">
+          <p>ADK introduces an event-driven runtime that orchestrates agents, tools, and persistent state into cohesive applications. The Runner asks the Execution Logic to process; each LLM invocation, tool call, or callback <em>yields</em> events back. This bidirectional model enables observability impossible with synchronous APIs. ADK 2.0 added a graph-based Workflow Runtime for deterministic flows with routing, fan-out/fan-in, loops, retry, HITL, and nested workflows.</p>
+          <pre class="code" data-lang="python"><span class="code-keyword">from</span> google.adk <span class="code-keyword">import</span> Agent, Workflow
+
+researcher = Agent(name=<span class="code-string">"researcher"</span>,
+    model=<span class="code-string">"gemini-flash-latest"</span>,
+    tools=[google_search])
+writer = Agent(name=<span class="code-string">"writer"</span>, ...)
+
+root = Workflow(name=<span class="code-string">"pipeline"</span>,
+    edges=[(<span class="code-string">"START"</span>, researcher, writer)])
+<span class="code-comment"># adk run path/to/agent  or  adk web</span></pre>
+          <div class="fw-strengths">
+            <span class="fw-strengths-label">Strengths</span>
+            Only framework with native Python/TS/Go/Java; A2A protocol enables cross-framework agent communication (an ADK agent can call a LangGraph or CrewAI agent); bidirectional audio/video streaming; native deployment to Vertex AI Agent Engine; rich evaluation tooling.
+          </div>
+          <div class="fw-weaknesses">
+            <span class="fw-weaknesses-label">Gaps</span>
+            Strongly Gemini-optimized; weakest on tool-call cost efficiency in independent benchmarks; v2.0 introduced breaking changes that fragmented session compatibility; the framework's surface area is large enough that learning all of it is a project.
+          </div>
+        </div>
+      </article>
+
+      <!-- MICROSOFT -->
+      <article class="fw-card reveal">
+        <div class="fw-num">06</div>
+        <div class="fw-content">
+          <h3>Microsoft <em>Agent Framework</em></h3>
+          <div class="fw-vendor">Microsoft · v1.0 GA Apr 2026 · Successor to Semantic Kernel + AutoGen</div>
+          <p class="fw-tagline">"The unification of Semantic Kernel's enterprise muscle and AutoGen's multi-agent conversation, now the canonical Microsoft stack for agents on Azure."</p>
+          <div class="fw-meta">
+            <div><span class="fw-meta-label">Languages</span><span class="fw-meta-val">Python · .NET</span></div>
+            <div><span class="fw-meta-label">Orchestration</span><span class="fw-meta-val">Graph workflows + conversational</span></div>
+            <div><span class="fw-meta-label">Model</span><span class="fw-meta-val">Multi-provider via Azure AI Foundry</span></div>
+            <div><span class="fw-meta-label">Enterprise users</span><span class="fw-meta-val">KPMG · BMW · Fujitsu · Novo Nordisk</span></div>
+            <div><span class="fw-meta-label">Protocols</span><span class="fw-meta-val">MCP · A2A · OpenTelemetry</span></div>
+            <div><span class="fw-meta-label">Best for</span><span class="fw-meta-val">Azure-native · .NET shops · governance</span></div>
+          </div>
+        </div>
+        <div class="fw-details">
+          <p>Microsoft sunset two parallel projects (Semantic Kernel and AutoGen) into one unified framework, released as 1.0 in April 2026. The framework provides AutoGen's simple agent abstractions plus Semantic Kernel's enterprise features — session-based state, type safety, middleware, telemetry — and adds graph-based workflows for explicit multi-agent execution paths.</p>
+          <pre class="code" data-lang="csharp"><span class="code-comment">// .NET — Microsoft Agent Framework</span>
+<span class="code-keyword">var</span> agent = <span class="code-keyword">new</span> ChatAgent(
+    name: <span class="code-string">"compliance"</span>,
+    description: <span class="code-string">"Reviews documents for GDPR"</span>,
+    chatClient: azureOpenAI.AsChatClient(<span class="code-string">"gpt-4"</span>),
+    tools: [reviewerTool]);
+
+<span class="code-keyword">var</span> workflow = WorkflowBuilder
+    .StartWith(intakeAgent)
+    .Then(compliance)
+    .Then(approval)
+    .Build();</pre>
+          <div class="fw-strengths">
+            <span class="fw-strengths-label">Strengths</span>
+            Only major framework with first-class .NET support; native Azure AI Foundry deployment; built-in OpenTelemetry, Entra security, governance; 10,000+ orgs on Azure AI Foundry Agent Service; MCP + A2A both supported natively.
+          </div>
+          <div class="fw-weaknesses">
+            <span class="fw-weaknesses-label">Gaps</span>
+            Best leverage assumes Azure ecosystem; migration friction from legacy AutoGen v0.2 / v0.4 docs is real; newest of the six — operational maturity outside Microsoft's case-studied accounts is still being established.
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- § 03 HEAD-TO-HEAD -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="compare">
+  <div class="container">
+    <div class="section-num">§ 03 — Head-to-Head</div>
+    <h2 class="section-title">Six frameworks, <em>six dimensions</em>.</h2>
+    <p class="section-intro">Ratings reflect the consensus from independent 2026 benchmarks (CLEAR framework, Langfuse, Gurusup, Towards AI), production case studies, and developer community sentiment. They are directional, not definitive — your context matters more than any leaderboard.</p>
+
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-target="tab-overview">Overview</button>
+      <button class="tab" data-target="tab-dx">Dev Experience</button>
+      <button class="tab" data-target="tab-prod">Production</button>
+      <button class="tab" data-target="tab-cost">Cost &amp; Latency</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-overview">
+      <div class="table-wrap">
+        <table class="compare">
+          <thead><tr>
+            <th>Framework</th><th>Orchestration</th><th>Model Lock-in</th>
+            <th>Learning Curve</th><th>MCP Support</th><th>Sweet Spot</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="cell-fw">OpenAI Agents SDK</td><td>Explicit handoffs</td><td>None (100+ LLMs)</td><td><span class="score score-good">Easy</span></td><td>Native</td><td>OpenAI-first stacks, voice agents, fast prototyping</td></tr>
+            <tr><td class="cell-fw">Claude Agent SDK</td><td>Tool-use + subagents</td><td>Claude only</td><td><span class="score score-mid">Medium</span></td><td><span class="score score-best">Deepest</span></td><td>OS-level automation, coding, long-horizon tasks</td></tr>
+            <tr><td class="cell-fw">LangGraph</td><td>Directed graph + edges</td><td>None</td><td><span class="score score-weak">Steep</span></td><td>Native</td><td>Stateful complex workflows, durable execution</td></tr>
+            <tr><td class="cell-fw">CrewAI</td><td>Role-based crews + Flows</td><td>None</td><td><span class="score score-best">Easiest</span></td><td>Adapter</td><td>Role workflows, content, research, prototyping</td></tr>
+            <tr><td class="cell-fw">Google ADK</td><td>Hierarchical tree</td><td>Gemini-leaning</td><td><span class="score score-mid">Medium</span></td><td>Native</td><td>GCP-native, multimodal, polyglot Java/Go teams</td></tr>
+            <tr><td class="cell-fw">MS Agent Framework</td><td>Graph + conversational</td><td>Multi-provider</td><td><span class="score score-mid">Medium</span></td><td>Native</td><td>Azure-native, .NET shops, governed enterprise</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-dx">
+      <div class="table-wrap">
+        <table class="compare">
+          <thead><tr>
+            <th>Framework</th><th>Time-to-Hello-World</th><th>Docs Quality</th>
+            <th>Community</th><th>TypeScript Parity</th><th>Visual Builder</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="cell-fw">OpenAI Agents SDK</td><td>&lt; 5 min</td><td><span class="score score-best">Excellent</span></td><td><span class="score score-best">Excellent</span></td><td>Full parity</td><td>AgentKit / Agent Builder</td></tr>
+            <tr><td class="cell-fw">Claude Agent SDK</td><td>10–15 min</td><td><span class="score score-good">Strong</span></td><td><span class="score score-good">Strong</span></td><td>Full parity</td><td>No (CLI-driven)</td></tr>
+            <tr><td class="cell-fw">LangGraph</td><td>30–60 min</td><td><span class="score score-good">Strong (v1 redesign)</span></td><td><span class="score score-best">Largest</span></td><td>Full parity</td><td>LangSmith Studio</td></tr>
+            <tr><td class="cell-fw">CrewAI</td><td>&lt; 10 min</td><td><span class="score score-good">Strong</span></td><td><span class="score score-good">Strong (100K certified)</span></td><td>Python only</td><td>Yes (AMP)</td></tr>
+            <tr><td class="cell-fw">Google ADK</td><td>15–20 min</td><td><span class="score score-good">Strong</span></td><td><span class="score score-mid">Growing</span></td><td>Full parity + Go/Java</td><td>adk web</td></tr>
+            <tr><td class="cell-fw">MS Agent Framework</td><td>20–30 min</td><td><span class="score score-good">Strong</span></td><td><span class="score score-mid">Newer</span></td><td>.NET-first</td><td>AI Foundry</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-prod">
+      <div class="table-wrap">
+        <table class="compare">
+          <thead><tr>
+            <th>Framework</th><th>Durable Execution</th><th>Observability</th>
+            <th>HITL</th><th>State Persistence</th><th>Guardrails</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="cell-fw">OpenAI Agents SDK</td><td>Sandbox 0.14+</td><td>Tracing (built-in)</td><td>Yes</td><td>Sessions, Conversations API</td><td>Native</td></tr>
+            <tr><td class="cell-fw">Claude Agent SDK</td><td><span class="score score-weak">BYO</span></td><td><span class="score score-weak">BYO</span></td><td>Permissions system</td><td>Sessions (v2 API)</td><td>Hooks (PreToolUse, etc.)</td></tr>
+            <tr><td class="cell-fw">LangGraph</td><td><span class="score score-best">Best in class</span></td><td>LangSmith (replays)</td><td><span class="score score-best">First-class</span></td><td><span class="score score-best">Checkpointers</span></td><td>Middleware</td></tr>
+            <tr><td class="cell-fw">CrewAI</td><td><span class="score score-weak">Limited</span></td><td>AMP Control Plane</td><td>Yes (via Flows)</td><td>Task-output passing</td><td>Coarse-grained</td></tr>
+            <tr><td class="cell-fw">Google ADK</td><td>Workflow Runtime 2.0</td><td>Cloud Trace</td><td>Tool confirmation flow</td><td>Pluggable backends</td><td>Yes</td></tr>
+            <tr><td class="cell-fw">MS Agent Framework</td><td>Yes (state mgmt)</td><td><span class="score score-best">OpenTelemetry</span></td><td>Yes</td><td>Session-based</td><td>Filters · Entra</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-cost">
+      <div class="table-wrap">
+        <table class="compare">
+          <thead><tr>
+            <th>Framework</th><th>Token Efficiency</th><th>Latency Profile</th>
+            <th>Memory Footprint</th><th>Notes (from independent 2026 benchmarks)</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="cell-fw">OpenAI Agents SDK</td><td><span class="score score-good">Efficient</span></td><td>Low</td><td>Light</td><td>Provider-native; bills through OpenAI API; sandbox adds infra cost</td></tr>
+            <tr><td class="cell-fw">Claude Agent SDK</td><td><span class="score score-best">10× cheaper w/ caching</span></td><td>Medium</td><td>270–340 MiB binary</td><td>Prompt caching is the key cost lever; subagents reduce token usage on long tasks</td></tr>
+            <tr><td class="cell-fw">LangGraph</td><td><span class="score score-best">Best in class</span></td><td><span class="score score-best">Lowest</span></td><td>Light</td><td>Fastest on latency across all 5 tasks in 2,000-task benchmark; best state-mgmt efficiency</td></tr>
+            <tr><td class="cell-fw">CrewAI</td><td><span class="score score-weak">~18% overhead</span></td><td>Medium</td><td>Light</td><td>~3× tokens on simple flows; multi-role coordination is expensive on small tasks</td></tr>
+            <tr><td class="cell-fw">Google ADK</td><td><span class="score score-mid">Mid</span></td><td>Medium</td><td>Light</td><td>Weakest tool-call cost efficiency; Skills system reduces baseline 90% on agents w/ 10+ skills</td></tr>
+            <tr><td class="cell-fw">MS Agent Framework</td><td><span class="score score-good">Efficient</span></td><td>Medium</td><td>Light</td><td>Multi-provider routing helps; Azure AI Foundry adds managed-service overhead</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="benchmark-chart reveal">
+      <div class="chart-title">Independent benchmark — Q1 2026</div>
+      <div class="chart-sub">Relative latency on 2,000 task instances (same model, same tasks). <em style="font-family:Fraunces;color:#666;font-size:14px">Lower is faster.</em></div>
+      <div class="bar-row"><span class="bar-label">LangGraph</span><div class="bar-track"><div class="bar-fill" data-pct="100"></div></div><span class="bar-val">1.00×</span></div>
+      <div class="bar-row"><span class="bar-label">AutoGen / MAF</span><div class="bar-track"><div class="bar-fill" data-pct="102"></div></div><span class="bar-val">1.02×</span></div>
+      <div class="bar-row"><span class="bar-label">OpenAI SDK</span><div class="bar-track"><div class="bar-fill" data-pct="115"></div></div><span class="bar-val">1.15×</span></div>
+      <div class="bar-row"><span class="bar-label">Claude SDK</span><div class="bar-track"><div class="bar-fill" data-pct="125"></div></div><span class="bar-val">1.25×</span></div>
+      <div class="bar-row"><span class="bar-label">Google ADK</span><div class="bar-track"><div class="bar-fill" data-pct="130"></div></div><span class="bar-val">1.30×</span></div>
+      <div class="bar-row"><span class="bar-label">CrewAI</span><div class="bar-track"><div class="bar-fill" data-pct="155"></div></div><span class="bar-val">1.55×</span></div>
+    </div>
+
+    <div class="benchmark-chart reveal">
+      <div class="chart-title">Token cost — simple one-tool-call workflow</div>
+      <div class="chart-sub">Indexed against LangChain baseline (= 1.0×). <em style="font-family:Fraunces;color:#666;font-size:14px">Lower is cheaper.</em></div>
+      <div class="bar-row"><span class="bar-label">LangChain</span><div class="bar-track"><div class="bar-fill" data-pct="100"></div></div><span class="bar-val">1.00×</span></div>
+      <div class="bar-row"><span class="bar-label">LangGraph</span><div class="bar-track"><div class="bar-fill" data-pct="105"></div></div><span class="bar-val">1.05×</span></div>
+      <div class="bar-row"><span class="bar-label">AutoGen / MAF</span><div class="bar-track"><div class="bar-fill" data-pct="120"></div></div><span class="bar-val">1.20×</span></div>
+      <div class="bar-row"><span class="bar-label">CrewAI</span><div class="bar-track"><div class="bar-fill" data-pct="300"></div></div><span class="bar-val">3.00×</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- § 04 THREE EVALUATION SCENARIOS -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="scenarios">
+  <div class="container">
+    <div class="section-num">§ 04 — Three Evaluation Scenarios</div>
+    <h2 class="section-title">The same problem, <em>three different worlds</em>.</h2>
+    <p class="section-intro">Framework choice is context-dependent. We evaluate each across three canonical scenarios — business automation, consumer assistant, and academic research — with the metrics that actually matter in that context.</p>
+
+    <div class="scenario reveal">
+      <div class="scenario-head">
+        <div class="scenario-num">i</div>
+        <div class="scenario-domain">Scenario · Enterprise</div>
+        <h3 class="scenario-name">Business <em>automation</em></h3>
+        <p style="font-family:Fraunces;font-size:17px;line-height:1.5;color:#444">A B2B SaaS company building an automated invoice-to-payment pipeline. Multi-step approval, audit trail, integration with ERP / CRM / finance systems. Compliance is non-negotiable.</p>
+        <div class="scenario-tags">
+          <span class="tag">Multi-step approval</span>
+          <span class="tag">Audit trail</span>
+          <span class="tag">ERP / CRM</span>
+          <span class="tag">SOC2 / GDPR</span>
+        </div>
+      </div>
+      <div class="scenario-body">
+        <h4>The task</h4>
+        <p>Process inbound invoices from email. Extract structured data. Cross-reference vendor master and PO database. Route to the right approver based on amount and category. On approval, schedule payment via the treasury API. Log every step for audit. Pause and escalate to a human if anything is off.</p>
+        <h4>Why most frameworks lose</h4>
+        <p>This is not a "build an agent" problem. It's a "build a durable, observable, human-supervised workflow with agent reasoning at decision points" problem. The frameworks that win are the ones that treat state, persistence, and HITL as first-class concerns — not bolt-ons.</p>
+        <h4>Defined metrics</h4>
+        <div class="metrics-grid" style="margin-top:14px;grid-template-columns:1fr">
+          <div class="metric" style="padding:18px">
+            <div class="metric-cat">Cost &amp; Throughput</div>
+            <ul>
+              <li>Cost-per-successful-invoice (USD) — full token + infra + retry cost</li>
+              <li>Median end-to-end latency (intake → approval-routed)</li>
+              <li>P95 latency on long-tail invoices (complex PO matching)</li>
+            </ul>
+          </div>
+          <div class="metric" style="padding:18px">
+            <div class="metric-cat">Reliability &amp; Governance</div>
+            <ul>
+              <li>Audit-trail completeness (% of steps with structured log)</li>
+              <li>Recovery time after partial failure</li>
+              <li>HITL escalation precision (false-escalations / 100 invoices)</li>
+              <li>Cross-system integration latency (ERP + CRM round-trip)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="winner-box">
+          <div class="winner-name">LangGraph &nbsp;&nbsp;·&nbsp;&nbsp; MS Agent Framework</div>
+          <div class="winner-why"><strong>LangGraph</strong> wins on technical merit: checkpointers give true durable execution, conditional edges model approval gates explicitly, LangSmith replays the exact production trace locally. Klarna runs this exact pattern for 85M users with 80% resolution-time reduction. <strong>MS Agent Framework</strong> wins when the customer is Azure-native: OpenTelemetry, Entra, and AI Foundry deployment collapse months of governance work. KPMG, BMW, and Fujitsu chose this path for production workloads.</div>
+        </div>
+        <h4>Why not the others?</h4>
+        <p><strong>CrewAI</strong> can prototype this in an afternoon, but the lack of native checkpointing and the 18% token overhead on multi-step flows make production hardening expensive. A common pattern: prototype on CrewAI, rewrite on LangGraph. <strong>OpenAI/Claude SDKs</strong> are lightweight enough that engineering teams end up building most of the durable-execution layer themselves. <strong>Google ADK</strong> is a fit if you're already on GCP — the v2.0 Workflow Runtime now supports this class of workflow well.</p>
+      </div>
+    </div>
+
+    <div class="scenario reveal">
+      <div class="scenario-head">
+        <div class="scenario-num">ii</div>
+        <div class="scenario-domain">Scenario · Consumer</div>
+        <h3 class="scenario-name">Consumer <em>assistant</em></h3>
+        <p style="font-family:Fraunces;font-size:17px;line-height:1.5;color:#444">A travel-booking assistant inside a mobile app. Conversational, multimodal (voice + photo of itinerary), tolerates ambiguity, must feel snappy. Cost-per-user is the existential constraint.</p>
+        <div class="scenario-tags">
+          <span class="tag">Conversational</span>
+          <span class="tag">Voice + multimodal</span>
+          <span class="tag">Low latency</span>
+          <span class="tag">Cost-per-user</span>
+        </div>
+      </div>
+      <div class="scenario-body">
+        <h4>The task</h4>
+        <p>User says "find me a 3-day Lisbon trip in October under $1,200, near a beach." Voice in. Show options. Handle interruptions ("actually make it 4 days"). Let the user upload a screenshot of a hotel and ask "is this in the bundle?" Book on confirmation. Email itinerary.</p>
+        <h4>Why this is hard</h4>
+        <p>Consumer assistants live and die on perceived latency and cost. The orchestration challenge isn't graph theory — it's keeping the conversation alive while making real progress on a multi-tool task, and doing it without burning $0.10 per turn.</p>
+        <h4>Defined metrics</h4>
+        <div class="metrics-grid" style="margin-top:14px;grid-template-columns:1fr">
+          <div class="metric" style="padding:18px">
+            <div class="metric-cat">User Experience</div>
+            <ul>
+              <li>Time-to-first-token (TTFT) — perceived responsiveness</li>
+              <li>Turn-completion latency P50 / P95</li>
+              <li>Interruption recovery quality (resume mid-tool gracefully)</li>
+              <li>Multimodal handoff smoothness (voice → image → voice)</li>
+            </ul>
+          </div>
+          <div class="metric" style="padding:18px">
+            <div class="metric-cat">Unit Economics</div>
+            <ul>
+              <li>Cost per successful booking (USD, blended)</li>
+              <li>Cost per conversation turn (P50)</li>
+              <li>Booking-conversion rate per 100 sessions</li>
+              <li>Tail cost: dollars/session at P99 (verbose conversations)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="winner-box">
+          <div class="winner-name">OpenAI Agents SDK &nbsp;&nbsp;·&nbsp;&nbsp; Google ADK</div>
+          <div class="winner-why"><strong>OpenAI Agents SDK</strong> wins on voice-first products: gpt-realtime-2 is the strongest realtime voice model shipping, the handoff primitive maps cleanly to "interrupt + delegate to specialist," and Sessions handle conversation state without ceremony. <strong>Google ADK</strong> wins for multimodal-heavy assistants: native bidirectional audio/video, Gemini's image understanding, and the event-driven runtime makes multimodal handoffs idiomatic rather than glued-together.</div>
+        </div>
+        <h4>Why not the others?</h4>
+        <p><strong>Claude SDK</strong> excels at long-horizon coding but is heavier than needed for short conversational turns — and the model lock-in eliminates the option to route cheap turns to a Haiku-class model on another vendor. <strong>LangGraph</strong>'s power is wasted here; its sweet spot is durable multi-step processes, not 4-turn travel queries. <strong>CrewAI</strong> would burn 3× the tokens on simple one-tool flows. <strong>MS Agent Framework</strong> is fine but consumer apps rarely benefit from its enterprise-governance strengths.</p>
+      </div>
+    </div>
+
+    <div class="scenario reveal">
+      <div class="scenario-head">
+        <div class="scenario-num">iii</div>
+        <div class="scenario-domain">Scenario · Academic / Research</div>
+        <h3 class="scenario-name">Research <em>agent</em></h3>
+        <p style="font-family:Fraunces;font-size:17px;line-height:1.5;color:#444">A literature-review agent for a research lab. Reads PDFs, scrapes arXiv, runs Python notebooks, generates LaTeX. Reproducibility, transparency, and the ability to spawn parallel sub-agents matter more than UX polish.</p>
+        <div class="scenario-tags">
+          <span class="tag">Reproducibility</span>
+          <span class="tag">Tool transparency</span>
+          <span class="tag">Parallel subagents</span>
+          <span class="tag">Long-horizon</span>
+        </div>
+      </div>
+      <div class="scenario-body">
+        <h4>The task</h4>
+        <p>Given a research question, scan the last 3 years of arXiv for relevant papers. Download PDFs, extract methods and results, run their published code where possible to verify reproducibility, synthesize a structured literature review with LaTeX bibliography. Spawn parallel sub-agents per paper to avoid context overflow.</p>
+        <h4>Why this is hard</h4>
+        <p>This is the scenario where context-engineering and OS-level access matter most. The agent needs file system, shell, Python execution, long context, and the ability to fan out work across sub-agents that each maintain their own focused context. Anthropic's own research found multi-agent architectures outperform single-agent benchmarks by up to 90% in this regime.</p>
+        <h4>Defined metrics</h4>
+        <div class="metrics-grid" style="margin-top:14px;grid-template-columns:1fr">
+          <div class="metric" style="padding:18px">
+            <div class="metric-cat">Capability &amp; Coverage</div>
+            <ul>
+              <li>Papers correctly retrieved (recall @ 50) for a known topic</li>
+              <li>Method extraction accuracy (LLM-as-judge + human spot-check)</li>
+              <li>Code reproducibility rate (% of papers' code runnable)</li>
+              <li>Citation accuracy (% of claims with valid attribution)</li>
+            </ul>
+          </div>
+          <div class="metric" style="padding:18px">
+            <div class="metric-cat">Process &amp; Transparency</div>
+            <ul>
+              <li>Trace completeness (every tool call logged and replayable)</li>
+              <li>Sub-agent parallelism efficiency (wall-clock speedup vs single-agent)</li>
+              <li>Hallucination rate on summaries (per CAR-bench protocol)</li>
+              <li>End-to-end token budget per literature review</li>
+            </ul>
+          </div>
+        </div>
+        <div class="winner-box">
+          <div class="winner-name">Claude Agent SDK &nbsp;&nbsp;·&nbsp;&nbsp; LangGraph (for orchestration shell)</div>
+          <div class="winner-why"><strong>Claude Agent SDK</strong> is purpose-built for this: Read/Write/Edit/Bash/Glob/Web Search are native tools, subagents with isolated context windows are first-class, the Skills system makes domain expertise (LaTeX, BibTeX, arXiv API) hot-loadable, and Claude Sonnet 4.5 has demonstrated 30+ hours of autonomous coding. <strong>LangGraph</strong> earns the dual mention when you need the durability layer around it — for week-long, resumable research runs spanning many context windows, wrap Claude SDK calls inside a LangGraph checkpointed graph.</div>
+        </div>
+        <h4>Why not the others?</h4>
+        <p><strong>OpenAI SDK</strong> sandbox-agents (Apr 2026) brought it closer, but the harness is younger and the file/shell tool depth lags Claude. <strong>CrewAI</strong>'s role-based abstraction maps awkwardly to research workflows where parallelism is data-driven not role-driven. <strong>Google ADK</strong> can do it, especially if you need Gemini's long-context strengths — but the framework's enterprise lean shows. <strong>MS Agent Framework</strong> is least at-home here; research workflows rarely benefit from .NET strengths.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- § 05 DEVELOPER VOICES -->
+<!-- ══════════════════════════════════════════════ -->
+<section>
+  <div class="container">
+    <div class="section-num">§ 05 — Voices from the Field</div>
+    <h2 class="section-title">What developers <em>actually say</em>.</h2>
+    <p class="section-intro">Synthesized from Reddit's r/LLMDevs and r/MachineLearning, Hacker News, dev.to, and engineering blogs at Klarna, Uber, LinkedIn, Replit, and Anthropic. Direct paraphrases — not verbatim quotes.</p>
+
+    <div class="voices">
+      <div class="voice">
+        <p class="voice-quote">"We prototyped in CrewAI in a weekend and shipped to demo. Three months later we rewrote it in LangGraph because we needed checkpointing and our 7-agent crew had become impossible to debug."</p>
+        <div class="voice-source">— Engineering Lead, B2B SaaS startup (paraphrased from dev.to)</div>
+      </div>
+      <div class="voice">
+        <p class="voice-quote">"The Claude Agent SDK feels less like a framework and more like an opinionated harness. That's the point. When it fits, it's the shortest path from 'I have an idea' to 'the agent is editing files.' When it doesn't, you'll know fast."</p>
+        <div class="voice-source">— Quoted from morphllm.com 2026 review</div>
+      </div>
+      <div class="voice">
+        <p class="voice-quote">"OpenAI Agents SDK is the most opinionated framework, and that's an advantage. Fewer decisions, faster implementation. The tracing and guardrails save weeks of custom plumbing."</p>
+        <div class="voice-source">— Best Multi-Agent Frameworks 2026, gurusup.com</div>
+      </div>
+      <div class="voice">
+        <p class="voice-quote">"LangGraph is steeper but it pays you back. We use it because we need to know exactly what our agent did, replay any production trace locally, and resume long-running workflows after server restarts. That's not optional at our scale."</p>
+        <div class="voice-source">— Inferred from LangChain customer case studies (Uber, LinkedIn, Klarna)</div>
+      </div>
+      <div class="voice">
+        <p class="voice-quote">"Microsoft's unification of Semantic Kernel and AutoGen was overdue. The new framework finally gives us one answer to 'which Microsoft thing do I use?' — and the Azure AI Foundry integration is the only governance story that satisfies our compliance team."</p>
+        <div class="voice-source">— Inferred from KPMG/BMW/Fujitsu deployment case studies</div>
+      </div>
+      <div class="voice">
+        <p class="voice-quote">"ADK feels Java-shop friendly in a way no other framework does. Having Python, TypeScript, Go, and Java with feature parity is a real advantage for polyglot teams — even if the Gemini-first defaults need work to undo."</p>
+        <div class="voice-source">— Hands-on with the Google ADK, InfoWorld</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">The consensus pattern</div>
+      <p>"Match the framework to the problem, not the other way around. Subagents are cheap. Conversations are expensive. Handoffs are in the middle. The decision is no longer about features — it's about what you'll regret in six months."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- § 06 THE AGENT LOOP -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="loop">
+  <div class="container">
+    <div class="section-num">§ 06 — The Anatomy of an Agent Loop</div>
+    <h2 class="section-title">Five stages, <em>six frameworks</em>, real engineering.</h2>
+    <p class="section-intro">Every production agent runs the same five-stage loop: <strong>plan → decompose → execute → verify → loop control</strong>. What separates frameworks is how each stage is implemented, what's provided versus left to the developer, and how the loop handles its own termination.</p>
+
+    <div class="loop-diagram reveal">
+      <div class="loop-step">
+        <div class="loop-num">i.</div>
+        <div class="loop-name">Plan</div>
+        <div class="loop-title">Form a strategy</div>
+        <div class="loop-text">Decompose the user goal into a sequence of intermediate goals. Anthropic recommends saving the plan to external memory <em>before</em> context fills. OpenAI's Codex team treats prompt structure as a "first-class performance surface" — durable instructions at the top, volatile at the bottom.</div>
+      </div>
+      <div class="loop-step">
+        <div class="loop-num">ii.</div>
+        <div class="loop-name">Decompose</div>
+        <div class="loop-title">Break down to subtasks</div>
+        <div class="loop-text">Translate goals into a multiset of subtasks. The VeriMAP pattern couples decomposition with verification design: each subtask is generated <em>with its own verifier</em>. Sub-tasks without dependencies get parallelized; dependent ones get sequenced.</div>
+      </div>
+      <div class="loop-step">
+        <div class="loop-num">iii.</div>
+        <div class="loop-name">Execute</div>
+        <div class="loop-title">Call tools, write code, browse</div>
+        <div class="loop-text">The orchestrator routes each subtask: dispatch to a sub-agent, call a tool, run a shell command. This is where MCP servers earn their keep — one integration unlocks an ecosystem instead of N bespoke wrappers.</div>
+      </div>
+      <div class="loop-step">
+        <div class="loop-num">iv.</div>
+        <div class="loop-name">Verify</div>
+        <div class="loop-title">Check before continuing</div>
+        <div class="loop-text">Run the test suite, lint, diff against the spec, or invoke an LLM-as-judge. Anthropic: "verification is pluggable." A judge agent catches 15-20% of errors before they reach users — at the cost of 500-800ms latency.</div>
+      </div>
+      <div class="loop-step">
+        <div class="loop-num">v.</div>
+        <div class="loop-name">Loop Control</div>
+        <div class="loop-title">Continue or terminate</div>
+        <div class="loop-text">Re-plan if verification failed. Stop if done. <em>Stop if budget exceeded.</em> Cognition's Devin team: "verification is the bottleneck, not generation." Anthropic recommends hard caps at the harness level, never billing alerts.</div>
+      </div>
+    </div>
+
+    <div class="principle reveal">
+      <div class="principle-label">The principle that ties them together</div>
+      <div class="principle-text">An agent is <em>"an LLM autonomously using tools in a loop."</em> The loop is the framework's contract with the developer. What it includes by default — and what it leaves for you to engineer — is the whole game.</div>
+    </div>
+
+    <!-- Stage i: Planning -->
+    <div class="stage-block reveal">
+      <div class="stage-header">
+        <div class="stage-header-num">i.</div>
+        <div class="stage-header-content">
+          <h4>Planning &amp; Strategy Formation</h4>
+          <div class="stage-cat">Stage 01 · How each framework forms its plan</div>
+        </div>
+      </div>
+      <div class="stage-prelude">Planning is where <strong>context anxiety</strong> lives: models that wrap up prematurely as they believe context is running out. The decision is whether planning is implicit (the model decides each step) or explicit (the framework forces a plan artifact).</div>
+      <div class="fw-matrix">
+        <div class="fw-row"><div class="fw-name-cell">OpenAI SDK</div><div class="fw-detail-cell"><span class="fw-pill">Implicit</span> Plan emerges turn-by-turn through the agent loop; no first-class plan artifact. Codex CLI introduced explicit <code>AGENTS.md</code> for repository-level planning context — that file becomes part of the stable cache prefix and persists across runs.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">Claude SDK</div><div class="fw-detail-cell"><span class="fw-pill pill-best">Explicit + persisted</span> Anthropic's harness pattern: <code>claude-progress.txt</code> + initial git commit on first run. The initializer agent's job is to set up the environment and write the plan. The coding agent reads it on every subsequent context-window reset. Plans survive context truncation.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">LangGraph</div><div class="fw-detail-cell"><span class="fw-pill pill-best">Plan-as-graph</span> Plan is the graph itself — nodes, edges, conditional routing. The "plan" is a static artifact you compile <em>before</em> the agent runs. Plan-and-execute pattern with scoped re-planning reports 82% token reduction vs regenerating full plans from scratch.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">CrewAI</div><div class="fw-detail-cell"><span class="fw-pill pill-mid">Role-implicit</span> "Plan" is encoded in the crew composition: who's the researcher, who's the writer, who's the manager. <em>Hierarchical Process</em> mode auto-generates a manager agent that does runtime re-planning. The risk: goal drift across iterations on vague inputs.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">Google ADK</div><div class="fw-detail-cell"><span class="fw-pill">Workflow agents</span> Three plan types: <code>Sequential</code>, <code>Parallel</code>, <code>Loop</code> — deterministic workflow agents with no LLM in the planning path. ADK 2.0 added <code>Workflow Runtime</code> for graph-based execution with explicit retry, fan-out/fan-in, nested workflows.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">MS Agent Framework</div><div class="fw-detail-cell"><span class="fw-pill">Workflows + agents</span> Graph-based <code>WorkflowBuilder</code> for explicit multi-agent execution paths, plus AutoGen-style conversational planning for dynamic flows. State management is session-based and durable — plans survive process restarts.</div></div>
+      </div>
+    </div>
+
+    <!-- Stage ii: Decompose -->
+    <div class="stage-block reveal">
+      <div class="stage-header">
+        <div class="stage-header-num">ii.</div>
+        <div class="stage-header-content">
+          <h4>Task Decomposition &amp; Sub-Agent Spawning</h4>
+          <div class="stage-cat">Stage 02 · Whether you fan out, and at what cost</div>
+        </div>
+      </div>
+      <div class="stage-prelude">Anthropic's research: multi-agent architectures outperform single-agent by <strong>~90%</strong> when sub-agents work in parallel — but at <strong>~15× the token cost</strong> of a chat conversation. The decision is when fanning out is worth the multiple.</div>
+      <div class="fw-matrix">
+        <div class="fw-row"><div class="fw-name-cell">OpenAI SDK</div><div class="fw-detail-cell"><span class="fw-pill">Handoffs + Agents-as-tools</span> Two flavors: <code>handoff</code> transfers control (one-way), <code>agent-as-tool</code> delegates with return value. No first-class sub-agent context isolation. You can compose, but you own the context-boundary discipline.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">Claude SDK</div><div class="fw-detail-cell"><span class="fw-pill pill-best">First-class subagents</span> Define agents in the <code>agents</code> param with their own description, prompt, restricted tools, optional model. Each gets an <strong>isolated context window</strong> — the security reviewer's deep read of auth code doesn't pollute the perf reviewer. Sub-agents cannot spawn their own sub-agents (intentional).</div></div>
+        <div class="fw-row"><div class="fw-name-cell">LangGraph</div><div class="fw-detail-cell"><span class="fw-pill pill-best">Subgraphs + Send API</span> Subgraphs are first-class — each can have its own state schema. The <code>Send</code> primitive enables fan-out with map-reduce semantics. State is checkpointed at super-step boundaries, so parallel branches recover independently on failure.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">CrewAI</div><div class="fw-detail-cell"><span class="fw-pill pill-warn">Coarse-grained</span> Decomposition is role-based, not data-driven. Task outputs pass sequentially between agents via the <code>Task</code> object. Independent benchmark: ~3× the tokens of competitors on simple one-tool-call flows because every role adds an LLM round-trip.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">Google ADK</div><div class="fw-detail-cell"><span class="fw-pill">Hierarchical tree</span> Root agent delegates to sub-agents, which can have their own sub-agents. <code>Task API</code> in ADK 2.0 adds structured agent-to-agent delegation with multi-turn task mode and mixed delegation patterns.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">MS Agent Framework</div><div class="fw-detail-cell"><span class="fw-pill">Graph workflows + GroupChat</span> Inherits AutoGen's GroupChat for conversational decomposition and Semantic Kernel's structured workflows for deterministic ones. The <code>WorkflowBuilder</code> fluent API composes them.</div></div>
+      </div>
+      <div class="code-compare reveal" style="margin-top:30px">
+        <div class="code-compare-side">
+          <h5>Claude SDK — Context-isolated subagents</h5>
+          <pre class="code" data-lang="python"><span class="code-keyword">async for</span> msg <span class="code-keyword">in</span> query(
+  prompt=<span class="code-string">"Review codebase"</span>,
+  options=ClaudeAgentOptions(
+    allowedTools=[<span class="code-string">"Read"</span>,<span class="code-string">"Glob"</span>,<span class="code-string">"Task"</span>],
+    agents={
+      <span class="code-string">"sec-review"</span>: {
+        <span class="code-string">"prompt"</span>: <span class="code-string">"Audit auth"</span>,
+        <span class="code-string">"tools"</span>: [<span class="code-string">"Read"</span>,<span class="code-string">"Grep"</span>],
+        <span class="code-string">"model"</span>: <span class="code-string">"claude-opus"</span>,
+      },
+      <span class="code-string">"perf-review"</span>: {
+        <span class="code-string">"prompt"</span>: <span class="code-string">"Profile hot paths"</span>,
+        <span class="code-string">"tools"</span>: [<span class="code-string">"Read"</span>,<span class="code-string">"Bash"</span>],
+        <span class="code-string">"model"</span>: <span class="code-string">"claude-sonnet"</span>,
+      },
+    },
+  ),
+):
+  <span class="code-fn">print</span>(msg)
+<span class="code-comment"># Each subagent runs in isolation</span>
+<span class="code-comment"># Returns only summary, not raw context</span></pre>
+        </div>
+        <div class="code-compare-side">
+          <h5>LangGraph — Send API for parallel fan-out</h5>
+          <pre class="code" data-lang="python"><span class="code-keyword">from</span> langgraph.constants <span class="code-keyword">import</span> Send
+
+<span class="code-keyword">def</span> <span class="code-fn">dispatch</span>(state):
+  <span class="code-comment"># map-reduce: one Send per subtask</span>
+  <span class="code-keyword">return</span> [
+    Send(<span class="code-string">"reviewer"</span>, {<span class="code-string">"file"</span>: f})
+    <span class="code-keyword">for</span> f <span class="code-keyword">in</span> state[<span class="code-string">"files"</span>]
+  ]
+
+g = StateGraph(State)
+g.add_node(<span class="code-string">"reviewer"</span>, review_file)
+g.add_node(<span class="code-string">"reduce"</span>, merge_reports)
+g.add_conditional_edges(<span class="code-string">"plan"</span>, dispatch)
+g.add_edge(<span class="code-string">"reviewer"</span>, <span class="code-string">"reduce"</span>)
+g = g.compile(checkpointer=memory)
+<span class="code-comment"># State checkpointed at each super-step</span>
+<span class="code-comment"># Parallel branches recover independently</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage iii-iv: Execute + Verify -->
+    <div class="stage-block reveal">
+      <div class="stage-header">
+        <div class="stage-header-num">iii — iv.</div>
+        <div class="stage-header-content">
+          <h4>Execution &amp; Verification</h4>
+          <div class="stage-cat">Stages 03–04 · How tools run and how outputs get checked</div>
+        </div>
+      </div>
+      <div class="stage-prelude">Execution is the easy part — every framework can call a tool. Verification is where production agents live or die. Cognition's Devin team: <strong>"verification is the bottleneck, not generation."</strong> The frameworks differ in whether verification is opt-in glue code or a first-class loop participant.</div>
+      <div class="fw-matrix">
+        <div class="fw-row"><div class="fw-name-cell">OpenAI SDK</div><div class="fw-detail-cell"><span class="fw-pill">Guardrails (in/out)</span> Input/output guardrails are first-class. The new <strong>sandbox execution</strong> (v0.14+) ships with native support for Blaxel, Cloudflare, Daytona, E2B, Modal, Runloop, Vercel. The Manifest abstraction makes workspaces portable across sandbox providers.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">Claude SDK</div><div class="fw-detail-cell"><span class="fw-pill pill-best">Hooks + verification patterns</span> <code>PreToolUse</code>, <code>PostToolUse</code>, <code>Stop</code>, <code>SubagentStart</code> intercept the loop. Verification is pluggable: rules-based (linters, test runners), visual (screenshots for UI work), LLM-as-judge. Tool use supports parallel calls, strict schema enforcement, per-tool streaming.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">LangGraph</div><div class="fw-detail-cell"><span class="fw-pill pill-best">Conditional edges + interrupts</span> Verification is a node in the graph. Failed verification → conditional edge → re-plan or escalate. The <code>interrupt()</code> primitive pauses execution at any point and saves a checkpoint — humans (or another agent) can inspect and modify state before resuming.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">CrewAI</div><div class="fw-detail-cell"><span class="fw-pill">Task-level callbacks</span> Verification happens between tasks — coarse-grained. The hierarchical Process mode introduces a manager that can re-route on bad outputs, but the round-trip cost is high.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">Google ADK</div><div class="fw-detail-cell"><span class="fw-pill">Built-in evaluation</span> ADK ships with eval tooling for test trajectories against expected paths. Tool confirmation flow (HITL) is built into the runtime. Code execution uses the Vertex AI Code Execution Sandbox.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">MS Agent Framework</div><div class="fw-detail-cell"><span class="fw-pill">Filters + middleware</span> Filters intercept every model call (Semantic Kernel inheritance). OpenTelemetry traces every tool execution. Native sandboxing via Azure AI Foundry's managed agent service.</div></div>
+      </div>
+      <div class="principle">
+        <div class="principle-label">Production hard rule</div>
+        <div class="principle-text">A lightweight judge agent that scores worker outputs <em>before they reach the user</em> catches 15-20% of errors at the cost of 500-800ms latency. Almost every production deployment we surveyed runs one. The frameworks that make this trivial (LangGraph conditional edges, Claude PostToolUse hook, ADK eval) win.</div>
+      </div>
+    </div>
+
+    <!-- Stage v: Loop Control -->
+    <div class="stage-block reveal">
+      <div class="stage-header">
+        <div class="stage-header-num">v.</div>
+        <div class="stage-header-content">
+          <h4>Loop Control: Budgets, Limits, &amp; Runaways</h4>
+          <div class="stage-cat">Stage 05 · How the agent knows to stop</div>
+        </div>
+      </div>
+      <div class="stage-prelude">The most common production failure is a loop that never terminates. A single runaway job can hit the context ceiling and start failing — or worse, keep retrying and burn through API budget silently. <strong>Anthropic's production guide explicitly recommends hard caps at the harness level rather than relying on billing alerts.</strong></div>
+      <div class="fw-matrix">
+        <div class="fw-row"><div class="fw-name-cell">OpenAI SDK</div><div class="fw-detail-cell"><code>max_turns</code> on Runner; tracing surfaces loops in real time. Sandbox execution adds CPU/memory caps. No automatic repetition detection — you log + analyze.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">Claude SDK</div><div class="fw-detail-cell"><span class="fw-pill pill-warn">BYO budget guards</span> Loop guards are <em>not built in</em>. Developers implement both numeric iteration limits and repetition detection. The bundled CLI has <code>/cost</code> and <code>/context</code> but the SDK does not expose programmatic budget hooks at the harness level.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">LangGraph</div><div class="fw-detail-cell"><span class="fw-pill pill-best">recursion_limit + interrupts</span> <code>recursion_limit</code> on every <code>invoke()</code>; conditional edges let you implement custom budget guards as graph nodes. LangSmith surfaces token + cost telemetry per node, per run. Checkpointers make it safe to terminate and resume.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">CrewAI</div><div class="fw-detail-cell"><code>max_iter</code> on Agent, <code>max_rpm</code> for rate limiting. Less granular than graph-based frameworks — you can stop a crew, but mid-task budget enforcement is rough.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">Google ADK</div><div class="fw-detail-cell">Loop workflow agent has <code>max_iterations</code>. Event-driven runtime makes it trivial to attach a budget callback to every yield. Cloud Trace + Cloud Monitoring give per-agent cost dashboards.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">MS Agent Framework</div><div class="fw-detail-cell">Workflow timeouts and retry policies are first-class. Middleware can short-circuit any model call. OpenTelemetry provides cost attribution down to the tool call.</div></div>
+      </div>
+      <div class="callout reveal">
+        <div class="callout-label">The pattern that ships</div>
+        <p>Production loops in 2026 use three tiers of guards: (1) <em>per-call</em> token cap, (2) <em>per-agent</em> turn cap, (3) <em>per-task</em> wall-clock + dollar budget. When any guard trips, the agent enters a structured-handoff mode: write progress to disk, log state, escalate to human or to a "summarizer" sub-agent. Never let the LLM decide whether to stop.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- § 07 CONTEXT ENGINEERING -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="context">
+  <div class="container">
+    <div class="section-num">§ 07 — Context Engineering</div>
+    <h2 class="section-title">The discipline that <em>actually matters</em>.</h2>
+    <p class="section-intro">The shift from "prompt engineering" to "context engineering" is the most important paradigm move of 2025–2026. Anthropic defines context as <em>"the set of tokens included when sampling from a model"</em> and the engineering challenge as <em>"optimizing the utility of those tokens against the inherent constraints of LLMs."</em> Nominal context windows are 200K. <strong>Effective working context is 60–80K.</strong> Past that, context rot degrades model recall.</p>
+
+    <div class="principle reveal">
+      <div class="principle-label">The Four Operations of Context Engineering</div>
+      <div class="principle-text">Every framework has a position on each: <em>Offload</em> (store full data outside context, pass references). <em>Reduce</em> (compact conversation history). <em>Retrieve</em> (fetch only what's needed, when it's needed). <em>Isolate</em> (sub-agents with fresh windows that return only summaries).</div>
+    </div>
+
+    <!-- Op 1: Offload -->
+    <div class="stage-block reveal">
+      <div class="stage-header">
+        <div class="stage-header-num">1.</div>
+        <div class="stage-header-content">
+          <h4>Offload — Externalize state, pass references</h4>
+          <div class="stage-cat">Operation 01 · The filesystem is the memory</div>
+        </div>
+      </div>
+      <div class="stage-prelude">Sub-agents write findings to a shared filesystem and return lightweight references — the <strong>artifact pattern</strong>. The lead agent never re-reads every detail; it follows a reference when needed. This is how Anthropic's Claude Research handles long-horizon work that would otherwise blow context.</div>
+      <div class="fw-matrix">
+        <div class="fw-row"><div class="fw-name-cell">Claude SDK</div><div class="fw-detail-cell"><span class="fw-pill pill-best">Native filesystem</span> <code>Read</code>, <code>Write</code>, <code>Edit</code>, <code>Glob</code>, <code>Bash</code> are built-in tools. <code>claude-progress.txt</code> + git history is the canonical externalization pattern. Skills extend this with progressive disclosure — load expertise only when needed.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">LangGraph</div><div class="fw-detail-cell"><span class="fw-pill pill-best">Store + Checkpointer</span> Two distinct persistence layers: <code>Store</code> for cross-thread long-term memory (user preferences, episodic), <code>Checkpointer</code> for per-thread short-term state. Confusing them is the #1 architecture mistake. Production uses PostgresStore + PostgresSaver.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">OpenAI SDK</div><div class="fw-detail-cell"><span class="fw-pill">Sandbox + Manifest</span> v0.14 sandbox gives agents real file access. The <code>Manifest</code> abstraction describes the workspace portably. <code>file_search</code> hosted tool externalizes large corpora. Conversations API provides durable thread state.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">Google ADK</div><div class="fw-detail-cell"><span class="fw-pill">Session + Artifacts</span> Session state with pluggable backends. <code>Artifact</code> service for large binary or text outputs that shouldn't live in context. SkillToolset's three-tool pattern (<code>list_skills</code>, <code>load_skill</code>, <code>load_skill_resource</code>) reports 90% baseline context reduction.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">CrewAI</div><div class="fw-detail-cell"><span class="fw-pill pill-mid">Mem0 + shared memory</span> Memory is task-output passing by default. CrewAI partners with Mem0 for richer long-term memory. Less idiomatic than LangGraph's two-layer model.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">MS Agent Framework</div><div class="fw-detail-cell"><span class="fw-pill">Session-based state</span> Inherits Semantic Kernel's memory connectors (Azure AI Search, Postgres, Redis). Type-safe state objects across the workflow.</div></div>
+      </div>
+    </div>
+
+    <!-- Op 2: Reduce -->
+    <div class="stage-block reveal">
+      <div class="stage-header">
+        <div class="stage-header-num">2.</div>
+        <div class="stage-header-content">
+          <h4>Reduce — Compaction strategies</h4>
+          <div class="stage-cat">Operation 02 · Summarize history in place</div>
+        </div>
+      </div>
+      <div class="stage-prelude">Compaction replaces full conversation history with a structured summary — typically reducing context size by <strong>60–80%</strong>. The trade-off: it breaks prompt cache. The strategy is to compact only when the cache benefit is exhausted, and to compact predictable parts of the prompt only.</div>
+      <div class="fw-matrix">
+        <div class="fw-row"><div class="fw-name-cell">Claude SDK</div><div class="fw-detail-cell"><span class="fw-pill pill-best">Automatic + PreCompact hook</span> Automatic compaction fires when accumulated context approaches the window limit. The <code>PreCompact</code> hook lets you intercept and customize the summary. Common pattern: HeadTail compaction (20% head, 80% tail) at an 8K or 15K budget.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">OpenAI SDK</div><div class="fw-detail-cell"><span class="fw-pill">/compact slash + context mgmt</span> Responses API provides Context Management primitives including compaction. The Codex agent loop documents prompt structure as a first-class performance surface: durable content at top, volatile at bottom — preserves cache while allowing tail rewrites.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">LangGraph</div><div class="fw-detail-cell"><span class="fw-pill pill-best">trim_messages + middleware</span> <code>trim_messages</code> utility supports last/first strategies, token-aware truncation. LangChain 1.0's middleware lets you inject compaction at any model call. Checkpointers preserve full history while the visible context is reduced.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">Google ADK</div><div class="fw-detail-cell"><span class="fw-pill">Custom callbacks</span> Compaction is developer-implemented via callbacks. ADK exposes event stream so you can summarize-and-replace within the runtime.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">CrewAI</div><div class="fw-detail-cell"><span class="fw-pill pill-mid">Manual</span> No first-class compaction primitive. You implement it inside task functions. The framework's coarse-grained task model makes mid-task compaction awkward.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">MS Agent Framework</div><div class="fw-detail-cell"><span class="fw-pill">Filters / middleware</span> Filters can rewrite chat history before each call. Less developed than LangGraph or Claude for compaction specifically.</div></div>
+      </div>
+    </div>
+
+    <!-- Op 3: Retrieve -->
+    <div class="stage-block reveal">
+      <div class="stage-header">
+        <div class="stage-header-num">3.</div>
+        <div class="stage-header-content">
+          <h4>Retrieve — Just-in-time, not always-in-time</h4>
+          <div class="stage-cat">Operation 03 · RAG, search, dynamic loading</div>
+        </div>
+      </div>
+      <div class="stage-prelude">2024 orthodoxy: load everything into context up-front via RAG. 2026 inversion: <strong>agentic search</strong> — the agent runs grep/find/tail to load only what it needs, when it needs it. Anthropic explicitly recommends agentic search over RAG-first patterns for code-heavy tasks. Vector search becomes the optimization for when agentic search is insufficient.</div>
+      <div class="fw-matrix">
+        <div class="fw-row"><div class="fw-name-cell">Claude SDK</div><div class="fw-detail-cell"><span class="fw-pill pill-best">Agentic search native</span> <code>Grep</code>, <code>Glob</code>, <code>Read</code> tools enable on-demand loading. <code>tool_search</code> dynamic tool discovery prevents 50K+ token tool definitions from polluting context. Skills load just-in-time via progressive disclosure.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">OpenAI SDK</div><div class="fw-detail-cell"><code>file_search</code> hosted tool for vector retrieval. <code>web_search</code> for fresh information. Sandbox agents get grep/find on the workspace.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">LangGraph</div><div class="fw-detail-cell"><span class="fw-pill">Tool-driven retrieval</span> Pair with LangChain retrievers (1000+ integrations). The graph structure makes retrieval a node — easy to inspect, cache, and replace.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">Google ADK</div><div class="fw-detail-cell"><span class="fw-pill">Vertex AI Search</span> Native integration with Vertex AI Search, AlloyDB, BigQuery. Built-in connectors collapse most enterprise retrieval boilerplate on GCP.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">CrewAI / MS Agent Framework</div><div class="fw-detail-cell">CrewAI relies on LlamaIndex / Mem0 integrations. MS Agent Framework leans on Semantic Kernel's connectors + Azure AI Search.</div></div>
+      </div>
+    </div>
+
+    <!-- Op 4: Isolate -->
+    <div class="stage-block reveal">
+      <div class="stage-header">
+        <div class="stage-header-num">4.</div>
+        <div class="stage-header-content">
+          <h4>Isolate — Fresh-context sub-agents &amp; handoffs</h4>
+          <div class="stage-cat">Operation 04 · The orchestrator-subagent pattern</div>
+        </div>
+      </div>
+      <div class="stage-prelude">The defining move: when context fills, don't compact — <strong>reset</strong>. Spawn a fresh sub-agent with a structured handoff artifact. Compaction preserves continuity at the cost of context anxiety. A reset gives a clean slate at the cost of the handoff carrying enough state.</div>
+      <div class="code-compare">
+        <div class="code-compare-side">
+          <h5>Compaction — same agent, shorter history</h5>
+          <pre class="code" data-lang="python"><span class="code-comment"># LangGraph: trim in place</span>
+<span class="code-keyword">from</span> langchain_core.messages <span class="code-keyword">import</span> trim_messages
+
+trimmer = trim_messages(
+  max_tokens=<span class="code-string">8000</span>,
+  strategy=<span class="code-string">"last"</span>,
+  token_counter=count_tokens,
+  include_system=<span class="code-keyword">True</span>,
+)
+
+<span class="code-keyword">def</span> <span class="code-fn">call_model</span>(state):
+  msgs = trimmer.invoke(state[<span class="code-string">"messages"</span>])
+  <span class="code-comment"># same agent continues with shortened history</span>
+  <span class="code-keyword">return</span> {<span class="code-string">"messages"</span>: [model.invoke(msgs)]}
+
+<span class="code-comment"># Pros: continuity, no handoff loss</span>
+<span class="code-comment"># Cons: cache invalidation, context anxiety</span></pre>
+        </div>
+        <div class="code-compare-side">
+          <h5>Context reset — fresh agent, handoff artifact</h5>
+          <pre class="code" data-lang="python"><span class="code-comment"># Anthropic harness pattern</span>
+<span class="code-comment"># 1. Initializer agent (first run only)</span>
+init_agent.run(<span class="code-string">"""
+Set up environment:
+- claude-progress.txt
+- init.sh
+- initial git commit
+"""</span>)
+
+<span class="code-comment"># 2. Each subsequent session: fresh agent</span>
+<span class="code-keyword">while not</span> done:
+  fresh_agent = ClaudeAgent(...)
+  fresh_agent.run(<span class="code-string">"""
+    Read claude-progress.txt.
+    Make incremental progress.
+    Update progress file + git commit.
+  """</span>)
+
+<span class="code-comment"># Pros: clean slate, no context anxiety</span>
+<span class="code-comment"># Cons: handoff artifact must carry state</span></pre>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-label">The Cognition vs Anthropic debate</div>
+        <div class="principle-text">Cognition (Devin): <em>"Don't build multi-agents."</em> Single-threaded, full-context, with read-only sub-agents at most. Anthropic: <em>"Multi-agent outperforms single-agent by 90% on research-style tasks."</em> Both agree on the underlying principle — <em>context engineering is everything</em> — and disagree on the cost-benefit of distributing it across multiple agents.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- § 08 TOKEN BUDGET -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="budget">
+  <div class="container">
+    <div class="section-num">§ 08 — Token Budget &amp; Prompt Caching</div>
+    <h2 class="section-title">The economics of <em>agent loops</em>.</h2>
+    <p class="section-intro">Token costs in multi-agent systems don't scale linearly — they compound. Each tool call adds context. Each sub-agent response feeds back to the orchestrator. Without deliberate budget management, a single runaway job hits the ceiling and starts failing — or burns through your API budget silently.</p>
+
+    <div class="token-chart reveal">
+      <div class="chart-title">Token attribution — typical agent turn</div>
+      <div class="chart-sub" style="font-family:Fraunces;font-size:20px;font-weight:500;margin-bottom:24px">Where the budget actually goes (representative breakdowns)</div>
+      <div class="token-row">
+        <div class="token-row-label">Naïve single-agent</div>
+        <div class="token-stack">
+          <div class="token-seg seg-sys" data-w="8">SYS 8%</div>
+          <div class="token-seg seg-tools" data-w="12">TOOLS 12%</div>
+          <div class="token-seg seg-hist" data-w="55">HISTORY 55%</div>
+          <div class="token-seg seg-task" data-w="15">TASK 15%</div>
+          <div class="token-seg seg-out" data-w="10">OUT 10%</div>
+        </div>
+        <div class="token-total">~120K</div>
+      </div>
+      <div class="token-row">
+        <div class="token-row-label">+ Compaction</div>
+        <div class="token-stack">
+          <div class="token-seg seg-sys" data-w="14">SYS 14%</div>
+          <div class="token-seg seg-tools" data-w="20">TOOLS 20%</div>
+          <div class="token-seg seg-hist" data-w="20">SUM 20%</div>
+          <div class="token-seg seg-task" data-w="26">TASK 26%</div>
+          <div class="token-seg seg-out" data-w="20">OUT 20%</div>
+        </div>
+        <div class="token-total">~45K</div>
+      </div>
+      <div class="token-row">
+        <div class="token-row-label">+ Subagent isolation</div>
+        <div class="token-stack">
+          <div class="token-seg seg-sys" data-w="22">SYS 22%</div>
+          <div class="token-seg seg-tools" data-w="18">TOOLS 18%</div>
+          <div class="token-seg seg-hist" data-w="8">HIST 8%</div>
+          <div class="token-seg seg-task" data-w="30">TASK 30%</div>
+          <div class="token-seg seg-out" data-w="22">OUT 22%</div>
+        </div>
+        <div class="token-total">~22K</div>
+      </div>
+      <div class="token-row">
+        <div class="token-row-label">+ Prompt cache hit</div>
+        <div class="token-stack">
+          <div class="token-seg seg-sys" data-w="3">SYS</div>
+          <div class="token-seg seg-tools" data-w="3">TLS</div>
+          <div class="token-seg seg-hist" data-w="3">HST</div>
+          <div class="token-seg seg-task" data-w="55">TASK 55%</div>
+          <div class="token-seg seg-out" data-w="36">OUT 36%</div>
+        </div>
+        <div class="token-total">~7K eff.</div>
+      </div>
+      <div class="token-legend">
+        <span><span class="legend-dot seg-sys"></span>System prompt</span>
+        <span><span class="legend-dot seg-tools"></span>Tool definitions</span>
+        <span><span class="legend-dot seg-hist"></span>History / Summary</span>
+        <span><span class="legend-dot seg-task"></span>Current task</span>
+        <span><span class="legend-dot seg-out"></span>Output</span>
+      </div>
+    </div>
+
+    <p style="font-family:Fraunces;font-size:17px;line-height:1.65;max-width:65ch;color:#222;margin-top:16px">The arithmetic is brutal at production scale. A 120K-token agent run on Claude Opus 4.6 ($5/MTok input, $25/MTok output) costs ~$0.60 per turn for input alone. Run that 50 times a day across a team of 10 → <strong>$9,000/month</strong> on a single agent workflow. Prompt caching reduces uncached input cost from $3.00/MTok to $0.30/MTok on Sonnet — <strong>10× cheaper</strong> when the prefix is stable.</p>
+
+    <div class="stage-block reveal" style="margin-top:48px">
+      <div class="stage-header">
+        <div class="stage-header-num">⁂</div>
+        <div class="stage-header-content">
+          <h4>Prompt Caching — The 10× Cost Lever</h4>
+          <div class="stage-cat">Don't break the cache</div>
+        </div>
+      </div>
+      <div class="stage-prelude">Arxiv 2601.06007 ("Don't Break the Cache") on DeepResearch Bench: prompt caching reduces API costs by <strong>41–80%</strong> and improves TTFT by <strong>13–31%</strong> across providers. The rule: <em>durable content at the top of the prompt, volatile at the bottom.</em> Every change to system prompt, tool definitions, or rules silently breaks caching.</div>
+      <div class="fw-matrix">
+        <div class="fw-row"><div class="fw-name-cell">Anthropic / Claude SDK</div><div class="fw-detail-cell"><span class="fw-pill pill-best">Explicit cache control</span> <code>cache_control: {type: "ephemeral"}</code> annotations let you mark exactly which prompt segments are cached. Sonnet pricing: <code>$0.30/MTok cached</code> vs <code>$3.00/MTok uncached</code>. The single biggest cost lever in the ecosystem.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">OpenAI</div><div class="fw-detail-cell"><span class="fw-pill">Automatic prefix caching</span> Automatic for prompts ≥1024 tokens. No explicit annotations needed. Codex CLI keeps system instructions, tool definitions, sandbox config in identical order between requests to preserve the prefix.</div></div>
+        <div class="fw-row"><div class="fw-name-cell">Google / Gemini</div><div class="fw-detail-cell"><span class="fw-pill">Implicit + explicit</span> Implicit caching at provider level + explicit context caching for large reusable corpora (up to 24 hour TTL).</div></div>
+        <div class="fw-row"><div class="fw-name-cell">Framework-level</div><div class="fw-detail-cell"><strong>LangGraph</strong>: cache discipline is your responsibility — graph structure makes it visible at least. <strong>Claude SDK</strong>: the agent loop is built around cache preservation. <strong>OpenAI SDK</strong>: same. <strong>CrewAI</strong>: role-based delegation rewrites prompts between agents — cache benefit is harder to preserve. <strong>ADK / MS Agent Framework</strong>: provider-level only.</div></div>
+      </div>
+      <div class="callout reveal">
+        <div class="callout-label">Rules that earn back 41-80% on production bills</div>
+        <p>(i) Place durable content (system prompt, tool defs, persistent rules) at the <em>beginning</em>; volatile content (user input, session data) at the <em>end</em>. (ii) Normalize prompts — tiny variations create thousands of near-duplicate cache entries. (iii) Cache retrieval <em>queries</em>, not retrieval <em>output</em>. (iv) Compaction breaks the cache — only compact when the cache benefit is already exhausted. (v) Never cache PII, secrets, or customer-specific data.</p>
+      </div>
+    </div>
+
+    <div class="benchmark-chart reveal" style="margin-top:48px">
+      <div class="chart-title">Multi-agent cost multiplier</div>
+      <div class="chart-sub">Tokens consumed per task vs single-agent baseline. <em style="font-family:Fraunces;color:#666;font-size:14px">Multi-agent is ~15× the cost of chat. The question is whether the task class justifies the multiple.</em></div>
+      <div class="bar-row"><span class="bar-label">Single chat turn</span><div class="bar-track"><div class="bar-fill" data-pct="6"></div></div><span class="bar-val">1×</span></div>
+      <div class="bar-row"><span class="bar-label">Single agent + tools</span><div class="bar-track"><div class="bar-fill" data-pct="24"></div></div><span class="bar-val">4×</span></div>
+      <div class="bar-row"><span class="bar-label">Orchestrator + 3 subagents</span><div class="bar-track"><div class="bar-fill" data-pct="90"></div></div><span class="bar-val">15×</span></div>
+      <div class="bar-row"><span class="bar-label">CrewAI role workflow (5 agents)</span><div class="bar-track"><div class="bar-fill" data-pct="135"></div></div><span class="bar-val">22×</span></div>
+      <div class="bar-row"><span class="bar-label">Long-horizon (10 ctx windows)</span><div class="bar-track"><div class="bar-fill" data-pct="180"></div></div><span class="bar-val">30×</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- § 09 THE CROSSOVER POINT -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="crossover">
+  <div class="container">
+    <div class="section-num">§ 09 — The Crossover Point</div>
+    <h2 class="section-title">When single-agent <em>breaks</em>.</h2>
+    <p class="section-intro">The single most important architectural question in 2026: when does a single agent stop working and you must go multi-agent? Both Anthropic and Cognition agree on the principle (context is everything) but disagree on the inflection point. This section gives the operational answer.</p>
+
+    <div class="crossover reveal">
+      <div class="crossover-title">Three signals that you've <em>crossed the threshold</em></div>
+      <div class="crossover-sub">If you observe any two of these in production, you've already crossed</div>
+      <div class="crossover-grid">
+        <div class="cross-side">
+          <h5>Stay <em>single-agent</em></h5>
+          <div class="cross-side-tag">When this fits</div>
+          <ul>
+            <li>Task fits inside one context window (~60-80K effective tokens)</li>
+            <li>Steps are sequential — each depends on the previous</li>
+            <li>Workflow is deterministic enough to specify upfront</li>
+            <li>Cost ceiling is tight (cost-per-task &lt; $0.10)</li>
+            <li>The user perceives this as one continuous decision-maker (consumer chat)</li>
+            <li>Latency is the primary constraint (voice, real-time UX)</li>
+            <li>Coordination overhead would dominate any quality gain</li>
+          </ul>
+        </div>
+        <div class="cross-divider">⇆</div>
+        <div class="cross-side">
+          <h5>Go <em>multi-agent</em></h5>
+          <div class="cross-side-tag">When you need to scale</div>
+          <ul>
+            <li>Task class is breadth-first (research, code review, broad search)</li>
+            <li>Subtasks are independent and can truly parallelize</li>
+            <li>Each subtask needs different specialized context / tools / model</li>
+            <li>Total information exceeds what fits in a single window</li>
+            <li>You can afford 10–15× the token cost for the quality gain</li>
+            <li>Failures are recoverable per-subagent (no shared-state corruption)</li>
+            <li>You have the harness to make subagents reliable (Claude / LangGraph)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="cross-thresholds">
+        <div class="threshold-row"><div class="threshold-trigger">Your agent regularly burns &gt; 60K tokens before completing a task</div><div class="threshold-resp">→ Reduce or isolate</div></div>
+        <div class="threshold-row"><div class="threshold-trigger">The model wraps up prematurely as context grows ("context anxiety")</div><div class="threshold-resp">→ Reset, don't compact</div></div>
+        <div class="threshold-row"><div class="threshold-trigger">A single agent must hold both broad context and narrow expertise</div><div class="threshold-resp">→ Orchestrator + specialist subagents</div></div>
+        <div class="threshold-row"><div class="threshold-trigger">Subtasks could run in parallel with no shared mutable state</div><div class="threshold-resp">→ Fan-out with Send / Task / subagent</div></div>
+        <div class="threshold-row"><div class="threshold-trigger">You need to verify outputs before they reach the user</div><div class="threshold-resp">→ Judge agent (15-20% error catch)</div></div>
+        <div class="threshold-row"><div class="threshold-trigger">Coordination cost &gt; specialization benefit</div><div class="threshold-resp">→ Stay single-agent; add skills</div></div>
+      </div>
+    </div>
+
+    <div class="principle reveal">
+      <div class="principle-label">The cross-cutting design rule</div>
+      <div class="principle-text">Even if your system has complex internal components, <em>it should present itself to the user as a single coherent entity.</em> The user must feel they are talking with one continuous decision-maker. Multi-agent is an implementation detail of your harness — never an exposed surface area.</div>
+    </div>
+
+    <div class="stage-block reveal">
+      <div class="stage-header">
+        <div class="stage-header-num">⊕</div>
+        <div class="stage-header-content">
+          <h4>Routing the work: which framework, which pattern, which scenario</h4>
+          <div class="stage-cat">Synthesizing the whole survey into one decision</div>
+        </div>
+      </div>
+      <div class="stage-prelude">Match the pattern to the problem, not the other way around. Subagents are cheap (one LLM call per delegation). Multi-turn conversations are expensive (N agents × M rounds). Handoffs are in between. The table below is the synthesis of everything in this report.</div>
+      <div class="fw-matrix">
+        <div class="fw-row"><div class="fw-name-cell">Consumer chat<br>(travel, support)</div><div class="fw-detail-cell"><strong>Single-agent + tools.</strong> Stay coherent for the user. Use cache aggressively (durable system prompt, volatile user input). Compact at 70% window. Reset only if the conversation crosses session boundaries.<div style="margin-top:10px"><span class="fw-pill pill-best">OpenAI SDK</span> <span class="fw-pill">Google ADK (multimodal)</span></div></div></div>
+        <div class="fw-row"><div class="fw-name-cell">Coding agent<br>(repo-scale work)</div><div class="fw-detail-cell"><strong>Single primary agent + isolated subagents for breadth-first sub-tasks</strong> (security review, perf profile, test gen). Use agentic search not RAG. <code>claude-progress.txt</code>-style externalization for long-horizon. Reset context per session.<div style="margin-top:10px"><span class="fw-pill pill-best">Claude SDK</span> <span class="fw-pill">OpenAI SDK + Codex</span></div></div></div>
+        <div class="fw-row"><div class="fw-name-cell">Research / analysis<br>(deep, breadth-first)</div><div class="fw-detail-cell"><strong>Orchestrator + parallel subagents</strong> is justified here. Pay the 15× cost for the 90% quality gain. Subagents write findings to shared filesystem, return only references. Final synthesis happens in the orchestrator with reduced context.<div style="margin-top:10px"><span class="fw-pill pill-best">Claude SDK</span> <span class="fw-pill">LangGraph (durability shell)</span></div></div></div>
+        <div class="fw-row"><div class="fw-name-cell">Business workflow<br>(approvals, integrations)</div><div class="fw-detail-cell"><strong>Deterministic graph with LLM-at-decision-points</strong>, never LLM-as-orchestrator. Checkpointers for durable execution. HITL at every approval gate. Verification + audit log are first-class nodes, not afterthoughts.<div style="margin-top:10px"><span class="fw-pill pill-best">LangGraph</span> <span class="fw-pill">MS Agent Framework</span></div></div></div>
+        <div class="fw-row"><div class="fw-name-cell">Customer support<br>(triage + route)</div><div class="fw-detail-cell"><strong>Triage agent + specialist sub-agents via handoff.</strong> Don't over-architect. Most teams reach for multi-agent when they need good tool use + clean routing. Lightweight judge agent before user response catches 15-20% of errors.<div style="margin-top:10px"><span class="fw-pill pill-best">OpenAI SDK</span> <span class="fw-pill">CrewAI (prototyping)</span> <span class="fw-pill">LangGraph (production)</span></div></div></div>
+        <div class="fw-row"><div class="fw-name-cell">Multi-tenant SaaS<br>(per-customer agents)</div><div class="fw-detail-cell"><strong>Single-agent per tenant, isolated state stores</strong>, shared system prompt + cached prefix across tenants. Cross-tenant fan-out is a security boundary you don't want to cross at the LLM layer.<div style="margin-top:10px"><span class="fw-pill pill-best">LangGraph + PostgresSaver</span> <span class="fw-pill">MS Agent Framework + Entra</span></div></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- § 10 GAPS -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="gaps">
+  <div class="container">
+    <div class="section-num">§ 10 — The Gaps &amp; Where the Market Is Going</div>
+    <h2 class="section-title">What every framework <em>still gets wrong</em>.</h2>
+    <p class="section-intro">None of the six frameworks is "done." Each ships with structural gaps that the community and vendors are actively closing — sometimes via the framework itself, sometimes via the surrounding protocol layer (MCP, A2A, AG-UI).</p>
+
+    <div class="gap-grid reveal">
+      <div class="gap">
+        <div class="gap-num">i.</div>
+        <div class="gap-title">Production-grade evaluation</div>
+        <div class="gap-desc">Only 38% of production agents run automated evals on every prompt change. The CLEAR framework (Nov 2025, arXiv 2511.14136) documents a 37% lab-to-prod performance gap. Most frameworks ship a tracing UI; almost none ship a real eval harness.</div>
+        <div class="gap-future">CLEAR-style five-dim evaluation as the emerging standard</div>
+      </div>
+      <div class="gap">
+        <div class="gap-num">ii.</div>
+        <div class="gap-title">Runaway loops &amp; cost guards</div>
+        <div class="gap-desc">The most common production failure mode is a loop that never terminates. Most SDKs do not build in loop guards, repetition detection, or hard caps. Anthropic's own production guide recommends implementing these at the harness level rather than relying on billing alerts.</div>
+        <div class="gap-future">Cost-per-task as a first-class telemetry primitive</div>
+      </div>
+      <div class="gap">
+        <div class="gap-num">iii.</div>
+        <div class="gap-title">Cross-framework interoperability</div>
+        <div class="gap-desc">The A2A protocol (open-sourced to Linux Foundation 2025) and MCP (97M+ downloads) are quietly collapsing the cost of multi-framework deployments. By Q1 2026, 67% of CTOs surveyed say MCP is their default agent-integration standard.</div>
+        <div class="gap-future">Hybrid stacks via MCP (tools) + A2A (agent-agent) becoming the norm</div>
+      </div>
+      <div class="gap">
+        <div class="gap-num">iv.</div>
+        <div class="gap-title">Security &amp; shadow agents</div>
+        <div class="gap-desc">Only 14.4% of organizations have full security approval for their entire agent fleet. 47% of agents on average are actively monitored. Prompt injection remains a structural problem; no framework solves it natively.</div>
+        <div class="gap-future">Governance agents that monitor other agents — emerging 2026 pattern</div>
+      </div>
+      <div class="gap">
+        <div class="gap-num">v.</div>
+        <div class="gap-title">Long-running memory &amp; context</div>
+        <div class="gap-desc">Effective working context during agent execution is closer to 60–80K tokens despite nominal 200K windows. Compaction helps but introduces context degradation. Skills systems (Anthropic, Google) and progressive disclosure are emerging answers.</div>
+        <div class="gap-future">Skills-based progressive disclosure as the new context-engineering primitive</div>
+      </div>
+      <div class="gap">
+        <div class="gap-num">vi.</div>
+        <div class="gap-title">UI &amp; frontend communication</div>
+        <div class="gap-desc">Agents → tools (MCP), agents → agents (A2A) — but agents → frontend was unsolved until CopilotKit's AG-UI (May 2025). Now integrated with LangGraph, CrewAI, Mastra, and MS Agent Framework.</div>
+        <div class="gap-future">AG-UI converging as the third leg of the protocol stack</div>
+      </div>
+    </div>
+
+    <div class="decision-tree reveal">
+      <div class="dt-title">Decision tree: <em style="font-style:italic;font-weight:300">which framework should you build on?</em></div>
+      <div class="dt-row"><div class="dt-if">You're already on OpenAI and want to ship voice or fast multi-agent prototypes</div><div class="dt-then">→ <span class="dt-then-fw">OPENAI AGENTS SDK</span></div></div>
+      <div class="dt-row"><div class="dt-if">You're committed to Claude and want OS-level automation or coding agents with the deepest MCP ecosystem</div><div class="dt-then">→ <span class="dt-then-fw">CLAUDE AGENT SDK</span></div></div>
+      <div class="dt-row"><div class="dt-if">You need durable execution, complex stateful workflows, and the team can invest in graph thinking</div><div class="dt-then">→ <span class="dt-then-fw">LANGGRAPH</span></div></div>
+      <div class="dt-row"><div class="dt-if">You need a working multi-agent prototype this week and role-based abstractions match how stakeholders think</div><div class="dt-then">→ <span class="dt-then-fw">CREWAI</span></div></div>
+      <div class="dt-row"><div class="dt-if">You're on GCP, need multimodal, or your team is polyglot across Python/Java/Go/TypeScript</div><div class="dt-then">→ <span class="dt-then-fw">GOOGLE ADK</span></div></div>
+      <div class="dt-row"><div class="dt-if">You're an Azure / .NET shop with strict governance requirements and existing Foundry investment</div><div class="dt-then">→ <span class="dt-then-fw">MICROSOFT AGENT FRAMEWORK</span></div></div>
+      <div class="dt-row"><div class="dt-if">You need to build on top of multiple frameworks at once</div><div class="dt-then">→ <span class="dt-then-fw">MCP + A2A + AG-UI protocol stack</span></div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- § 11 CONCLUSION -->
+<!-- ══════════════════════════════════════════════ -->
+<section>
+  <div class="container">
+    <div class="section-num">§ 11 — Conclusion</div>
+    <h2 class="section-title">The era of <em>framework-as-architecture</em>.</h2>
+    <div class="hero-lede" style="max-width:65ch;margin-bottom:48px">
+      Framework choice is no longer a library decision. In 2026 it is an architectural commitment — to a model, an orchestration philosophy, an observability stack, a deployment target, and a community. Pick wrong and you face a 50–80% rewrite when you outgrow it. Pick right and you ship faster than you thought possible, and sleep at night.
+    </div>
+    <div class="callout">
+      <div class="callout-label">The pattern that wins</div>
+      <p>High-performing teams in 2026 don't optimize for raw framework capability. They optimize for: <em>narrow scope, hard metrics, automated evaluation, named ownership, and human-in-the-loop checkpoints in production rollouts.</em> The framework matters less than the operating discipline around it.</p>
+    </div>
+    <p style="font-family:Fraunces;font-size:18px;line-height:1.6;max-width:65ch;margin-top:32px;color:#333">Build vs. buy is no longer the question. The frameworks are good enough. The question is whether your organization is ready to operate agents with the same discipline you bring to databases and APIs. Most aren't yet — and that's where the next two years of work live.</p>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="article-footer">
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-title">Canny<em>Forge</em></div>
+        <div class="foot-desc">Independent AI practice — publishing across agent systems, architecture, economics, and emerging applications. Written by a builder, for practitioners, executives, and investors shaping what comes next.</div>
+        <a href="/about.html" class="foot-cta">About CannyForge →</a>
+      </div>
+      <div class="foot-col">
+        <h6>Sources</h6>
+        <ul>
+          <li>Official framework docs (6 vendors)</li>
+          <li>arXiv 2511.14136 — CLEAR</li>
+          <li>arXiv 2601.06007 — Caching</li>
+          <li>McKinsey/S&amp;P Global Q1 2026</li>
+          <li>Langfuse/Gurusup benchmarks</li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h6>Production Cases</h6>
+        <ul>
+          <li>Klarna — 85M users, 80% faster</li>
+          <li>Uber — LangGraph workflows</li>
+          <li>LinkedIn — support automation</li>
+          <li>Replit — coding agent</li>
+          <li>Cognition — Devin agent</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span>© 2026 CannyForge</span>
+      <span>
+        <a href="https://twitter.com/cannyforge" style="color:#666;text-decoration:none;margin-right:24px">Twitter/X</a>
+        <a href="/feed.xml" style="color:#666;text-decoration:none;margin-right:24px">RSS</a>
+        <a href="mailto:cannyforge@gmail.com" style="color:#666;text-decoration:none">Contact</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<!-- ── Giscus Comments ── -->
+<div class="comments-wrap">
+  <script src="https://giscus.app/client.js"
+    data-repo="cannyforge/cannyforge.github.io"
+    data-repo-id="R_kgDOSMHeOA"
+    data-category="General"
+    data-category-id="DIC_kwDOSMHeOM4C7p9a"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="light"
+    data-lang="en"
+    crossorigin="anonymous"
+    async>
+  </script>
+</div>
+
+<script>
+// Tab control
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.target;
+    btn.parentElement.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(target).classList.add('active');
+  });
+});
+
+// IntersectionObserver: reveal + bar animation + token chart animation
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      e.target.querySelectorAll('.bar-fill').forEach(b => {
+        const pct = parseInt(b.dataset.pct, 10);
+        b.style.width = Math.min(pct, 200) / 2 + '%';
+      });
+      e.target.querySelectorAll('.token-seg').forEach(s => {
+        const w = parseFloat(s.dataset.w);
+        if (!isNaN(w)) s.style.width = w + '%';
+      });
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Initial reveal for above-fold elements
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.querySelectorAll('.reveal').forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight) {
+        el.classList.add('in');
+        el.querySelectorAll('.bar-fill').forEach(b => {
+          const pct = parseInt(b.dataset.pct, 10);
+          b.style.width = Math.min(pct, 200) / 2 + '%';
+        });
+        el.querySelectorAll('.token-seg').forEach(s => {
+          const w = parseFloat(s.dataset.w);
+          if (!isNaN(w)) s.style.width = w + '%';
+        });
+      }
+    });
+  }, 200);
+});
+</script>
+
+</body>
+</html>

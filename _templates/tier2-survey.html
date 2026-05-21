@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SURVEY_TITLE — CannyForge</title>
+  <meta name="description" content="SURVEY_DESCRIPTION">
+  <meta property="og:title" content="SURVEY_TITLE">
+  <meta property="og:description" content="SURVEY_DESCRIPTION">
+  <meta property="og:url" content="https://cannyforge.dev/SURVEY_SLUG/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="CannyForge">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@cannyforge">
+  <!-- Tier 2 surveys are self-contained: NO link to /assets/style.css -->
+  <!-- All CSS is embedded below. Use Fraunces + JetBrains Mono design system. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="alternate" type="application/rss+xml" title="CannyForge" href="/feed.xml">
+  <style>
+    /* ── CSS Variables ───────────────────────────────── */
+    :root {
+      --ink:        #1a1610;
+      --paper:      #faf7f2;
+      --paper-deep: #f0ebe1;
+      --rust:       #c0392b;
+      --rust-deep:  #922b21;
+      --olive:      #5d6b3a;
+      --gold:       #c9982a;
+      --muted:      #6b635a;
+      --serif:      'Fraunces', Georgia, serif;
+      --mono:       'JetBrains Mono', 'Fira Code', monospace;
+      --sans:       'Inter Tight', 'Helvetica Neue', sans-serif;
+    }
+
+    /* ── Reset & Base ────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { background: var(--paper); color: var(--ink); font-family: var(--serif); line-height: 1.7; }
+
+    /* ── Site Header (matches site-wide style) ───────── */
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--ink); color: var(--paper);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 52px;
+      font-family: var(--sans);
+    }
+    .site-header .site-name { color: var(--paper); text-decoration: none; font-weight: 600; font-size: 15px; letter-spacing: .02em; }
+    .site-header .site-name span { color: var(--gold); }
+    .site-header nav { display: flex; gap: 24px; }
+    .site-header nav a { color: rgba(250,247,242,.7); text-decoration: none; font-size: 13px; letter-spacing: .04em; transition: color .2s; }
+    .site-header nav a:hover { color: var(--paper); }
+
+    /* ── Ticker ──────────────────────────────────────── */
+    .ticker-wrap { background: var(--rust); overflow: hidden; height: 32px; display: flex; align-items: center; }
+    .ticker { display: flex; gap: 0; animation: ticker-scroll 40s linear infinite; white-space: nowrap; }
+    .ticker-item { font-family: var(--mono); font-size: 11px; color: #fff; padding: 0 40px; letter-spacing: .06em; }
+    .ticker-item::before { content: '◆  '; opacity: .6; }
+    @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── Hero ────────────────────────────────────────── */
+    .hero { background: var(--ink); color: var(--paper); padding: 80px 0 60px; }
+    .hero-inner { max-width: 900px; margin: 0 auto; padding: 0 32px; }
+    .hero-kicker { font-family: var(--mono); font-size: 11px; color: var(--gold); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 24px; }
+    .hero h1 { font-family: var(--serif); font-size: clamp(32px, 5vw, 56px); font-weight: 700; line-height: 1.1; letter-spacing: -.02em; margin-bottom: 24px; }
+    .hero h1 em { font-style: italic; color: var(--gold); }
+    .hero-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px; background: rgba(250,247,242,.1); margin-top: 40px; }
+    .hero-cell { background: var(--ink); padding: 20px 24px; }
+    .hero-cell .label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; }
+    .hero-cell .value { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--gold); }
+
+    /* ── Content Sections ────────────────────────────── */
+    .section { padding: 72px 0; border-bottom: 1px solid var(--paper-deep); }
+    .section:nth-child(even) { background: var(--paper-deep); }
+    .section-inner { max-width: 900px; margin: 0 auto; padding: 0 32px; }
+    .section-label { font-family: var(--mono); font-size: 10px; color: var(--rust); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 16px; }
+    .section h2 { font-family: var(--serif); font-size: clamp(24px, 3.5vw, 36px); font-weight: 600; line-height: 1.2; letter-spacing: -.02em; margin-bottom: 24px; }
+    p { font-size: 16px; line-height: 1.8; margin-bottom: 16px; color: var(--ink); }
+    h3 { font-family: var(--serif); font-size: 20px; font-weight: 600; margin: 32px 0 12px; }
+
+    /* ── Reveal animation ────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* ── Tabs ────────────────────────────────────────── */
+    .tabs { display: flex; border-bottom: 2px solid var(--ink); margin-bottom: 24px; gap: 0; flex-wrap: wrap; }
+    .tab { background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; padding: 10px 20px; font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; letter-spacing: .04em; transition: color .2s, border-color .2s; }
+    .tab:hover { color: var(--ink); }
+    .tab.active { color: var(--rust); border-bottom-color: var(--rust); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Bar chart ───────────────────────────────────── */
+    .bar-chart { display: flex; flex-direction: column; gap: 12px; }
+    .bar-row { display: flex; align-items: center; gap: 12px; font-family: var(--sans); font-size: 13px; }
+    .bar-label { width: 140px; flex-shrink: 0; color: var(--muted); }
+    .bar-track { flex: 1; background: var(--paper-deep); height: 20px; border-radius: 2px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--rust); width: 0; transition: width 1s ease; border-radius: 2px; }
+    .bar-val { width: 50px; text-align: right; font-weight: 600; font-family: var(--mono); font-size: 12px; }
+
+    /* ── Token chart ─────────────────────────────────── */
+    .token-chart { height: 40px; background: var(--paper-deep); border-radius: 4px; overflow: hidden; display: flex; margin: 16px 0 8px; }
+    .token-seg { height: 100%; width: 0; transition: width 1s ease; }
+    .seg-hist { background: var(--gold); }
+    .seg-task { background: var(--rust); }
+    .seg-out  { background: var(--rust-deep); }
+    .token-total { font-family: var(--mono); font-size: 12px; font-weight: 700; text-align: right; margin-bottom: 8px; }
+    .token-legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 8px; }
+    .token-legend span { font-family: var(--sans); font-size: 12px; display: flex; align-items: center; gap: 6px; }
+    .legend-dot { display: inline-block; width: 12px; height: 12px; border-radius: 2px; }
+
+    /* ── Framework / stage matrix ────────────────────── */
+    .fw-matrix { display: flex; flex-direction: column; gap: 1px; background: var(--paper-deep); border: 1px solid var(--paper-deep); }
+    .fw-row { display: grid; gap: 1px; background: var(--paper-deep); }
+    .fw-name-cell { background: var(--paper); border-left: 3px solid var(--rust); padding: 14px 16px; font-family: var(--serif); font-weight: 600; }
+    .fw-cell { background: var(--paper); padding: 12px 14px; font-size: 14px; }
+    .fw-head-cell { background: var(--ink); color: var(--paper); padding: 10px 14px; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; }
+
+    /* ── Code compare ────────────────────────────────── */
+    .code-compare { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--ink); border-radius: 4px; overflow: hidden; margin: 24px 0; }
+    .code-compare-side { background: #12100c; padding: 20px; overflow-x: auto; }
+    .code-compare-side h4 { font-family: var(--mono); font-size: 11px; color: var(--gold); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 12px; }
+    pre { background: #12100c; border-radius: 4px; padding: 16px; overflow-x: auto; margin: 16px 0; }
+    code { font-family: var(--mono); font-size: 13px; }
+
+    /* ── Tags ────────────────────────────────────────── */
+    .tag { display: inline-block; font-family: var(--mono); font-size: 11px; background: var(--paper-deep); color: var(--muted); border-radius: 2px; padding: 2px 8px; margin: 2px; }
+
+    /* ── Dig Deeper / cluster cards ──────────────────── */
+    .dig-deeper { background: var(--ink); color: var(--paper); padding: 80px 0; }
+    .dig-deeper h2 { font-family: var(--serif); font-size: 28px; font-weight: 600; color: var(--paper); margin-bottom: 8px; }
+    .dig-deeper .sub { font-family: var(--sans); font-size: 14px; color: rgba(250,247,242,.5); margin-bottom: 40px; }
+    .cluster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: rgba(250,247,242,.08); }
+    .cluster-card { background: var(--ink); padding: 28px; transition: background .2s; }
+    .cluster-card:hover { background: #24201a; }
+    .cluster-card .cc-num { font-family: var(--mono); font-size: 10px; color: var(--rust); letter-spacing: .1em; margin-bottom: 10px; }
+    .cluster-card h3 { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--paper); line-height: 1.4; margin-bottom: 8px; }
+    .cluster-card p { font-size: 13px; color: rgba(250,247,242,.55); line-height: 1.6; margin: 0; }
+    .cc-badge { display: inline-block; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; margin-top: 12px; padding: 3px 8px; border-radius: 2px; }
+    .cc-badge.soon { background: rgba(201,152,42,.15); color: var(--gold); }
+    .cc-badge.live { background: rgba(192,57,43,.15); color: var(--rust); text-decoration: none; }
+
+    /* ── Footer ──────────────────────────────────────── */
+    .footer { background: var(--ink); color: rgba(250,247,242,.4); padding: 40px 0; text-align: center; font-family: var(--sans); font-size: 12px; }
+    .footer a { color: var(--gold); text-decoration: none; }
+
+    /* ── Responsive ──────────────────────────────────── */
+    @media (max-width: 640px) {
+      .hero-inner, .section-inner { padding: 0 20px; }
+      .code-compare { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="/" class="site-name">Canny<span>Forge</span></a>
+  <nav>
+    <a href="/about.html">About</a>
+    <a href="https://github.com/cannyforge" target="_blank" rel="noopener">GitHub</a>
+    <a href="/feed.xml">RSS</a>
+  </nav>
+</header>
+
+<!-- Ticker: key stats, repeated 2× so the scroll loops seamlessly -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item">STAT_1</span>
+    <span class="ticker-item">STAT_2</span>
+    <span class="ticker-item">STAT_3</span>
+    <span class="ticker-item">STAT_4</span>
+    <span class="ticker-item">STAT_5</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item">STAT_1</span>
+    <span class="ticker-item">STAT_2</span>
+    <span class="ticker-item">STAT_3</span>
+    <span class="ticker-item">STAT_4</span>
+    <span class="ticker-item">STAT_5</span>
+  </div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-kicker">SURVEY_KICKER · SURVEY_DATE</div>
+    <h1>SURVEY_TITLE<br><em>SURVEY_SUBTITLE</em></h1>
+    <div class="hero-summary">
+      <div class="hero-cell"><div class="label">STAT_LABEL_1</div><div class="value">STAT_VALUE_1</div></div>
+      <div class="hero-cell"><div class="label">STAT_LABEL_2</div><div class="value">STAT_VALUE_2</div></div>
+      <div class="hero-cell"><div class="label">STAT_LABEL_3</div><div class="value">STAT_VALUE_3</div></div>
+      <div class="hero-cell"><div class="label">STAT_LABEL_4</div><div class="value">STAT_VALUE_4</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- §01 — SECTION TITLE -->
+<section class="section" id="s01">
+  <div class="section-inner">
+    <div class="section-label reveal">§ 01</div>
+    <h2 class="reveal">Section Title</h2>
+    <div class="reveal">
+      <p>Section content here.</p>
+    </div>
+  </div>
+</section>
+
+<!-- §02 — SECTION TITLE -->
+<section class="section" id="s02">
+  <div class="section-inner">
+    <div class="section-label reveal">§ 02</div>
+    <h2 class="reveal">Section Title</h2>
+    <div class="reveal">
+      <p>Section content here.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Add more sections as needed -->
+
+<!-- Dig Deeper cluster posts -->
+<section class="dig-deeper">
+  <div class="section-inner">
+    <h2>Dig Deeper</h2>
+    <p class="sub">Seven focused posts derived from this survey — each one a standalone deep dive.</p>
+    <div class="cluster-grid">
+      <div class="cluster-card">
+        <div class="cc-num">01 / 07</div>
+        <h3>Cluster Post Title</h3>
+        <p>Short description of what this cluster post covers.</p>
+        <span class="cc-badge soon">Coming Soon</span>
+      </div>
+      <!-- Repeat for each cluster post -->
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>© YEAR CannyForge · <a href="/feed.xml">RSS</a> · <a href="/about.html">About</a> · <a href="https://twitter.com/cannyforge" target="_blank" rel="noopener">@cannyforge</a></p>
+</footer>
+
+<!-- Giscus comments -->
+<div style="max-width:900px;margin:0 auto;padding:40px 32px;">
+  <script src="https://giscus.app/client.js"
+    data-repo="cannyforge/cannyforge.github.io"
+    data-repo-id="R_kgDOSMHeOA"
+    data-category="General"
+    data-category-id="DIC_kwDOSMHeOM4C7p9a"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    crossorigin="anonymous"
+    async>
+  </script>
+</div>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.target;
+      btn.parentElement.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById(target).classList.add('active');
+    });
+  });
+
+  // Scroll-reveal + chart animation
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        // Animate bar charts (data-pct attribute, capped at 200 → 100%)
+        e.target.querySelectorAll('.bar-fill').forEach(b => {
+          const pct = parseInt(b.dataset.pct, 10);
+          b.style.width = Math.min(pct, 200) / 2 + '%';
+        });
+        // Animate token segments (data-w attribute, direct %)
+        e.target.querySelectorAll('.token-seg').forEach(s => {
+          const w = parseFloat(s.dataset.w);
+          if (!isNaN(w)) s.style.width = w + '%';
+        });
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Reveal above-fold elements immediately
+  document.querySelectorAll('.reveal').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight) el.classList.add('in');
+  });
+</script>
+</body>
+</html>

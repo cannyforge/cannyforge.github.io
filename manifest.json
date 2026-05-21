@@ -1,5 +1,13 @@
 [
   {
+    "slug": "the-state-of-agent-frameworks-2026",
+    "title": "The State of Agent Frameworks — A 2026 Survey",
+    "date": "2026-05-21",
+    "category": "Agent Systems",
+    "tags": ["agents", "frameworks", "architecture", "survey", "openai", "langchain", "crewai"],
+    "description": "A comprehensive 2026 survey of the six agent frameworks that ship to production: OpenAI Agents SDK, Claude Agent SDK, LangGraph, CrewAI, Google ADK, and Microsoft Semantic Kernel. Architecture trade-offs, real deployments, and the gaps they have yet to close."
+  },
+  {
     "slug": "deepseek-v4",
     "title": "DeepSeek-V4: The Economics of the Million-Token Brain",
     "date": "2026-04-24",
