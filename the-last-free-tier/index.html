@@ -7,12 +7,12 @@
   <meta name="description" content="A fiction about platform dependency, developer lock-in, and what happens when the tools that make you faster make you unable to work without them.">
   <meta property="og:title" content="The Last Free Tier">
   <meta property="og:description" content="A fiction about platform dependency, developer lock-in, and what happens when the tools that make you faster make you unable to work without them.">
-  <meta property="og:image" content="https://cannyforge.dev/assets/og-the-last-free-tier.png">
+  <meta property="og:image" content="https://cannyforge.dev/assets/the-last-free-tier.png">
   <meta property="og:url" content="https://cannyforge.dev/the-last-free-tier/">
   <meta property="og:type" content="article">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:creator" content="@cannyforge">
-  <meta name="twitter:image" content="https://cannyforge.dev/assets/og-the-last-free-tier.png">
+  <meta name="twitter:image" content="https://cannyforge.dev/assets/the-last-free-tier.png">
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="alternate" type="application/rss+xml" title="CannyForge" href="/feed.xml">
 
@@ -25,10 +25,12 @@
       overflow: hidden;
       line-height: 0;
     }
-    .fiction-hero svg {
+    .fiction-hero-img {
       width: 100%;
       display: block;
-      max-height: 420px;
+      max-height: 480px;
+      object-fit: cover;
+      object-position: center 30%;
     }
     .fiction-hero-overlay {
       position: absolute;
@@ -135,7 +137,11 @@
 
 <!-- Full-bleed hero -->
 <div class="fiction-hero">
-  <svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <img src="/assets/the-last-free-tier.png"
+       alt="Developer hunched at desk at 3am, Bay Bridge glowing through the window in fog, monitor showing 'Terms accepted. Atlas Pro is now active.'"
+       class="fiction-hero-img">
+  <!-- kept for fallback reference: original SVG hero below (unused) -->
+  <svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:none">
     <defs>
       <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%"   stop-color="#04060f"/>
@@ -323,7 +329,7 @@
   <div class="fiction-hero-overlay">
     <div class="fiction-kicker">
       <span class="category-badge">Fiction</span>
-      <time>April 26, 2026</time>
+      <time>June 12, 2026</time>
     </div>
     <h1>The Last Free Tier</h1>
   </div>
