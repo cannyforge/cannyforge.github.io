@@ -6,7 +6,14 @@
     <description>AI systems engineering — architecture, agent reliability, LLM economics, and observations from building.</description>
     <language>en-us</language>
     <atom:link href="https://cannyforge.dev/feed.xml" rel="self" type="application/rss+xml"/>
-    <item>
+      <item>
+    <title>The Last Free Tier</title>
+    <link>https://cannyforge.dev/the-last-free-tier/</link>
+    <pubDate>Sun, 26 Apr 2026 00:00:00 +0000</pubDate>
+    <description>A fiction about platform dependency, developer lock-in, and what happens when the tools that make you faster make you unable to work without them.</description>
+    <guid isPermaLink="true">https://cannyforge.dev/the-last-free-tier/</guid>
+  </item>
+  <item>
       <title>The State of Agent Frameworks — A 2026 Survey</title>
       <link>https://cannyforge.dev/the-state-of-agent-frameworks-2026/</link>
       <pubDate>Wed, 21 May 2026 00:00:00 +0000</pubDate>

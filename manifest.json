@@ -1,10 +1,31 @@
 [
   {
+    "slug": "the-last-free-tier",
+    "title": "The Last Free Tier",
+    "date": "2026-04-26",
+    "category": "Essays",
+    "tags": [
+      "fiction",
+      "platform-economics",
+      "developer-tools",
+      "lock-in"
+    ],
+    "description": "A fiction about platform dependency, developer lock-in, and what happens when the tools that make you faster make you unable to work without them."
+  },
+  {
     "slug": "the-state-of-agent-frameworks-2026",
-    "title": "The State of Agent Frameworks — A 2026 Survey",
+    "title": "The State of Agent Frameworks \u2014 A 2026 Survey",
     "date": "2026-05-21",
     "category": "Agent Systems",
-    "tags": ["agents", "frameworks", "architecture", "survey", "openai", "langchain", "crewai"],
+    "tags": [
+      "agents",
+      "frameworks",
+      "architecture",
+      "survey",
+      "openai",
+      "langchain",
+      "crewai"
+    ],
     "description": "A comprehensive 2026 survey of the six agent frameworks that ship to production: OpenAI Agents SDK, Claude Agent SDK, LangGraph, CrewAI, Google ADK, and Microsoft Semantic Kernel. Architecture trade-offs, real deployments, and the gaps they have yet to close."
   },
   {
@@ -12,31 +33,49 @@
     "title": "From Conversation to Knowledge: Temporal Memory Reconstruction",
     "date": "2026-05-08",
     "category": "Systems & Memory",
-    "tags": ["memory", "knowledge-management", "discord", "pipeline"],
-    "description": "A grep-first, LLM-second pipeline for recovering design decisions from months of Discord history — with timestamps, decision states, and conflict detection. No vector DB needed."
+    "tags": [
+      "memory",
+      "knowledge-management",
+      "discord",
+      "pipeline"
+    ],
+    "description": "A grep-first, LLM-second pipeline for recovering design decisions from months of Discord history \u2014 with timestamps, decision states, and conflict detection. No vector DB needed."
   },
   {
     "slug": "deepseek-v4",
     "title": "DeepSeek-V4: The Economics of the Million-Token Brain",
     "date": "2026-04-24",
     "category": "Architecture",
-    "tags": ["attention", "agentic-coding", "cost", "deepseek"],
-    "description": "How a redesigned attention mechanism turns long-context AI from a luxury into a utility — and what it means for the tools developers use every day."
+    "tags": [
+      "attention",
+      "agentic-coding",
+      "cost",
+      "deepseek"
+    ],
+    "description": "How a redesigned attention mechanism turns long-context AI from a luxury into a utility \u2014 and what it means for the tools developers use every day."
   },
   {
     "slug": "from-prompt-tweaks-to-learning-machines-the-agent-skill-prim",
     "title": "From Prompt Tweaks to Learning Machines: The Agent Skill Primitive",
     "date": "2026-02-19",
     "category": "Agent Systems",
-    "tags": ["agents", "learning", "skills"],
-    "description": "How AI agents are evolving from static prompt followers to dynamic learning machines — and what the agent skill primitive means for the future of autonomous systems."
+    "tags": [
+      "agents",
+      "learning",
+      "skills"
+    ],
+    "description": "How AI agents are evolving from static prompt followers to dynamic learning machines \u2014 and what the agent skill primitive means for the future of autonomous systems."
   },
   {
     "slug": "beyond-the-hype-a-deep-dive-into-the-systemic-algorithmic-an",
     "title": "Beyond the Hype: A Deep Dive into the Systemic, Algorithmic, and Cognitive Roots of the Infinite Software Crisis",
     "date": "2026-01-19",
     "category": "Architecture",
-    "tags": ["vibe-coding", "technical-debt", "software-engineering"],
+    "tags": [
+      "vibe-coding",
+      "technical-debt",
+      "software-engineering"
+    ],
     "description": "A systems-level analysis of the Infinite Software Crisis, connecting weak guardrails, model training limits, and human cognitive bias to long-term software fragility."
   },
   {
@@ -44,7 +83,11 @@
     "title": "Designing Agentic Systems: Lessons from LLM Coding Tools",
     "date": "2025-07-14",
     "category": "Agent Systems",
-    "tags": ["agents", "coding", "system-design"],
+    "tags": [
+      "agents",
+      "coding",
+      "system-design"
+    ],
     "description": "LLM coding tools are the most demanding test of agentic system design. Here's what building and using them teaches about agents that actually work."
   },
   {
@@ -52,23 +95,35 @@
     "title": "Context Engineering: The Real Secret to Magical AI Agents",
     "date": "2025-07-08",
     "category": "Agent Systems",
-    "tags": ["context", "agents", "engineering"],
-    "description": "The difference between a basic AI demo and a magical product isn't the model — it's the context. A practical breakdown of context engineering."
+    "tags": [
+      "context",
+      "agents",
+      "engineering"
+    ],
+    "description": "The difference between a basic AI demo and a magical product isn't the model \u2014 it's the context. A practical breakdown of context engineering."
   },
   {
     "slug": "best-practices-for-agentic-reasoning-in-production-lessons-f",
     "title": "Best Practices for Agentic Reasoning in Production: Lessons from Anthropic and My Own Experience",
     "date": "2025-07-08",
     "category": "Agent Systems",
-    "tags": ["agents", "production", "reasoning"],
-    "description": "What actually works when deploying agentic reasoning systems in production — lessons distilled from Anthropic's guidance and real-world experience."
+    "tags": [
+      "agents",
+      "production",
+      "reasoning"
+    ],
+    "description": "What actually works when deploying agentic reasoning systems in production \u2014 lessons distilled from Anthropic's guidance and real-world experience."
   },
   {
     "slug": "reverse-engineering-openais-deep-research-how-to-balance-pow",
-    "title": "Reverse-Engineering OpenAI’s Deep Research: How to Balance Power with Safety",
+    "title": "Reverse-Engineering OpenAI\u2019s Deep Research: How to Balance Power with Safety",
     "date": "2025-03-09",
     "category": "Analysis",
-    "tags": ["openai", "safety", "research"],
+    "tags": [
+      "openai",
+      "safety",
+      "research"
+    ],
     "description": "A practical reverse-engineering of OpenAI's Deep Research system architecture, with lessons for balancing autonomous capability, reliability, and safety in production."
   },
   {
@@ -76,15 +131,23 @@
     "title": "Chain-of-Thought vs. ReAct: A Deep Dive into Reasoning Paradigms for Large Language Models",
     "date": "2025-02-18",
     "category": "Architecture",
-    "tags": ["reasoning", "chain-of-thought", "react"],
-    "description": "A rigorous comparison of two dominant reasoning paradigms — when to use each, and what their tradeoffs reveal about how LLMs actually think."
+    "tags": [
+      "reasoning",
+      "chain-of-thought",
+      "react"
+    ],
+    "description": "A rigorous comparison of two dominant reasoning paradigms \u2014 when to use each, and what their tradeoffs reveal about how LLMs actually think."
   },
   {
     "slug": "the-shock-of-deepseek-r1-and-the-legacy-of-eclipse",
     "title": "The Shock of DeepSeek-R1 and the Legacy of Eclipse",
     "date": "2025-02-01",
     "category": "Architecture",
-    "tags": ["deepseek", "reasoning", "open-source"],
+    "tags": [
+      "deepseek",
+      "reasoning",
+      "open-source"
+    ],
     "description": "DeepSeek-R1 arrived like a shock to the system. What it means for the frontier, and what history tells us about moments like this."
   }
 ]
