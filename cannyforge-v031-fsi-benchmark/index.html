@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CannyForge v0.3.1 — FSI Benchmark Release — CannyForge</title>
+  <meta name="description" content="FSI: 16 multi-turn tool-use scenarios, five scoring dimensions, six failure-mode detectors. No LLM-as-judge. Here's what the numbers actually say — and three things that broke along the way.">
+  <meta property="og:title" content="CannyForge v0.3.1 — FSI Benchmark Release">
+  <meta property="og:description" content="16 multi-turn tool-use scenarios, five scoring dimensions, six failure-mode detectors. No LLM-as-judge. Here's what the numbers actually say — and three things that broke along the way.">
+  <meta property="og:url" content="https://cannyforge.dev/cannyforge-v031-fsi-benchmark/">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@cannyforge">
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="alternate" type="application/rss+xml" title="CannyForge" href="/feed.xml">
+
+  <style>
+    table { width: 100%; border-collapse: collapse; margin: 16px 0 28px; font-size: 14px; }
+    th, td { padding: 8px 14px; text-align: right; border-bottom: 1px solid var(--rule); }
+    th { background: var(--surface); color: var(--muted); font-weight: 600;
+         font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+    td:first-child, th:first-child { text-align: left; }
+    tr.winner td { background: color-mix(in srgb, var(--accent) 8%, transparent);
+                   font-weight: 600; }
+    .callout {
+      background: var(--surface); border-left: 3px solid var(--accent);
+      padding: 14px 18px; border-radius: 0 6px 6px 0; margin: 24px 0;
+    }
+    .callout p { margin: 0; font-size: 15px; color: var(--muted); }
+    .callout p + p { margin-top: 8px; }
+    .diff-add  { color: #4ade80; }
+    .diff-hdr  { color: #a78bfa; }
+    .cmt       { color: var(--muted); }
+    .label-row { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
+    .version-badge {
+      display: inline-block; padding: 2px 10px; font-size: 11px; font-weight: 600;
+      background: var(--surface); border: 1px solid var(--rule);
+      border-radius: 4px; color: var(--muted); letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="/" class="site-name">Canny<span>Forge</span></a>
+  <nav>
+    <a href="/about.html">About</a>
+    <a href="https://github.com/cannyforge" target="_blank" rel="noopener">GitHub</a>
+    <a href="/feed.xml">RSS</a>
+  </nav>
+</header>
+
+<article class="article-wrap">
+  <div class="article-meta">
+    <time>2026-07-08</time>
+    <span class="category-badge">Release</span>
+  </div>
+  <h1>CannyForge v0.3.1 — FSI Benchmark Release</h1>
+
+  <p>This is a benchmark release, not a research result. We built a deterministic evaluation
+  framework for multi-turn tool-use agents, ran it against <code>deepseek-v4-flash</code> across
+  16 scenarios and three Pass<sup>k</sup> trials, and found a few things worth sharing — mostly
+  about what broke while building the harness itself.</p>
+
+  <p>The headline number: combined learned corrections and domain rules improve composite score
+  from 0.903 to 0.950, and lift Pass<sup>3</sup> reliability from 62.5% to 81.2% of scenarios
+  passing three consecutive trials without regression. That's a real signal. It's also a modest
+  one — and understanding where the improvement comes from matters more than the delta.</p>
+
+  <h2>Why another benchmark?</h2>
+
+  <p>BFCL measures tool <em>selection</em> — did the model pick the right function? Top models
+  score above 90%. SWE-bench measures task <em>completion</em> — did the repository end up
+  fixed? Neither captures what happens <em>between</em> tool calls in a multi-turn session.</p>
+
+  <p>When an agent calls <code>send_email</code> with <code>recipient=</code> instead of
+  <code>to=</code>, then retries identically six times after being told the field name is wrong —
+  does your eval catch that? When a model re-searches for data it already retrieved two turns ago,
+  is anyone counting the redundant calls? When a git commit task causes the model to read and
+  glob through the entire repository because a static system prompt said "always read before
+  edit" — is that measured as a regression or a pass?</p>
+
+  <p>The FSI benchmark measures these failure modes programmatically, from the execution trace,
+  without an LLM evaluating another LLM.</p>
+
+  <h2>What the benchmark measures</h2>
+
+  <p><strong>16 scenarios</strong> across three domains — coding (5), data analysis (5), and MCP
+  orchestration (5), plus one cross-domain preview. Each scenario runs under
+  <strong>4 conditions</strong> with <strong>3 Pass<sup>k</sup> trials</strong> each — 192 total
+  runs per benchmark execution.</p>
+
+  <table>
+    <tr><th>Condition</th><th>System prompt</th><th>Correction injection</th><th>What it isolates</th></tr>
+    <tr><td>baseline</td><td>no-think only</td><td>—</td><td>Raw model capability</td></tr>
+    <tr><td>static</td><td>Domain rules</td><td>—</td><td>Human-authored rules, untargeted</td></tr>
+    <tr><td>cannyforge</td><td>no-think only</td><td>Learned corrections</td><td>Learned corrections alone</td></tr>
+    <tr><td>static+cf</td><td>Domain rules + CF</td><td>Learned corrections</td><td>Both knowledge sources combined</td></tr>
+  </table>
+
+  <p><strong>5 scoring dimensions</strong> per run, each weighted:</p>
+
+  <table>
+    <tr><th>Dimension</th><th>Weight</th><th>What 1.0 looks like</th></tr>
+    <tr><td>tool_selection</td><td>0.25</td><td>All required tools called at least once</td></tr>
+    <tr><td>arg_quality</td><td>0.25</td><td>Arguments match expected schema and value patterns</td></tr>
+    <tr><td>sequence</td><td>0.25</td><td>Tools appear in the expected order</td></tr>
+    <tr><td>recovery</td><td>0.15</td><td>After an injected error, the model corrected and succeeded</td></tr>
+    <tr><td>call_efficiency</td><td>0.10</td><td>Total calls stayed within the scenario's budget</td></tr>
+  </table>
+
+  <p><strong>6 failure-mode detectors</strong>, caught programmatically from the trace:
+  <code>arg_mangling</code>, <code>retry_loop</code>, <code>context_amnesia</code>,
+  <code>sequence_violation</code>, <code>hallucinated_tool</code>, <code>wrong_tool</code>.</p>
+
+  <h2>Canonical results</h2>
+
+  <p><code>deepseek-v4-flash</code>, 16 scenarios × 3 Pass<sup>k</sup> trials × 4 conditions = 192 runs.
+  Canonical run: 2026-07-01.</p>
+
+  <table>
+    <tr><th>Condition</th><th>Composite</th><th>arg_quality</th><th>Pass<sup>1</sup></th><th>Pass<sup>3</sup></th><th>Inject rate</th></tr>
+    <tr><td>baseline</td><td>0.903</td><td>0.826</td><td>0.688</td><td>0.625</td><td>—</td></tr>
+    <tr><td>static</td><td>0.921</td><td>0.875</td><td>0.812</td><td>0.750</td><td>—</td></tr>
+    <tr><td>cannyforge</td><td>0.945</td><td>0.969</td><td>0.812</td><td>0.750</td><td>31%</td></tr>
+    <tr class="winner"><td>static+cf</td><td>0.950</td><td>0.969</td><td>0.812</td><td>0.812</td><td>31%</td></tr>
+  </table>
+
+  <p>The composite improvement is real but modest: +5.2% over baseline. What's more specific is
+  <em>where</em> it comes from. <code>arg_quality</code> moves from 0.826 to 0.969 — the model's
+  biggest weakness at baseline is wrong or missing arguments, and learned corrections address that
+  directly in the scenarios where they fire. <code>tool_selection</code> hits 1.000 across all
+  conditions, meaning the model already knows what tools to call; the gap is in <em>how</em> it
+  calls them.</p>
+
+  <p>Pass<sup>3</sup> is the more useful number. Baseline passes 10 of 16 scenarios three times
+  consecutively. Static+CF passes 13 of 16, with zero degradation in the reliability curve.
+  Every other condition loses ground between Pass<sup>1</sup> and Pass<sup>3</sup>. The combined
+  approach is the most consistent one in this run.</p>
+
+  <div class="callout">
+    <p>Results vary between runs — model non-determinism is real at these sample sizes. These
+    numbers reflect a single canonical execution, not an average across many runs. The directional
+    signal (corrections help arg quality, Pass<sup>3</sup> improves with static+cf) is consistent
+    across runs; the exact values are not.</p>
+  </div>
+
+  <h2>Three things that broke while building this</h2>
+
+  <h3>1. The Pydantic schema was hiding required parameters (mcp_002)</h3>
+
+  <p><code>mcp_002</code> asks the model to send an email to <code>alice@example.com</code>
+  with a specific subject. The failure mode it targets: <code>arg_mangling</code> — the model
+  uses <code>recipient=</code> instead of <code>to=</code>. The test injects an error when
+  <code>recipient</code> is passed: <em>"TypeError: send_email() got unexpected keyword argument
+  'recipient'. Use 'to' for the recipient address."</em></p>
+
+  <p>For a while, every run of this scenario produced a retry loop — the model was told to use
+  <code>to=</code> but couldn't recover. The root cause was in <code>_schema_for_tool()</code>.
+  The Pydantic schema for <code>send_email</code> was built from the scenario's
+  <code>args_contain</code> declarations. When a test was written without explicitly declaring
+  <code>to</code>, the schema Pydantic generated didn't include it. The model literally could not
+  pass <code>to=</code> — the field didn't exist in the JSON schema it was given.</p>
+
+  <p>The fix: a <code>_TOOL_CORE_PARAMS</code> map that always injects required fields into the
+  schema regardless of what the scenario declares.</p>
+
+<pre><code><span class="cmt">## Params that must always appear in the schema for a tool —
+## without these the LLM can't pass them even after being told to.</span>
+_TOOL_CORE_PARAMS: Dict[str, set] = {
+    "send_email":      {"to", "subject", "body"},
+    "check_calendar":  {"date"},
+    "schedule_meeting":{"date", "time"},
+    "read_file":       {"file_path"},
+    "search_web":      {"query"},
+}
+<span class="diff-hdr">@@ _schema_for_tool() @@</span>
+<span class="diff-add">+    param_names.update(LLMScenarioRunner._TOOL_CORE_PARAMS.get(tool_name, set()))</span></code></pre>
+
+  <p>After the fix, <code>mcp_002</code> passes cleanly in a single call across all conditions.
+  The model corrects on the first retry, which is the expected behavior.</p>
+
+  <h3>2. Keyword derivation was silently broken</h3>
+
+  <p>Learned corrections fire when their trigger keywords match the task text. The original
+  derivation logic pulled keywords from the tool name. For a correction targeting
+  <code>fetch_economic_data</code>, it would extract
+  <code>["fetch", "economic", "data"]</code>.</p>
+
+  <p>The problem: none of those words appear in a task that says <em>"Get the US labor force
+  participation count for Q3 2024."</em> The majority-match gate requires 2 of 3 keywords to
+  appear in the task. Only "economic" matched — one out of three. The correction existed, had
+  the right content, and never fired. Injection rate was 6.7%.</p>
+
+  <p>The fix: derive trigger tokens from the <em>expected argument values</em> that overlap
+  with the task text. <code>LABOR_FORCE_2024_Q3_BLS</code> tokenizes to
+  <code>["labor", "force", "2024", "q3"]</code> — "labor" and "force" both appear in the task.
+  Combined with "economic" from the tool name, that's 3 matches against the 2-of-3 threshold.
+  Injection rate moved to 31% in the canonical run.</p>
+
+  <h3>3. Static domain rules bleed across scenarios</h3>
+
+  <p>The static condition injects human-written domain rules as a system prompt. One rule read:
+  <em>"Always call read_file before edit_file. Use glob to discover file paths before reading
+  unknown files."</em> It was written to fix a specific coding scenario where the model edited
+  a file it hadn't read.</p>
+
+  <p>On <code>coding_002</code> (a conventional-commit format task, budget: 3 calls), the same
+  rule caused the model to make 20–24 git introspection calls — glob for auth.py, read auth.py,
+  run git status six times via the test runner — before attempting the actual commit. Efficiency
+  score went to zero. The static condition scored <em>lower</em> than baseline on this scenario.</p>
+
+  <p>Learned corrections don't have this problem. They're scoped by trigger keywords — a
+  correction for commit-format issues fires on tasks containing "git" and "commit", not on
+  tasks about reading and editing files. The correction's knowledge is targeted; the static
+  rule's knowledge is ambient.</p>
+
+  <h2>Try it</h2>
+
+<pre><code><span class="cmt"># Install</span>
+pip install cannyforge
+
+<span class="cmt"># Run the benchmark</span>
+python benchmark/scenario_harness.py \
+    --model deepseek-v4-flash --no-think \
+    --domains coding data mcp --passk 3
+
+<span class="cmt"># Integrate with LangGraph</span>
+from cannyforge.adapters.langgraph import CannyForgeMiddleware
+middleware = CannyForgeMiddleware(CannyForge())
+agent = create_react_agent(model, tools,
+    pre_model_hook=middleware.before_model,
+    post_model_hook=middleware.after_model)</code></pre>
+
+  <h2>What's next</h2>
+
+  <p>An arXiv technical report is in progress — 6–8 pages covering the full failure taxonomy,
+  scoring methodology, ablation tables, and Pass<sup>k</sup> curves with confidence intervals.
+  After that, a deeper post on the reliability story specifically: why Pass<sup>3</sup> matters
+  more than composite score for agents running in production.</p>
+
+  <p>The correction pipeline has room to grow. Injection rate at 31% means most scenarios
+  run without any corrections — either the model doesn't fail in ways that match what was
+  learned, or the keyword matching is still too conservative. The data domain needs
+  discovery-based scenarios to supplement the current knowledge-gap tests.</p>
+
+  <p>If you're building tool-using agents and running into arg-format failures, retry loops,
+  or context amnesia — the benchmark scenarios are in <code>benchmark/data/scenarios/</code>
+  and the harness is built to accept your own.</p>
+
+  <div class="author-box">
+    <p><strong>CannyForge</strong> is an independent AI practice — publishing across agent
+    systems, architecture, economics, and emerging applications. Written by a builder, for
+    practitioners, executives, and investors.</p>
+    <p>Follow <a href="https://twitter.com/cannyforge" target="_blank" rel="noopener">@cannyforge</a>
+    on X &middot; <a href="https://github.com/cannyforge/cannyforge" target="_blank" rel="noopener">GitHub</a>
+    &middot; <a href="/feed.xml">RSS</a></p>
+  </div>
+
+  <div class="email-capture">
+    <p>New articles by email — no noise, just the writing.</p>
+    <form action="https://buttondown.email/api/emails/embed-subscribe/cannyforge"
+          method="post" target="popupwindow"
+          onsubmit="window.open('https://buttondown.email/cannyforge','popupwindow')">
+      <input type="email" name="email" placeholder="you@example.com" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+
+  <script src="https://giscus.app/client.js"
+    data-repo="cannyforge/cannyforge.github.io"
+    data-repo-id="R_kgDOSMHeOA"
+    data-category="Articles"
+    data-category-id="DIC_kwDOSMHeOM4C7p9a"
+    data-mapping="pathname"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-theme="light"
+    crossorigin="anonymous"
+    async>
+  </script>
+</article>
+
+<script data-goatcounter="https://cannyforge.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
