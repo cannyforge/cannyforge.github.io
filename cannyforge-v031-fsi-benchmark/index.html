@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CannyForge v0.3.1 — FSI Benchmark Release — CannyForge</title>
-  <meta name="description" content="FSI: 16 multi-turn tool-use scenarios, five scoring dimensions, six failure-mode detectors. No LLM-as-judge. Here's what the numbers actually say — and three things that broke along the way.">
+  <meta name="description" content="FSI: 15 multi-turn tool-use scenarios, five scoring dimensions, six failure-mode detectors. No LLM-as-judge. Here's what the numbers actually say — and three things that broke along the way.">
   <meta property="og:title" content="CannyForge v0.3.1 — FSI Benchmark Release">
-  <meta property="og:description" content="16 multi-turn tool-use scenarios, five scoring dimensions, six failure-mode detectors. No LLM-as-judge. Here's what the numbers actually say — and three things that broke along the way.">
+  <meta property="og:description" content="15 multi-turn tool-use scenarios, five scoring dimensions, six failure-mode detectors. No LLM-as-judge. Here's what the numbers actually say — and three things that broke along the way.">
   <meta property="og:url" content="https://cannyforge.dev/cannyforge-v031-fsi-benchmark/">
   <meta property="og:type" content="article">
   <meta name="twitter:card" content="summary_large_image">
@@ -60,11 +60,11 @@
 
   <p>This is a benchmark release, not a research result. We built a deterministic evaluation
   framework for multi-turn tool-use agents, ran it against <code>deepseek-v4-flash</code> across
-  16 scenarios and three Pass<sup>k</sup> trials, and found a few things worth sharing — mostly
+  15 scenarios and three Pass<sup>k</sup> trials, and found a few things worth sharing — mostly
   about what broke while building the harness itself.</p>
 
   <p>The headline number: combined learned corrections and domain rules improve composite score
-  from 0.903 to 0.950, and lift Pass<sup>3</sup> reliability from 62.5% to 81.2% of scenarios
+  from 0.924 to 0.962, and lift Pass<sup>3</sup> reliability from 66.7% to 86.7% of scenarios
   passing three consecutive trials without regression. That's a real signal. It's also a modest
   one — and understanding where the improvement comes from matters more than the delta.</p>
 
@@ -86,9 +86,9 @@
 
   <h2>What the benchmark measures</h2>
 
-  <p><strong>16 scenarios</strong> across three domains — coding (5), data analysis (5), and MCP
-  orchestration (5), plus one cross-domain preview. Each scenario runs under
-  <strong>4 conditions</strong> with <strong>3 Pass<sup>k</sup> trials</strong> each — 192 total
+  <p><strong>15 scenarios</strong> across three domains — coding (5), data analysis (5), and MCP
+  orchestration (5). Each scenario runs under
+  <strong>4 conditions</strong> with <strong>3 Pass<sup>k</sup> trials</strong> each — 180 total
   runs per benchmark execution.</p>
 
   <table>
@@ -116,26 +116,26 @@
 
   <h2>Canonical results</h2>
 
-  <p><code>deepseek-v4-flash</code>, 16 scenarios × 3 Pass<sup>k</sup> trials × 4 conditions = 192 runs.
+  <p><code>deepseek-v4-flash</code>, 15 scenarios × 3 Pass<sup>k</sup> trials × 4 conditions = 180 runs.
   Canonical run: 2026-07-01.</p>
 
   <table>
     <tr><th>Condition</th><th>Composite</th><th>arg_quality</th><th>Pass<sup>1</sup></th><th>Pass<sup>3</sup></th><th>Inject rate</th></tr>
-    <tr><td>baseline</td><td>0.903</td><td>0.826</td><td>0.688</td><td>0.625</td><td>—</td></tr>
-    <tr><td>static</td><td>0.921</td><td>0.875</td><td>0.812</td><td>0.750</td><td>—</td></tr>
-    <tr><td>cannyforge</td><td>0.945</td><td>0.969</td><td>0.812</td><td>0.750</td><td>31%</td></tr>
-    <tr class="winner"><td>static+cf</td><td>0.950</td><td>0.969</td><td>0.812</td><td>0.812</td><td>31%</td></tr>
+    <tr><td>baseline</td><td>0.924</td><td>0.837</td><td>0.733</td><td>0.667</td><td>—</td></tr>
+    <tr><td>static</td><td>0.925</td><td>0.867</td><td>0.867</td><td>0.800</td><td>—</td></tr>
+    <tr><td>cannyforge</td><td>0.964</td><td>1.000</td><td>0.867</td><td>0.800</td><td>27%</td></tr>
+    <tr class="winner"><td>static+cf</td><td>0.962</td><td>1.000</td><td>0.867</td><td>0.867</td><td>27%</td></tr>
   </table>
 
-  <p>The composite improvement is real but modest: +5.2% over baseline. What's more specific is
-  <em>where</em> it comes from. <code>arg_quality</code> moves from 0.826 to 0.969 — the model's
-  biggest weakness at baseline is wrong or missing arguments, and learned corrections address that
-  directly in the scenarios where they fire. <code>tool_selection</code> hits 1.000 across all
-  conditions, meaning the model already knows what tools to call; the gap is in <em>how</em> it
+  <p>The composite improvement is real but modest: +0.038 over baseline (about +4%). What's more
+  specific is <em>where</em> it comes from. <code>arg_quality</code> moves from 0.837 to 1.000 — the
+  model's biggest weakness at baseline is wrong or missing arguments, and learned corrections address
+  that directly in the scenarios where they fire. <code>tool_selection</code> holds at 1.000 across
+  all conditions, meaning the model already knows what tools to call; the gap is in <em>how</em> it
   calls them.</p>
 
-  <p>Pass<sup>3</sup> is the more useful number. Baseline passes 10 of 16 scenarios three times
-  consecutively. Static+CF passes 13 of 16, with zero degradation in the reliability curve.
+  <p>Pass<sup>3</sup> is the more useful number. Baseline passes 10 of 15 scenarios three times
+  consecutively. Static+CF passes 13 of 15, with zero degradation in the reliability curve.
   Every other condition loses ground between Pass<sup>1</sup> and Pass<sup>3</sup>. The combined
   approach is the most consistent one in this run.</p>
 
@@ -197,7 +197,7 @@ _TOOL_CORE_PARAMS: Dict[str, set] = {
   with the task text. <code>LABOR_FORCE_2024_Q3_BLS</code> tokenizes to
   <code>["labor", "force", "2024", "q3"]</code> — "labor" and "force" both appear in the task.
   Combined with "economic" from the tool name, that's 3 matches against the 2-of-3 threshold.
-  Injection rate moved to 31% in the canonical run.</p>
+  Injection rate moved from 6.7% to 27% on the canonical set.</p>
 
   <h3>3. Static domain rules bleed across scenarios</h3>
 
@@ -240,7 +240,7 @@ agent = create_react_agent(model, tools,
   After that, a deeper post on the reliability story specifically: why Pass<sup>3</sup> matters
   more than composite score for agents running in production.</p>
 
-  <p>The correction pipeline has room to grow. Injection rate at 31% means most scenarios
+  <p>The correction pipeline has room to grow. Injection rate at 27% means most scenarios
   run without any corrections — either the model doesn't fail in ways that match what was
   learned, or the keyword matching is still too conservative. The data domain needs
   discovery-based scenarios to supplement the current knowledge-gap tests.</p>

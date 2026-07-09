@@ -10,7 +10,7 @@
     <title>CannyForge v0.3.1 — FSI Benchmark Release</title>
     <link>https://cannyforge.dev/cannyforge-v031-fsi-benchmark/</link>
     <pubDate>Tue, 08 Jul 2026 00:00:00 +0000</pubDate>
-    <description>16 multi-turn tool-use scenarios, five scoring dimensions, six failure-mode detectors. No LLM-as-judge. Here's what the numbers actually say — and three things that broke along the way.</description>
+    <description>15 multi-turn tool-use scenarios, five scoring dimensions, six failure-mode detectors. No LLM-as-judge. Here's what the numbers actually say — and three things that broke along the way.</description>
     <guid isPermaLink="true">https://cannyforge.dev/cannyforge-v031-fsi-benchmark/</guid>
   </item>
       <item>
