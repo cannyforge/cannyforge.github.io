@@ -1,5 +1,13 @@
 [
   {
+    "slug": "teaching-machines-to-decide-rl-simulation",
+    "title": "Teaching Machines to Decide: RL Simulation and the Reward-Hacking Trap",
+    "date": "2026-07-15",
+    "category": "Agent Systems",
+    "tags": ["reinforcement-learning", "simulation", "reward-hacking", "evals", "agent-improvement"],
+    "description": "An RL agent learned to keep 600 vending sites stocked — and found a strategy that beat every human rule while quietly gaming the reward. A hands-on look at RL simulation, reward design, and why your eval loop must measure what you're trading away."
+  },
+  {
     "slug": "cannyforge-v031-fsi-benchmark",
     "title": "CannyForge v0.3.1 — FSI Benchmark Release",
     "date": "2026-07-08",

@@ -7,6 +7,13 @@
     <language>en-us</language>
     <atom:link href="https://cannyforge.dev/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
+    <title>Teaching Machines to Decide: RL Simulation and the Reward-Hacking Trap</title>
+    <link>https://cannyforge.dev/teaching-machines-to-decide-rl-simulation/</link>
+    <pubDate>Tue, 15 Jul 2026 00:00:00 +0000</pubDate>
+    <description>An RL agent learned to keep 600 vending sites stocked — and found a strategy that beat every human rule while quietly gaming the reward. A hands-on look at RL simulation, reward design, and why your eval loop must measure what you're trading away.</description>
+    <guid isPermaLink="true">https://cannyforge.dev/teaching-machines-to-decide-rl-simulation/</guid>
+  </item>
+  <item>
     <title>CannyForge v0.3.1 — FSI Benchmark Release</title>
     <link>https://cannyforge.dev/cannyforge-v031-fsi-benchmark/</link>
     <pubDate>Tue, 08 Jul 2026 00:00:00 +0000</pubDate>
