@@ -6,6 +6,13 @@
     <description>AI systems engineering — architecture, agent reliability, LLM economics, and observations from building.</description>
     <language>en-us</language>
     <atom:link href="https://cannyforge.dev/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+    <title>ZZZ Pipeline Verification Test — safe to delete</title>
+    <link>https://cannyforge.dev/zzz-pipeline-verification-test/</link>
+    <pubDate>Thu, 23 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Throwaway draft used solely to verify the --branch review-link flow end to end.</description>
+    <guid isPermaLink="true">https://cannyforge.dev/zzz-pipeline-verification-test/</guid>
+  </item>
   <item>
     <title>Teaching Machines to Decide: RL Simulation and the Reward-Hacking Trap</title>
     <link>https://cannyforge.dev/teaching-machines-to-decide-rl-simulation/</link>
