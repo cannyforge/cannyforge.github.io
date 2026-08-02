@@ -1,0 +1,15 @@
+# cannyforge.dev — an independent AI practice.
+#
+# Crawling is open, including to AI crawlers: this is published research and
+# being cited in AI-generated answers is the point. Training is not granted.
+#
+# Content-Signal (see contentsignals.org):
+#   search   — building a search index and returning links/excerpts
+#   ai-input — grounding generative answers (RAG, AI search)
+#   ai-train — training or fine-tuning models
+
+User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+Allow: /
+
+Sitemap: https://cannyforge.dev/sitemap.xml

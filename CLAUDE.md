@@ -8,19 +8,29 @@ This is the source for **cannyforge.dev** (served via GitHub Pages from `cannyfo
 
 ```
 cannyforge-site/
-├── index.html               ← Homepage (fetches manifest.json, renders article list)
+├── index.html               ← Homepage (article list BAKED IN — see _pipeline/build.py)
 ├── about.html
 ├── 404.html
-├── manifest.json            ← REQUIRED: drives article list on homepage
+├── manifest.json            ← REQUIRED: source of truth, drives homepage + sitemap
 ├── feed.xml                 ← RSS feed (update alongside manifest.json)
+├── robots.txt               ← Allows all crawlers incl. AI; points to sitemap
+├── sitemap.xml              ← GENERATED — do not hand-edit
 ├── assets/
 │   └── style.css            ← Shared styles for Tier 1 articles
+├── _pipeline/
+│   └── build.py             ← Regenerates index.html article list + sitemap.xml
 ├── _templates/
 │   ├── tier1-article.html   ← Template for standard prose articles
 │   └── tier2-survey.html    ← Template for pillar surveys (self-contained CSS)
 └── <article-slug>/
     └── index.html           ← One directory per article
 ```
+
+**`index.html` and `sitemap.xml` are generated.** The homepage article list used to
+be fetched client-side, which meant crawlers saw only `Loading...`. It is now baked
+into the HTML between `<!-- BEGIN:articles -->` / `<!-- END:articles -->` markers at
+publish time. The remaining JS only wires up category filtering, reading
+`data-category` off the DOM — no fetch. Never hand-edit inside the markers.
 
 ---
 
@@ -90,6 +100,27 @@ Add a new `<item>` block immediately after the opening `<channel>` tags, before 
 ```
 
 Date format: `Wed, 21 May 2026 00:00:00 +0000` (RFC 2822).
+
+### 4. Run the build
+
+```bash
+python3 _pipeline/build.py
+```
+
+Regenerates the homepage article list and `sitemap.xml` from `manifest.json`.
+Safe to run repeatedly — output is idempotent. **Skipping this means the new
+article never appears on the homepage or in the sitemap.**
+
+### 5. Check the article's own page
+
+Every article needs the goatcounter snippet before `</body>` and a working
+Buttondown form (`embed-subscribe/cannyforge` — never a placeholder). Both are
+already in the templates; verify they survived if you hand-edited:
+
+```bash
+grep -L goatcounter */index.html                 # should list nothing
+grep -rl BUTTONDOWN_USERNAME . --include=*.html  # should list nothing
+```
 
 ---
 
@@ -193,10 +224,12 @@ Already configured. Copy this block verbatim into every article footer:
 ## Deployment
 
 The site deploys automatically via GitHub Pages on push to `main`.  
-No build step. All HTML/CSS/JS is pre-rendered.
+No build step *at serve time* — all HTML/CSS/JS is pre-rendered, which is why
+`_pipeline/build.py` must run before you commit.
 
 ```bash
-git add <slug>/index.html manifest.json feed.xml
+python3 _pipeline/build.py
+git add <slug>/index.html manifest.json feed.xml index.html sitemap.xml
 git commit -m "add: <article title>"
 git push
 ```

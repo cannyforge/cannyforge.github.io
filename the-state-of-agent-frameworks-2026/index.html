@@ -628,6 +628,19 @@ pre.code code { background: none; padding: 0; color: inherit; font-size: 12px; }
 .cluster-status { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 8px; background: #333; color: #888; display: inline-block; margin-top: auto; }
 
 /* ── Footer strip ── */
+.signup { background: var(--paper-deep); padding: 84px 0; }
+.signup-inner { max-width: 620px; }
+.signup-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rust); margin-bottom: 14px; }
+.signup h3 { font-family: var(--serif); font-size: clamp(26px, 3.4vw, 38px); font-weight: 300; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 14px; }
+.signup h3 em { font-style: italic; color: var(--rust); }
+.signup p { font-size: 15px; line-height: 1.65; color: #4a4a4a; margin-bottom: 26px; }
+.signup form { display: flex; gap: 10px; flex-wrap: wrap; }
+.signup input { flex: 1 1 260px; padding: 13px 16px; font-family: var(--sans); font-size: 15px; color: var(--ink); background: var(--paper); border: 1px solid var(--line-soft); }
+.signup input:focus { outline: none; border-color: var(--rust); }
+.signup button { padding: 13px 28px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--paper); background: var(--rust); border: none; cursor: pointer; transition: background 0.2s; }
+.signup button:hover { background: var(--rust-deep); }
+.signup-fine { font-size: 12px; color: #6a6a6a; margin: 14px 0 0; }
+.signup-fine a { color: var(--rust); }
 .article-footer { background: var(--ink); color: var(--paper); padding: 72px 0 40px; }
 .foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 56px; margin-bottom: 56px; }
 @media(max-width: 768px) { .foot-grid { grid-template-columns: 1fr; gap: 28px; } }
@@ -1892,6 +1905,24 @@ Set up environment:
   </div>
 </section>
 
+<!-- ── Email capture ── -->
+<section class="signup">
+  <div class="container">
+    <div class="signup-inner">
+      <div class="signup-label">Stay in the loop</div>
+      <h3>New writing, <em>by email</em></h3>
+      <p>Surveys like this one, plus shorter pieces on agent systems, architecture, and what actually happens when these systems run in production. No noise, just the writing.</p>
+      <form action="https://buttondown.email/api/emails/embed-subscribe/cannyforge"
+            method="post" target="popupwindow"
+            onsubmit="window.open('https://buttondown.email/cannyforge','popupwindow')">
+        <input type="email" name="email" placeholder="you@example.com" required aria-label="Email address">
+        <button type="submit">Subscribe</button>
+      </form>
+      <p class="signup-fine">Also available via <a href="/feed.xml">RSS</a>.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ── Footer ── -->
 <footer class="article-footer">
   <div class="container">
@@ -2004,5 +2035,7 @@ window.addEventListener('load', () => {
 });
 </script>
 
+<script data-goatcounter="https://cannyforge.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
