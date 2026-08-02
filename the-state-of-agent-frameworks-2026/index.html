@@ -669,6 +669,7 @@ pre.code code { background: none; padding: 0; color: inherit; font-size: 12px; }
 <body>
 
 <!-- ── Site header ── -->
+<!-- BEGIN:site-header -->
 <header class="site-header">
   <a href="/" class="site-name">Canny<span>Forge</span></a>
   <nav>
@@ -677,6 +678,7 @@ pre.code code { background: none; padding: 0; color: inherit; font-size: 12px; }
     <a href="/feed.xml">RSS</a>
   </nav>
 </header>
+<!-- END:site-header -->
 
 <!-- ── Ticker ── -->
 <div class="ticker">
@@ -1906,6 +1908,7 @@ Set up environment:
 </section>
 
 <!-- ── Email capture ── -->
+<!-- BEGIN:email-capture-tier2 -->
 <section class="signup">
   <div class="container">
     <div class="signup-inner">
@@ -1922,6 +1925,7 @@ Set up environment:
     </div>
   </div>
 </section>
+<!-- END:email-capture-tier2 -->
 
 <!-- ── Footer ── -->
 <footer class="article-footer">
@@ -1966,6 +1970,7 @@ Set up environment:
 
 <!-- ── Giscus Comments ── -->
 <div class="comments-wrap">
+  <!-- BEGIN:giscus-tier2 -->
   <script src="https://giscus.app/client.js"
     data-repo="cannyforge/cannyforge.github.io"
     data-repo-id="R_kgDOSMHeOA"
@@ -1975,12 +1980,13 @@ Set up environment:
     data-strict="0"
     data-reactions-enabled="1"
     data-emit-metadata="0"
-    data-input-position="top"
+    data-input-position="bottom"
     data-theme="light"
     data-lang="en"
     crossorigin="anonymous"
     async>
   </script>
+  <!-- END:giscus-tier2 -->
 </div>
 
 <script>
@@ -2035,7 +2041,9 @@ window.addEventListener('load', () => {
 });
 </script>
 
+<!-- BEGIN:analytics -->
 <script data-goatcounter="https://cannyforge.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
+<!-- END:analytics -->
 </body>
 </html>

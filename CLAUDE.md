@@ -34,6 +34,52 @@ publish time. The remaining JS only wires up category filtering, reading
 
 ---
 
+## Shared blocks: `_partials/`
+
+`_templates/` are **copy-from** templates, not render-through layouts — once you
+`cp` one, the article has no link back. That is how a literal `BUTTONDOWN_USERNAME`
+survived on 10 published articles, and a `SITE.goatcounter.com` placeholder on
+another, for over a year.
+
+So any block appearing on more than one page lives once in `_partials/`:
+
+| Partial | Used by |
+|---------|---------|
+| `site-header.html` | every page |
+| `analytics.html` | every page |
+| `email-capture.html` | Tier 1 markup (`div.email-capture`) |
+| `email-capture-tier2.html` | Tier 2 markup (`section.signup`) |
+| `giscus.html` | pages using `preferred_color_scheme` |
+| `giscus-tier2.html` | light-only pages (Tier 2 palettes have no dark mode) |
+
+A page opts in by wrapping the block in markers whose name matches the filename:
+
+```html
+<!-- BEGIN:analytics -->
+<script data-goatcounter="..." async src="//gc.zgo.at/count.js"></script>
+<!-- END:analytics -->
+```
+
+`build.py` then overwrites everything between those markers. **Edit the partial,
+never the page.** A page without a given marker is left alone, so bespoke pages can
+opt out.
+
+To change a shared block everywhere: edit `_partials/<name>.html`, run the build.
+
+```bash
+python3 _pipeline/build.py --check   # non-zero exit if any page is out of sync
+```
+
+Run `--check` before committing, or in CI, to catch drift.
+
+**Note on giscus:** all variants share `data-category-id="DIC_kwDOSMHeOM4C7p9a"`,
+which resolves to the **General** discussion category. Giscus resolves by ID, so the
+`data-category` name is only a label — three pages carried `"Articles"`, a category
+that does not exist in the repo. Do not "fix" this by changing the ID; that would
+orphan existing comment threads.
+
+---
+
 ## Article tiers
 
 ### Tier 1 — Standard prose article
@@ -113,14 +159,16 @@ article never appears on the homepage or in the sitemap.**
 
 ### 5. Check the article's own page
 
-Every article needs the goatcounter snippet before `</body>` and a working
-Buttondown form (`embed-subscribe/cannyforge` — never a placeholder). Both are
-already in the templates; verify they survived if you hand-edited:
+The template already carries the partial markers, so the shared blocks stay
+correct on their own. Verify nothing drifted:
 
 ```bash
-grep -L goatcounter */index.html                 # should list nothing
-grep -rl BUTTONDOWN_USERNAME . --include=*.html  # should list nothing
+python3 _pipeline/build.py --check                     # exits non-zero if stale
+grep -rlE 'BUTTONDOWN_USERNAME|SITE\.goatcounter' . --include=*.html   # nothing
 ```
+
+Check for *placeholders*, not just presence — `deepseek-v4` had a goatcounter
+tag for a year that pointed at `SITE.goatcounter.com` and tracked nothing.
 
 ---
 
