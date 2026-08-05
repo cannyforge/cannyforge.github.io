@@ -32,7 +32,8 @@ from __future__ import annotations
 import sys
 import json
 import re
-from datetime import date
+from datetime import date, datetime, timezone
+from email.utils import format_datetime
 from html import escape
 from pathlib import Path
 
@@ -184,6 +185,57 @@ def _ignore_dates(s: str) -> str:
     return re.sub(r"<lastmod>\d{4}-\d{2}-\d{2}</lastmod>", "<lastmod/>", s)
 
 
+FEED_CHANNEL = {
+    "title": "CannyForge",
+    "link": BASE_URL,
+    "description": ("AI systems engineering — architecture, agent reliability, "
+                    "LLM economics, and observations from building."),
+    "language": "en-us",
+}
+
+
+def build_feed(articles: list[dict], write: bool) -> list[str]:
+    """Generate feed.xml from manifest.json.
+
+    Hand-maintained RSS drifted badly: 8 of 14 articles were missing entirely and
+    4 of the 6 present had the wrong weekday in their RFC 2822 pubDate. Dates are
+    formatted with email.utils so they are correct and locale-independent.
+    """
+    c = FEED_CHANNEL
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
+        "  <channel>",
+        f"    <title>{escape(c['title'])}</title>",
+        f"    <link>{c['link']}</link>",
+        f"    <description>{escape(c['description'])}</description>",
+        f"    <language>{c['language']}</language>",
+        f'    <atom:link href="{BASE_URL}/feed.xml" rel="self" type="application/rss+xml"/>',
+    ]
+    for a in articles:
+        url = f"{BASE_URL}/{a['slug']}/"
+        published = datetime.strptime(a["date"], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+        lines += [
+            "    <item>",
+            f"      <title>{escape(a['title'])}</title>",
+            f"      <link>{url}</link>",
+            f"      <pubDate>{format_datetime(published)}</pubDate>",
+            f"      <description>{escape(a['description'])}</description>",
+            f'      <guid isPermaLink="true">{url}</guid>',
+            "    </item>",
+        ]
+    lines += ["  </channel>", "</rss>"]
+    body = "\n".join(lines) + "\n"
+
+    path = ROOT / "feed.xml"
+    print(f"feed.xml      {len(articles)} items")
+    if path.exists() and path.read_text(encoding="utf-8") == body:
+        return []
+    if write:
+        path.write_text(body, encoding="utf-8")
+    return ["feed.xml"]
+
+
 # ── entry point ─────────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -194,6 +246,7 @@ def main() -> None:
     articles = load_manifest()
     stale += build_index(articles, write)
     stale += build_sitemap(articles, write)
+    stale += build_feed(articles, write)
 
     if check:
         if stale:

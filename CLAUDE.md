@@ -11,14 +11,14 @@ cannyforge-site/
 ├── index.html               ← Homepage (article list BAKED IN — see _pipeline/build.py)
 ├── about.html
 ├── 404.html
-├── manifest.json            ← REQUIRED: source of truth, drives homepage + sitemap
-├── feed.xml                 ← RSS feed (update alongside manifest.json)
+├── manifest.json            ← REQUIRED: source of truth — homepage, sitemap, feed
+├── feed.xml                 ← GENERATED from manifest.json — do not hand-edit
 ├── robots.txt               ← Allows all crawlers incl. AI; points to sitemap
 ├── sitemap.xml              ← GENERATED — do not hand-edit
 ├── assets/
 │   └── style.css            ← Shared styles for Tier 1 articles
 ├── _pipeline/
-│   └── build.py             ← Regenerates index.html article list + sitemap.xml
+│   └── build.py             ← Regenerates index.html list, sitemap.xml, feed.xml
 ├── _templates/
 │   ├── tier1-article.html   ← Template for standard prose articles
 │   └── tier2-survey.html    ← Template for pillar surveys (self-contained CSS)
@@ -26,7 +26,7 @@ cannyforge-site/
     └── index.html           ← One directory per article
 ```
 
-**`index.html` and `sitemap.xml` are generated.** The homepage article list used to
+**`index.html`, `sitemap.xml` and `feed.xml` are generated.** The homepage article list used to
 be fetched client-side, which meant crawlers saw only `Loading...`. It is now baked
 into the HTML between `<!-- BEGIN:articles -->` / `<!-- END:articles -->` markers at
 publish time. The remaining JS only wires up category filtering, reading
@@ -129,23 +129,19 @@ Add a new entry at the **top** of the array (newest first):
 }
 ```
 
-**Valid categories**: `Agent Systems`, `Architecture`, `Analysis`
+**Categories in use**: `Agent Systems`, `Architecture`, `Analysis`, `Release`,
+`Fiction`, `Systems & Memory`. They are free-form — the homepage filter chips are
+generated from whatever appears in `manifest.json`, so a new one just works. Reuse an
+existing label unless the piece genuinely needs a new one.
 
-### 3. Update `feed.xml`
+### 3. ~~Update `feed.xml`~~ — generated, do not hand-edit
 
-Add a new `<item>` block immediately after the opening `<channel>` tags, before any existing items:
+RSS is now built from `manifest.json`, including RFC 2822 `pubDate` conversion. Nothing
+to do here; step 4 handles it.
 
-```xml
-<item>
-  <title>Full Article Title</title>
-  <link>https://cannyforge.dev/your-article-slug/</link>
-  <pubDate>Day, DD Mon YYYY 00:00:00 +0000</pubDate>
-  <description>Same description as manifest.json.</description>
-  <guid isPermaLink="true">https://cannyforge.dev/your-article-slug/</guid>
-</item>
-```
-
-Date format: `Wed, 21 May 2026 00:00:00 +0000` (RFC 2822).
+Hand-maintaining it did not work: the feed had drifted to **6 of 14 articles**, and 4 of
+the 6 present carried the *wrong weekday* in their `pubDate`. Eight articles were
+invisible to every RSS reader.
 
 ### 4. Run the build
 
@@ -153,9 +149,9 @@ Date format: `Wed, 21 May 2026 00:00:00 +0000` (RFC 2822).
 python3 _pipeline/build.py
 ```
 
-Regenerates the homepage article list and `sitemap.xml` from `manifest.json`.
+Regenerates the homepage article list, `sitemap.xml` and `feed.xml` from `manifest.json`.
 Safe to run repeatedly — output is idempotent. **Skipping this means the new
-article never appears on the homepage or in the sitemap.**
+article never appears on the homepage, the sitemap, or the RSS feed.**
 
 ### 5. Check the article's own page
 
@@ -194,7 +190,7 @@ The pillar's "Dig Deeper" section links to all 7. Cluster posts are Tier 1 artic
 Each cluster post:
 1. Lives at its own slug (e.g., `openai-agents-sdk-deep-dive`)
 2. References the parent survey with a link: `← Part of the State of Agent Frameworks 2026 survey`
-3. Is registered in `manifest.json` and `feed.xml` independently
+3. Is registered in `manifest.json` independently (feed and sitemap follow from the build)
 4. Tags should include the parent survey's primary tag (e.g., `survey`, `frameworks`)
 
 When a cluster post goes live, update the parent survey's "Dig Deeper" section:
@@ -277,7 +273,7 @@ No build step *at serve time* — all HTML/CSS/JS is pre-rendered, which is why
 
 ```bash
 python3 _pipeline/build.py
-git add <slug>/index.html manifest.json feed.xml index.html sitemap.xml
+git add <slug>/index.html manifest.json index.html sitemap.xml feed.xml
 git commit -m "add: <article title>"
 git push
 ```
