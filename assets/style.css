@@ -80,6 +80,14 @@ body {
 }
 
 /* ── Index: Article list ── */
+/* .article-item sets display:block, which outranks the UA [hidden] rule. */
+[hidden] { display: none !important; }
+.empty-state {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  color: var(--muted);
+  padding: 40px 0;
+}
 .article-list { padding-bottom: 60px; }
 .article-item {
   display: block;

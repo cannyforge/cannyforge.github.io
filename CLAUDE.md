@@ -8,19 +8,75 @@ This is the source for **cannyforge.dev** (served via GitHub Pages from `cannyfo
 
 ```
 cannyforge-site/
-├── index.html               ← Homepage (fetches manifest.json, renders article list)
+├── index.html               ← Homepage (article list BAKED IN — see _pipeline/build.py)
 ├── about.html
 ├── 404.html
-├── manifest.json            ← REQUIRED: drives article list on homepage
-├── feed.xml                 ← RSS feed (update alongside manifest.json)
+├── manifest.json            ← REQUIRED: source of truth — homepage, sitemap, feed
+├── feed.xml                 ← GENERATED from manifest.json — do not hand-edit
+├── robots.txt               ← Allows all crawlers incl. AI; points to sitemap
+├── sitemap.xml              ← GENERATED — do not hand-edit
 ├── assets/
 │   └── style.css            ← Shared styles for Tier 1 articles
+├── _pipeline/
+│   └── build.py             ← Regenerates index.html list, sitemap.xml, feed.xml
 ├── _templates/
 │   ├── tier1-article.html   ← Template for standard prose articles
 │   └── tier2-survey.html    ← Template for pillar surveys (self-contained CSS)
 └── <article-slug>/
     └── index.html           ← One directory per article
 ```
+
+**`index.html`, `sitemap.xml` and `feed.xml` are generated.** The homepage article list used to
+be fetched client-side, which meant crawlers saw only `Loading...`. It is now baked
+into the HTML between `<!-- BEGIN:articles -->` / `<!-- END:articles -->` markers at
+publish time. The remaining JS only wires up category filtering, reading
+`data-category` off the DOM — no fetch. Never hand-edit inside the markers.
+
+---
+
+## Shared blocks: `_partials/`
+
+`_templates/` are **copy-from** templates, not render-through layouts — once you
+`cp` one, the article has no link back. That is how a literal `BUTTONDOWN_USERNAME`
+survived on 10 published articles, and a `SITE.goatcounter.com` placeholder on
+another, for over a year.
+
+So any block appearing on more than one page lives once in `_partials/`:
+
+| Partial | Used by |
+|---------|---------|
+| `site-header.html` | every page |
+| `analytics.html` | every page |
+| `email-capture.html` | Tier 1 markup (`div.email-capture`) |
+| `email-capture-tier2.html` | Tier 2 markup (`section.signup`) |
+| `giscus.html` | pages using `preferred_color_scheme` |
+| `giscus-tier2.html` | light-only pages (Tier 2 palettes have no dark mode) |
+
+A page opts in by wrapping the block in markers whose name matches the filename:
+
+```html
+<!-- BEGIN:analytics -->
+<script data-goatcounter="..." async src="//gc.zgo.at/count.js"></script>
+<!-- END:analytics -->
+```
+
+`build.py` then overwrites everything between those markers. **Edit the partial,
+never the page.** A page without a given marker is left alone, so bespoke pages can
+opt out.
+
+To change a shared block everywhere: edit `_partials/<name>.html`, run the build.
+
+```bash
+python3 _pipeline/build.py --check   # non-zero exit if any page is out of sync
+```
+
+Run `--check` before committing, or in CI, to catch drift.
+
+**Note on giscus:** all variants share `data-category-id="DIC_kwDOSMHeOM4C7p9a"`,
+which resolves to the **General** discussion category. Giscus resolves by ID, so the
+`data-category` name is only a label — three pages carried `"Articles"`, a category
+that does not exist in the repo. Do not "fix" this by changing the ID; that would
+orphan existing comment threads.
 
 ---
 
@@ -73,23 +129,42 @@ Add a new entry at the **top** of the array (newest first):
 }
 ```
 
-**Valid categories**: `Agent Systems`, `Architecture`, `Analysis`
+**Categories in use**: `Agent Systems`, `Architecture`, `Analysis`, `Release`,
+`Fiction`, `Systems & Memory`. They are free-form — the homepage filter chips are
+generated from whatever appears in `manifest.json`, so a new one just works. Reuse an
+existing label unless the piece genuinely needs a new one.
 
-### 3. Update `feed.xml`
+### 3. ~~Update `feed.xml`~~ — generated, do not hand-edit
 
-Add a new `<item>` block immediately after the opening `<channel>` tags, before any existing items:
+RSS is now built from `manifest.json`, including RFC 2822 `pubDate` conversion. Nothing
+to do here; step 4 handles it.
 
-```xml
-<item>
-  <title>Full Article Title</title>
-  <link>https://cannyforge.dev/your-article-slug/</link>
-  <pubDate>Day, DD Mon YYYY 00:00:00 +0000</pubDate>
-  <description>Same description as manifest.json.</description>
-  <guid isPermaLink="true">https://cannyforge.dev/your-article-slug/</guid>
-</item>
+Hand-maintaining it did not work: the feed had drifted to **6 of 14 articles**, and 4 of
+the 6 present carried the *wrong weekday* in their `pubDate`. Eight articles were
+invisible to every RSS reader.
+
+### 4. Run the build
+
+```bash
+python3 _pipeline/build.py
 ```
 
-Date format: `Wed, 21 May 2026 00:00:00 +0000` (RFC 2822).
+Regenerates the homepage article list, `sitemap.xml` and `feed.xml` from `manifest.json`.
+Safe to run repeatedly — output is idempotent. **Skipping this means the new
+article never appears on the homepage, the sitemap, or the RSS feed.**
+
+### 5. Check the article's own page
+
+The template already carries the partial markers, so the shared blocks stay
+correct on their own. Verify nothing drifted:
+
+```bash
+python3 _pipeline/build.py --check                     # exits non-zero if stale
+grep -rlE 'BUTTONDOWN_USERNAME|SITE\.goatcounter' . --include=*.html   # nothing
+```
+
+Check for *placeholders*, not just presence — `deepseek-v4` had a goatcounter
+tag for a year that pointed at `SITE.goatcounter.com` and tracked nothing.
 
 ---
 
@@ -115,7 +190,7 @@ The pillar's "Dig Deeper" section links to all 7. Cluster posts are Tier 1 artic
 Each cluster post:
 1. Lives at its own slug (e.g., `openai-agents-sdk-deep-dive`)
 2. References the parent survey with a link: `← Part of the State of Agent Frameworks 2026 survey`
-3. Is registered in `manifest.json` and `feed.xml` independently
+3. Is registered in `manifest.json` independently (feed and sitemap follow from the build)
 4. Tags should include the parent survey's primary tag (e.g., `survey`, `frameworks`)
 
 When a cluster post goes live, update the parent survey's "Dig Deeper" section:
@@ -193,10 +268,12 @@ Already configured. Copy this block verbatim into every article footer:
 ## Deployment
 
 The site deploys automatically via GitHub Pages on push to `main`.  
-No build step. All HTML/CSS/JS is pre-rendered.
+No build step *at serve time* — all HTML/CSS/JS is pre-rendered, which is why
+`_pipeline/build.py` must run before you commit.
 
 ```bash
-git add <slug>/index.html manifest.json feed.xml
+python3 _pipeline/build.py
+git add <slug>/index.html manifest.json index.html sitemap.xml feed.xml
 git commit -m "add: <article title>"
 git push
 ```

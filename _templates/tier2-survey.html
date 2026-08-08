@@ -140,6 +140,7 @@
 </head>
 <body>
 
+<!-- BEGIN:site-header -->
 <header class="site-header">
   <a href="/" class="site-name">Canny<span>Forge</span></a>
   <nav>
@@ -148,6 +149,7 @@
     <a href="/feed.xml">RSS</a>
   </nav>
 </header>
+<!-- END:site-header -->
 
 <div class="survey-wrap">
 
@@ -222,8 +224,9 @@
     <p>Follow <a href="https://twitter.com/cannyforge" target="_blank" rel="noopener">@cannyforge</a> on X &middot; <a href="/feed.xml">RSS</a></p>
   </div>
 
+  <!-- BEGIN:email-capture -->
   <div class="email-capture">
-    <p>New articles by email — no noise, just the writing.</p>
+    <p>Get new articles by email — no noise, just the writing.</p>
     <form action="https://buttondown.email/api/emails/embed-subscribe/cannyforge"
           method="post" target="popupwindow"
           onsubmit="window.open('https://buttondown.email/cannyforge','popupwindow')">
@@ -231,23 +234,31 @@
       <button type="submit">Subscribe</button>
     </form>
   </div>
+  <!-- END:email-capture -->
 
+  <!-- BEGIN:giscus-tier2 -->
   <script src="https://giscus.app/client.js"
     data-repo="cannyforge/cannyforge.github.io"
     data-repo-id="R_kgDOSMHeOA"
-    data-category="Articles"
+    data-category="General"
     data-category-id="DIC_kwDOSMHeOM4C7p9a"
     data-mapping="pathname"
+    data-strict="0"
     data-reactions-enabled="1"
     data-emit-metadata="0"
+    data-input-position="bottom"
     data-theme="light"
+    data-lang="en"
     crossorigin="anonymous"
     async>
   </script>
+  <!-- END:giscus-tier2 -->
 </div>
 
+<!-- BEGIN:analytics -->
 <script data-goatcounter="https://cannyforge.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
+<!-- END:analytics -->
 
 <script>
   // Tab switching only — no scroll-reveal, no chart-grow animation.

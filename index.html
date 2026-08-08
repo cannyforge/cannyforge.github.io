@@ -15,6 +15,7 @@
 </head>
 <body>
 
+<!-- BEGIN:site-header -->
 <header class="site-header">
   <a href="/" class="site-name">Canny<span>Forge</span></a>
   <nav>
@@ -23,51 +24,169 @@
     <a href="/feed.xml">RSS</a>
   </nav>
 </header>
+<!-- END:site-header -->
 
 <div class="container">
-  <div class="filter-bar" id="filters"></div>
-  <div class="article-list" id="articles">
-    <p style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#6b7280;padding:40px 0">Loading...</p>
+  <div class="filter-bar" id="filters">
+  <!-- BEGIN:filters -->
+  <button class="chip" data-category="Agent Systems">Agent Systems</button>
+  <button class="chip" data-category="Release">Release</button>
+  <button class="chip" data-category="Fiction">Fiction</button>
+  <button class="chip" data-category="Systems &amp; Memory">Systems &amp; Memory</button>
+  <button class="chip" data-category="Architecture">Architecture</button>
+  <button class="chip" data-category="Analysis">Analysis</button>
+  <!-- END:filters -->
   </div>
+  <div class="article-list" id="articles">
+  <!-- BEGIN:articles -->
+  <a href="/teaching-machines-to-decide-rl-simulation/" class="article-item" data-category="Agent Systems">
+    <div class="meta">
+      <time datetime="2026-07-15">2026-07-15</time>
+      <span class="category-badge">Agent Systems</span>
+    </div>
+    <h2>Teaching Machines to Decide: RL Simulation and the Reward-Hacking Trap</h2>
+    <p>An RL agent learned to keep 600 vending sites stocked — and found a strategy that beat every human rule while quietly gaming the reward. A hands-on look at RL simulation, reward design, and why your eval loop must measure what you&#x27;re trading away.</p>
+  </a>
+  <a href="/cannyforge-v031-fsi-benchmark/" class="article-item" data-category="Release">
+    <div class="meta">
+      <time datetime="2026-07-08">2026-07-08</time>
+      <span class="category-badge">Release</span>
+    </div>
+    <h2>CannyForge v0.3.1 — FSI Benchmark Release</h2>
+    <p>15 multi-turn tool-use scenarios, five scoring dimensions, six failure-mode detectors. No LLM-as-judge. Here&#x27;s what the numbers actually say — and three things that broke along the way.</p>
+  </a>
+  <a href="/the-last-free-tier/" class="article-item" data-category="Fiction">
+    <div class="meta">
+      <time datetime="2026-06-12">2026-06-12</time>
+      <span class="category-badge">Fiction</span>
+    </div>
+    <h2>The Last Free Tier</h2>
+    <p>A fiction about platform dependency, developer lock-in, and what happens when the tools that make you faster make you unable to work without them.</p>
+  </a>
+  <a href="/the-state-of-agent-frameworks-2026/" class="article-item" data-category="Agent Systems">
+    <div class="meta">
+      <time datetime="2026-05-21">2026-05-21</time>
+      <span class="category-badge">Agent Systems</span>
+    </div>
+    <h2>The State of Agent Frameworks — A 2026 Survey</h2>
+    <p>A comprehensive 2026 survey of the six agent frameworks that ship to production: OpenAI Agents SDK, Claude Agent SDK, LangGraph, CrewAI, Google ADK, and Microsoft Semantic Kernel. Architecture trade-offs, real deployments, and the gaps they have yet to close.</p>
+  </a>
+  <a href="/from-conversation-to-knowledge-temporal-memory-reconstruction/" class="article-item" data-category="Systems &amp; Memory">
+    <div class="meta">
+      <time datetime="2026-05-08">2026-05-08</time>
+      <span class="category-badge">Systems &amp; Memory</span>
+    </div>
+    <h2>From Conversation to Knowledge: Temporal Memory Reconstruction</h2>
+    <p>A grep-first, LLM-second pipeline for recovering design decisions from months of Discord history — with timestamps, decision states, and conflict detection. No vector DB needed.</p>
+  </a>
+  <a href="/deepseek-v4/" class="article-item" data-category="Architecture">
+    <div class="meta">
+      <time datetime="2026-04-24">2026-04-24</time>
+      <span class="category-badge">Architecture</span>
+    </div>
+    <h2>DeepSeek-V4: The Economics of the Million-Token Brain</h2>
+    <p>How a redesigned attention mechanism turns long-context AI from a luxury into a utility — and what it means for the tools developers use every day.</p>
+  </a>
+  <a href="/from-prompt-tweaks-to-learning-machines-the-agent-skill-prim/" class="article-item" data-category="Agent Systems">
+    <div class="meta">
+      <time datetime="2026-02-19">2026-02-19</time>
+      <span class="category-badge">Agent Systems</span>
+    </div>
+    <h2>From Prompt Tweaks to Learning Machines: The Agent Skill Primitive</h2>
+    <p>How AI agents are evolving from static prompt followers to dynamic learning machines — and what the agent skill primitive means for the future of autonomous systems.</p>
+  </a>
+  <a href="/beyond-the-hype-a-deep-dive-into-the-systemic-algorithmic-an/" class="article-item" data-category="Architecture">
+    <div class="meta">
+      <time datetime="2026-01-19">2026-01-19</time>
+      <span class="category-badge">Architecture</span>
+    </div>
+    <h2>Beyond the Hype: A Deep Dive into the Systemic, Algorithmic, and Cognitive Roots of the Infinite Software Crisis</h2>
+    <p>A systems-level analysis of the Infinite Software Crisis, connecting weak guardrails, model training limits, and human cognitive bias to long-term software fragility.</p>
+  </a>
+  <a href="/designing-agentic-systems-lessons-from-llm-coding-tools/" class="article-item" data-category="Agent Systems">
+    <div class="meta">
+      <time datetime="2025-07-14">2025-07-14</time>
+      <span class="category-badge">Agent Systems</span>
+    </div>
+    <h2>Designing Agentic Systems: Lessons from LLM Coding Tools</h2>
+    <p>LLM coding tools are the most demanding test of agentic system design. Here&#x27;s what building and using them teaches about agents that actually work.</p>
+  </a>
+  <a href="/context-engineering-the-real-secret-to-magical-ai-agents/" class="article-item" data-category="Agent Systems">
+    <div class="meta">
+      <time datetime="2025-07-08">2025-07-08</time>
+      <span class="category-badge">Agent Systems</span>
+    </div>
+    <h2>Context Engineering: The Real Secret to Magical AI Agents</h2>
+    <p>The difference between a basic AI demo and a magical product isn&#x27;t the model — it&#x27;s the context. A practical breakdown of context engineering.</p>
+  </a>
+  <a href="/best-practices-for-agentic-reasoning-in-production-lessons-f/" class="article-item" data-category="Agent Systems">
+    <div class="meta">
+      <time datetime="2025-07-08">2025-07-08</time>
+      <span class="category-badge">Agent Systems</span>
+    </div>
+    <h2>Best Practices for Agentic Reasoning in Production: Lessons from Anthropic and My Own Experience</h2>
+    <p>What actually works when deploying agentic reasoning systems in production — lessons distilled from Anthropic&#x27;s guidance and real-world experience.</p>
+  </a>
+  <a href="/reverse-engineering-openais-deep-research-how-to-balance-pow/" class="article-item" data-category="Analysis">
+    <div class="meta">
+      <time datetime="2025-03-09">2025-03-09</time>
+      <span class="category-badge">Analysis</span>
+    </div>
+    <h2>Reverse-Engineering OpenAI’s Deep Research: How to Balance Power with Safety</h2>
+    <p>A practical reverse-engineering of OpenAI&#x27;s Deep Research system architecture, with lessons for balancing autonomous capability, reliability, and safety in production.</p>
+  </a>
+  <a href="/chain-of-thought-vs-react-a-deep-dive-into-reasoning-paradig/" class="article-item" data-category="Architecture">
+    <div class="meta">
+      <time datetime="2025-02-18">2025-02-18</time>
+      <span class="category-badge">Architecture</span>
+    </div>
+    <h2>Chain-of-Thought vs. ReAct: A Deep Dive into Reasoning Paradigms for Large Language Models</h2>
+    <p>A rigorous comparison of two dominant reasoning paradigms — when to use each, and what their tradeoffs reveal about how LLMs actually think.</p>
+  </a>
+  <a href="/the-shock-of-deepseek-r1-and-the-legacy-of-eclipse/" class="article-item" data-category="Architecture">
+    <div class="meta">
+      <time datetime="2025-02-01">2025-02-01</time>
+      <span class="category-badge">Architecture</span>
+    </div>
+    <h2>The Shock of DeepSeek-R1 and the Legacy of Eclipse</h2>
+    <p>DeepSeek-R1 arrived like a shock to the system. What it means for the frontier, and what history tells us about moments like this.</p>
+  </a>
+  <!-- END:articles -->
+  </div>
+  <p class="empty-state" id="empty" hidden>No articles in this category yet.</p>
 </div>
 
 <script>
-  fetch('/manifest.json')
-    .then(r => r.json())
-    .then(articles => {
-      const categories = [...new Set(articles.map(a => a.category))];
-      let active = null;
+  // The article list is baked into the HTML by _pipeline/build.py so crawlers
+  // and no-JS visitors get the full list. This only wires up filtering, which
+  // reads categories off the DOM — no fetch, nothing to re-render on load.
+  (function () {
+    var chips = Array.prototype.slice.call(document.querySelectorAll('.chip'));
+    var items = Array.prototype.slice.call(document.querySelectorAll('.article-item'));
+    var empty = document.getElementById('empty');
+    var active = null;
 
-      const filtersEl = document.getElementById('filters');
-      categories.forEach(cat => {
-        const chip = document.createElement('button');
-        chip.className = 'chip';
-        chip.textContent = cat;
-        chip.onclick = () => {
-          active = active === cat ? null : cat;
-          document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-          if (active) chip.classList.add('active');
-          render(active ? articles.filter(a => a.category === active) : articles);
-        };
-        filtersEl.appendChild(chip);
+    chips.forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        active = active === chip.dataset.category ? null : chip.dataset.category;
+        chips.forEach(function (c) {
+          c.classList.toggle('active', active !== null && c === chip);
+        });
+        var shown = 0;
+        items.forEach(function (item) {
+          var match = active === null || item.dataset.category === active;
+          item.hidden = !match;
+          if (match) shown++;
+        });
+        empty.hidden = shown > 0;
       });
-
-      function render(list) {
-        document.getElementById('articles').innerHTML = list.length ? list.map(a => `
-          <a href="/${a.slug}/" class="article-item">
-            <div class="meta">
-              <time>${a.date}</time>
-              <span class="category-badge">${a.category}</span>
-            </div>
-            <h2>${a.title}</h2>
-            <p>${a.description}</p>
-          </a>
-        `).join('') : '<p style="font-family:sans-serif;font-size:14px;color:#6b7280;padding:40px 0">No articles in this category yet.</p>';
-      }
-
-      render(articles);
     });
+  })();
 </script>
 
+<!-- BEGIN:analytics -->
+<script data-goatcounter="https://cannyforge.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<!-- END:analytics -->
 </body>
 </html>

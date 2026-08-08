@@ -213,6 +213,7 @@
 </head>
 <body>
 
+<!-- BEGIN:site-header -->
 <header class="site-header">
   <a href="/" class="site-name">Canny<span>Forge</span></a>
   <nav>
@@ -221,6 +222,7 @@
     <a href="/feed.xml">RSS</a>
   </nav>
 </header>
+<!-- END:site-header -->
 
 <!-- Masthead -->
 <section class="hero">
@@ -709,6 +711,7 @@ obs[10] = capacity / max_capacity     <span class="code-comment"># site-size sig
     <p><strong>CannyForge</strong> is an independent AI practice — publishing across agent systems, architecture, economics, and emerging applications. Written by a builder, for practitioners, executives, and investors shaping what comes next.</p>
     <p style="margin-bottom:0"><a href="/about.html">About CannyForge</a> · <a href="https://twitter.com/cannyforge" target="_blank" rel="noopener">Twitter/X</a> · <a href="/feed.xml">RSS</a> · Building something interesting in AI? <a href="mailto:cannyforge@gmail.com">Get in touch →</a></p>
   </div>
+  <!-- BEGIN:email-capture -->
   <div class="email-capture">
     <p>Get new articles by email — no noise, just the writing.</p>
     <form action="https://buttondown.email/api/emails/embed-subscribe/cannyforge"
@@ -718,10 +721,12 @@ obs[10] = capacity / max_capacity     <span class="code-comment"># site-size sig
       <button type="submit">Subscribe</button>
     </form>
   </div>
+  <!-- END:email-capture -->
 </div>
 
 <!-- Giscus comments -->
 <div style="max-width:820px;margin:0 auto;padding:32px 32px 8px;">
+  <!-- BEGIN:giscus -->
   <script src="https://giscus.app/client.js"
     data-repo="cannyforge/cannyforge.github.io"
     data-repo-id="R_kgDOSMHeOA"
@@ -737,6 +742,7 @@ obs[10] = capacity / max_capacity     <span class="code-comment"># site-size sig
     crossorigin="anonymous"
     async>
   </script>
+  <!-- END:giscus -->
 </div>
 
 <!-- Footer -->
@@ -753,5 +759,9 @@ obs[10] = capacity / max_capacity     <span class="code-comment"># site-size sig
     if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in');
   });
 </script>
+<!-- BEGIN:analytics -->
+<script data-goatcounter="https://cannyforge.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<!-- END:analytics -->
 </body>
 </html>

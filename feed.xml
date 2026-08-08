@@ -6,31 +6,31 @@
     <description>AI systems engineering — architecture, agent reliability, LLM economics, and observations from building.</description>
     <language>en-us</language>
     <atom:link href="https://cannyforge.dev/feed.xml" rel="self" type="application/rss+xml"/>
-  <item>
-    <title>Teaching Machines to Decide: RL Simulation and the Reward-Hacking Trap</title>
-    <link>https://cannyforge.dev/teaching-machines-to-decide-rl-simulation/</link>
-    <pubDate>Tue, 15 Jul 2026 00:00:00 +0000</pubDate>
-    <description>An RL agent learned to keep 600 vending sites stocked — and found a strategy that beat every human rule while quietly gaming the reward. A hands-on look at RL simulation, reward design, and why your eval loop must measure what you're trading away.</description>
-    <guid isPermaLink="true">https://cannyforge.dev/teaching-machines-to-decide-rl-simulation/</guid>
-  </item>
-  <item>
-    <title>CannyForge v0.3.1 — FSI Benchmark Release</title>
-    <link>https://cannyforge.dev/cannyforge-v031-fsi-benchmark/</link>
-    <pubDate>Tue, 08 Jul 2026 00:00:00 +0000</pubDate>
-    <description>15 multi-turn tool-use scenarios, five scoring dimensions, six failure-mode detectors. No LLM-as-judge. Here's what the numbers actually say — and three things that broke along the way.</description>
-    <guid isPermaLink="true">https://cannyforge.dev/cannyforge-v031-fsi-benchmark/</guid>
-  </item>
-      <item>
-    <title>The Last Free Tier</title>
-    <link>https://cannyforge.dev/the-last-free-tier/</link>
-    <pubDate>Fri, 12 Jun 2026 00:00:00 +0000</pubDate>
-    <description>A fiction about platform dependency, developer lock-in, and what happens when the tools that make you faster make you unable to work without them.</description>
-    <guid isPermaLink="true">https://cannyforge.dev/the-last-free-tier/</guid>
-  </item>
-  <item>
+    <item>
+      <title>Teaching Machines to Decide: RL Simulation and the Reward-Hacking Trap</title>
+      <link>https://cannyforge.dev/teaching-machines-to-decide-rl-simulation/</link>
+      <pubDate>Wed, 15 Jul 2026 00:00:00 +0000</pubDate>
+      <description>An RL agent learned to keep 600 vending sites stocked — and found a strategy that beat every human rule while quietly gaming the reward. A hands-on look at RL simulation, reward design, and why your eval loop must measure what you&#x27;re trading away.</description>
+      <guid isPermaLink="true">https://cannyforge.dev/teaching-machines-to-decide-rl-simulation/</guid>
+    </item>
+    <item>
+      <title>CannyForge v0.3.1 — FSI Benchmark Release</title>
+      <link>https://cannyforge.dev/cannyforge-v031-fsi-benchmark/</link>
+      <pubDate>Wed, 08 Jul 2026 00:00:00 +0000</pubDate>
+      <description>15 multi-turn tool-use scenarios, five scoring dimensions, six failure-mode detectors. No LLM-as-judge. Here&#x27;s what the numbers actually say — and three things that broke along the way.</description>
+      <guid isPermaLink="true">https://cannyforge.dev/cannyforge-v031-fsi-benchmark/</guid>
+    </item>
+    <item>
+      <title>The Last Free Tier</title>
+      <link>https://cannyforge.dev/the-last-free-tier/</link>
+      <pubDate>Fri, 12 Jun 2026 00:00:00 +0000</pubDate>
+      <description>A fiction about platform dependency, developer lock-in, and what happens when the tools that make you faster make you unable to work without them.</description>
+      <guid isPermaLink="true">https://cannyforge.dev/the-last-free-tier/</guid>
+    </item>
+    <item>
       <title>The State of Agent Frameworks — A 2026 Survey</title>
       <link>https://cannyforge.dev/the-state-of-agent-frameworks-2026/</link>
-      <pubDate>Wed, 21 May 2026 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 21 May 2026 00:00:00 +0000</pubDate>
       <description>A comprehensive 2026 survey of the six agent frameworks that ship to production: OpenAI Agents SDK, Claude Agent SDK, LangGraph, CrewAI, Google ADK, and Microsoft Semantic Kernel. Architecture trade-offs, real deployments, and the gaps they have yet to close.</description>
       <guid isPermaLink="true">https://cannyforge.dev/the-state-of-agent-frameworks-2026/</guid>
     </item>
@@ -44,9 +44,65 @@
     <item>
       <title>DeepSeek-V4: The Economics of the Million-Token Brain</title>
       <link>https://cannyforge.dev/deepseek-v4/</link>
-      <pubDate>Thu, 24 Apr 2026 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 24 Apr 2026 00:00:00 +0000</pubDate>
       <description>How a redesigned attention mechanism turns long-context AI from a luxury into a utility — and what it means for the tools developers use every day.</description>
       <guid isPermaLink="true">https://cannyforge.dev/deepseek-v4/</guid>
+    </item>
+    <item>
+      <title>From Prompt Tweaks to Learning Machines: The Agent Skill Primitive</title>
+      <link>https://cannyforge.dev/from-prompt-tweaks-to-learning-machines-the-agent-skill-prim/</link>
+      <pubDate>Thu, 19 Feb 2026 00:00:00 +0000</pubDate>
+      <description>How AI agents are evolving from static prompt followers to dynamic learning machines — and what the agent skill primitive means for the future of autonomous systems.</description>
+      <guid isPermaLink="true">https://cannyforge.dev/from-prompt-tweaks-to-learning-machines-the-agent-skill-prim/</guid>
+    </item>
+    <item>
+      <title>Beyond the Hype: A Deep Dive into the Systemic, Algorithmic, and Cognitive Roots of the Infinite Software Crisis</title>
+      <link>https://cannyforge.dev/beyond-the-hype-a-deep-dive-into-the-systemic-algorithmic-an/</link>
+      <pubDate>Mon, 19 Jan 2026 00:00:00 +0000</pubDate>
+      <description>A systems-level analysis of the Infinite Software Crisis, connecting weak guardrails, model training limits, and human cognitive bias to long-term software fragility.</description>
+      <guid isPermaLink="true">https://cannyforge.dev/beyond-the-hype-a-deep-dive-into-the-systemic-algorithmic-an/</guid>
+    </item>
+    <item>
+      <title>Designing Agentic Systems: Lessons from LLM Coding Tools</title>
+      <link>https://cannyforge.dev/designing-agentic-systems-lessons-from-llm-coding-tools/</link>
+      <pubDate>Mon, 14 Jul 2025 00:00:00 +0000</pubDate>
+      <description>LLM coding tools are the most demanding test of agentic system design. Here&#x27;s what building and using them teaches about agents that actually work.</description>
+      <guid isPermaLink="true">https://cannyforge.dev/designing-agentic-systems-lessons-from-llm-coding-tools/</guid>
+    </item>
+    <item>
+      <title>Context Engineering: The Real Secret to Magical AI Agents</title>
+      <link>https://cannyforge.dev/context-engineering-the-real-secret-to-magical-ai-agents/</link>
+      <pubDate>Tue, 08 Jul 2025 00:00:00 +0000</pubDate>
+      <description>The difference between a basic AI demo and a magical product isn&#x27;t the model — it&#x27;s the context. A practical breakdown of context engineering.</description>
+      <guid isPermaLink="true">https://cannyforge.dev/context-engineering-the-real-secret-to-magical-ai-agents/</guid>
+    </item>
+    <item>
+      <title>Best Practices for Agentic Reasoning in Production: Lessons from Anthropic and My Own Experience</title>
+      <link>https://cannyforge.dev/best-practices-for-agentic-reasoning-in-production-lessons-f/</link>
+      <pubDate>Tue, 08 Jul 2025 00:00:00 +0000</pubDate>
+      <description>What actually works when deploying agentic reasoning systems in production — lessons distilled from Anthropic&#x27;s guidance and real-world experience.</description>
+      <guid isPermaLink="true">https://cannyforge.dev/best-practices-for-agentic-reasoning-in-production-lessons-f/</guid>
+    </item>
+    <item>
+      <title>Reverse-Engineering OpenAI’s Deep Research: How to Balance Power with Safety</title>
+      <link>https://cannyforge.dev/reverse-engineering-openais-deep-research-how-to-balance-pow/</link>
+      <pubDate>Sun, 09 Mar 2025 00:00:00 +0000</pubDate>
+      <description>A practical reverse-engineering of OpenAI&#x27;s Deep Research system architecture, with lessons for balancing autonomous capability, reliability, and safety in production.</description>
+      <guid isPermaLink="true">https://cannyforge.dev/reverse-engineering-openais-deep-research-how-to-balance-pow/</guid>
+    </item>
+    <item>
+      <title>Chain-of-Thought vs. ReAct: A Deep Dive into Reasoning Paradigms for Large Language Models</title>
+      <link>https://cannyforge.dev/chain-of-thought-vs-react-a-deep-dive-into-reasoning-paradig/</link>
+      <pubDate>Tue, 18 Feb 2025 00:00:00 +0000</pubDate>
+      <description>A rigorous comparison of two dominant reasoning paradigms — when to use each, and what their tradeoffs reveal about how LLMs actually think.</description>
+      <guid isPermaLink="true">https://cannyforge.dev/chain-of-thought-vs-react-a-deep-dive-into-reasoning-paradig/</guid>
+    </item>
+    <item>
+      <title>The Shock of DeepSeek-R1 and the Legacy of Eclipse</title>
+      <link>https://cannyforge.dev/the-shock-of-deepseek-r1-and-the-legacy-of-eclipse/</link>
+      <pubDate>Sat, 01 Feb 2025 00:00:00 +0000</pubDate>
+      <description>DeepSeek-R1 arrived like a shock to the system. What it means for the frontier, and what history tells us about moments like this.</description>
+      <guid isPermaLink="true">https://cannyforge.dev/the-shock-of-deepseek-r1-and-the-legacy-of-eclipse/</guid>
     </item>
   </channel>
 </rss>
